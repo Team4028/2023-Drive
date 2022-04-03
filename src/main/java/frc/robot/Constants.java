@@ -74,7 +74,7 @@ public class Constants {
     public static final class PIDConstants {
         // TODO: get these from SysId
         public static final class Drive {
-            public static final double kP = 0.0;
+            public static final double kP = 0.2;
             public static final double kD = 0.0;
         }
 
@@ -84,7 +84,7 @@ public class Constants {
         }
 
         public static final class DriveController {
-            public static final double kP = 3.;
+            public static final double kP = 8.;
         }
     }
 
