@@ -11,7 +11,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 
-/** Add your docs here. */
+/** Get auton trajectories from paths. */
 public class Trajectories {
     public static Trajectory getTrajectory(String path) {
         Trajectory traj = new Trajectory();
@@ -23,7 +23,7 @@ public class Trajectories {
         }
 
         return traj;
-    } 
+    }
 
     public static Trajectory Bruh() {
         return getTrajectory("Bruh");

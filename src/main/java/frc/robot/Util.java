@@ -18,23 +18,23 @@ public final class Util {
         return input * (base + throttle * (1.0 - base));
     }
 
-    /** Gets a command to control the
-     * drivetrain to follow a path. 
+    /**
+     * Gets a command to control the
+     * drivetrain to follow a path.
      * 
      * @param traj Trajectory to follow.
-     * */
+     */
     public static final SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
         return new RamseteCommand(
-            traj,
-            Drivetrain.getInstance()::getPoseMeters,
-            new RamseteController(),
-            DriveConstants.kFF,
-            DriveConstants.kDriveKinematics,
-            Drivetrain.getInstance()::getWheelSpeeds,
-            AutonConstants.kDriveController,
-            AutonConstants.kDriveController,
-            Drivetrain.getInstance()::driveVolts,
-            Drivetrain.getInstance()
-        ).andThen(() -> Drivetrain.getInstance().drive(0, 0, 0));
+                traj,
+                Drivetrain.getInstance()::getPoseMeters,
+                new RamseteController(),
+                DriveConstants.kFF,
+                DriveConstants.kDriveKinematics,
+                Drivetrain.getInstance()::getWheelSpeeds,
+                AutonConstants.kDriveController,
+                AutonConstants.kDriveController,
+                Drivetrain.getInstance()::driveVolts,
+                Drivetrain.getInstance()).andThen(() -> Drivetrain.getInstance().drive(0, 0, 0));
     }
 }

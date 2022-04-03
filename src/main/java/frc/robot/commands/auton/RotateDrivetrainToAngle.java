@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.auton;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -17,21 +17,20 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     /** Creates a new RotateDrivetrainByAngle. */
     public RotateDrivetrainToAngle(Rotation2d goal) {
         super(
-            // The ProfiledPIDController used by the command
-            AutonConstants.kThetaController,
-            // This should return the measurement
-            () -> Drivetrain.getInstance().getRotation().getRadians(),
-            // This should return the goal (can also be a constant)
-            () -> goal.getRadians(),
-            // This uses the output
-            (output, setpoint) -> {
-                // Use the output (and setpoint, if desired) here
-                Drivetrain.getInstance().drive(
-                    0.,
-                    0.,
-                    output + setpoint.velocity);
-            }
-        );
+                // The ProfiledPIDController used by the command
+                AutonConstants.kThetaController,
+                // This should return the measurement
+                () -> Drivetrain.getInstance().getRotation().getRadians(),
+                // This should return the goal (can also be a constant)
+                () -> goal.getRadians(),
+                // This uses the output
+                (output, setpoint) -> {
+                    // Use the output (and setpoint, if desired) here
+                    Drivetrain.getInstance().drive(
+                            0.,
+                            0.,
+                            output + setpoint.velocity);
+                });
         // Use addRequirements() here to declare subsystem dependencies.
         // Configure additional PID options by calling `getController` here.
         addRequirements(Drivetrain.getInstance());

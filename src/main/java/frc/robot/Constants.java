@@ -20,48 +20,47 @@ public class Constants {
         // distance from the front to back wheels on the robot
         public static final double kWheelBase = 24.25;
 
-        public static final DifferentialDriveKinematics kDriveKinematics = 
-            new DifferentialDriveKinematics(Units.inchesToMeters(kTrackWidth));
+        public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(
+                Units.inchesToMeters(kTrackWidth));
 
         public static final double kSpeedScale = 0.5;
         public static final double kWheelDiameter = Units.inchesToMeters(6.258);
 
         public static final double kEncoderCPR = 4096.;
         public static final double kEncoderDistancePerPulse =
-            // Assumes the encoders are directly mounted on the wheel shafts
-            (kWheelDiameter * Math.PI) / kEncoderCPR;
+                // Assumes the encoders are directly mounted on the wheel shafts
+                (kWheelDiameter * Math.PI) / kEncoderCPR;
 
         public static final double kMaxSpeed = Units.feetToMeters(15.);
 
         public static final SimpleMotorFeedforward kFF = new SimpleMotorFeedforward(
-            // TODO: get these from SysId
-            0.0,
-            0.0,
-            0.0
-        );
-        
+                // TODO: get these from SysId
+                0.0,
+                0.0,
+                0.0);
+
         public static final double kNominalVoltage = 12.;
     }
 
     public static final class AutonConstants {
         // in radians per second
         public static final double kMaxAngularSpeed = DriveConstants.kMaxSpeed /
-            Math.hypot(DriveConstants.kTrackWidth / 2., DriveConstants.kWheelBase / 2.);
+                Math.hypot(DriveConstants.kTrackWidth / 2., DriveConstants.kWheelBase / 2.);
 
         public static final TrapezoidProfile.Constraints kThetaConstraints = new TrapezoidProfile.Constraints(
-            kMaxAngularSpeed, kMaxAngularSpeed);
-        
+                kMaxAngularSpeed, kMaxAngularSpeed);
+
         public static final ProfiledPIDController kThetaController = new ProfiledPIDController(
-            PIDConstants.Theta.kP,
-            0.,
-            PIDConstants.Theta.kD,
-            kThetaConstraints);
-        
+                PIDConstants.Theta.kP,
+                0.,
+                PIDConstants.Theta.kD,
+                kThetaConstraints);
+
         public static final TrajectoryConfig kAutonTrajConfig = new TrajectoryConfig(
-            DriveConstants.kMaxSpeed,
-            DriveConstants.kMaxSpeed)
-                .setKinematics(DriveConstants.kDriveKinematics);
-        
+                DriveConstants.kMaxSpeed,
+                DriveConstants.kMaxSpeed)
+                        .setKinematics(DriveConstants.kDriveKinematics);
+
         public static final PIDController kDriveController = new PIDController(PIDConstants.DriveController.kP, 0, 0);
     }
 

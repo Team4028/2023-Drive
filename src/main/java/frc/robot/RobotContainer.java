@@ -30,24 +30,24 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         m_drive.setDefaultCommand(
-            new RunCommand(() ->
-                m_drive.drive(
-                    speedScaledDriverLeftY(),
-                    0.,
-                    speedScaledDriverRightX()),
-                m_drive
-            )
-        );
+                new RunCommand(() -> m_drive.drive(
+                        speedScaledDriverLeftY(),
+                        0.,
+                        speedScaledDriverRightX()),
+                        m_drive));
 
         m_driverController.start.whenPressed(m_drive::zero);
         m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.)));
     }
 
     public double speedScaledDriverLeftY() {
-        return -Util.speedScale(m_driverController.getLeftYAxis(), DriveConstants.kSpeedScale, m_driverController.getRightTrigger());
+        return -Util.speedScale(m_driverController.getLeftYAxis(), DriveConstants.kSpeedScale,
+                m_driverController.getRightTrigger());
     }
+
     public double speedScaledDriverRightX() {
-        return -Util.speedScale(m_driverController.getRightXAxis(), DriveConstants.kSpeedScale, m_driverController.getRightTrigger());
+        return -Util.speedScale(m_driverController.getRightXAxis(), DriveConstants.kSpeedScale,
+                m_driverController.getRightTrigger());
     }
 
     private void initAutonChooser() {
@@ -55,16 +55,16 @@ public class RobotContainer {
     }
 
     /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    m_drive.resetOdometry(_autonChooser.getSelected().getInitialPose());
-    return _autonChooser.getSelected();
-  }
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        m_drive.resetOdometry(_autonChooser.getSelected().getInitialPose());
+        return _autonChooser.getSelected();
+    }
 
-  public static RobotContainer getInstance() {
-      return _instance;
-  }
+    public static RobotContainer getInstance() {
+        return _instance;
+    }
 }

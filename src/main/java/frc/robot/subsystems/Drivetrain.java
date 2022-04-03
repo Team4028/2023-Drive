@@ -92,21 +92,22 @@ public class Drivetrain extends SubsystemBase {
      */
     public void drive(double x, double y, double rot) {
         DifferentialDriveWheelSpeeds speed = DriveConstants.kDriveKinematics.toWheelSpeeds(
-            new ChassisSpeeds(x, 0, rot));
+                new ChassisSpeeds(x, 0, rot));
 
         speed.desaturate(DriveConstants.kMaxSpeed);
 
         m_FL.set(ControlMode.Velocity, speed.leftMetersPerSecond / 10. / DriveConstants.kEncoderDistancePerPulse,
-            DemandType.ArbitraryFeedForward, DriveConstants.kFF.calculate(speed.leftMetersPerSecond) / DriveConstants.kNominalVoltage);
+                DemandType.ArbitraryFeedForward,
+                DriveConstants.kFF.calculate(speed.leftMetersPerSecond) / DriveConstants.kNominalVoltage);
         m_FR.set(ControlMode.Velocity, speed.rightMetersPerSecond / 10. / DriveConstants.kEncoderDistancePerPulse,
-            DemandType.ArbitraryFeedForward, DriveConstants.kFF.calculate(speed.rightMetersPerSecond) / DriveConstants.kNominalVoltage);
+                DemandType.ArbitraryFeedForward,
+                DriveConstants.kFF.calculate(speed.rightMetersPerSecond) / DriveConstants.kNominalVoltage);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-            DriveConstants.kEncoderDistancePerPulse / m_FL.getSelectedSensorVelocity(),
-            DriveConstants.kEncoderDistancePerPulse / m_FR.getSelectedSensorVelocity()
-        );
+                DriveConstants.kEncoderDistancePerPulse / m_FL.getSelectedSensorVelocity(),
+                DriveConstants.kEncoderDistancePerPulse / m_FR.getSelectedSensorVelocity());
     }
 
     public void driveVolts(double left, double right) {
@@ -114,9 +115,11 @@ public class Drivetrain extends SubsystemBase {
         m_FR.setVoltage(right);
     }
 
-    /** Class for managing and driving a 4-motor
+    /**
+     * Class for managing and driving a 4-motor
      * differential drivetrain, with 4 TalonSRX
-     * controllers and a NavX. **/
+     * controllers and a NavX.
+     **/
     public static Drivetrain getInstance() {
         return m_instance;
     }
@@ -158,9 +161,8 @@ public class Drivetrain extends SubsystemBase {
         Rotation2d rot = getRotation();
 
         m_pose = m_odom.update(rot,
-            m_FL.getSelectedSensorVelocity() * DriveConstants.kWheelDiameter * 10.,
-            m_FR.getSelectedSensorVelocity() * DriveConstants.kWheelDiameter * 10.
-        );
+                m_FL.getSelectedSensorVelocity() * DriveConstants.kWheelDiameter * 10.,
+                m_FR.getSelectedSensorVelocity() * DriveConstants.kWheelDiameter * 10.);
 
         SmartDashboard.putNumber("Heading", m_pose.getRotation().getDegrees());
     }

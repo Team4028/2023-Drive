@@ -33,7 +33,7 @@ public final class BeakXBoxController {
 
     private int port;
 
-    /** 
+    /**
      * Wrapper around an XboxController with additional
      * functionality, like deadbands, individual Button
      * control, Trigger control, rumble, etc.
