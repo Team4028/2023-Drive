@@ -29,12 +29,13 @@ public final class Util {
                 traj,
                 Drivetrain.getInstance()::getPoseMeters,
                 new RamseteController(),
-                DriveConstants.kFF,
-                DriveConstants.kDriveKinematics,
+                DriveConstants.FEED_FORWARD,
+                DriveConstants.DRIVE_KINEMATICS,
                 Drivetrain.getInstance()::getWheelSpeeds,
-                AutonConstants.kDriveController,
-                AutonConstants.kDriveController,
+                AutonConstants.DRIVE_CONTROLLER,
+                AutonConstants.DRIVE_CONTROLLER,
                 Drivetrain.getInstance()::driveVolts,
-                Drivetrain.getInstance()).andThen(() -> Drivetrain.getInstance().drive(0, 0, 0));
+                Drivetrain.getInstance()
+            ).andThen(() -> Drivetrain.getInstance().drive(0, 0, 0));
     }
 }

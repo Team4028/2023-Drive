@@ -37,10 +37,10 @@ public class Drivetrain extends SubsystemBase {
         m_gyro = new AHRS(SPI.Port.kMXP);
         m_odom = new DifferentialDriveOdometry(getRotation());
 
-        m_FL = new WPI_TalonSRX(SubsystemConstants.kFL);
-        m_BL = new WPI_TalonSRX(SubsystemConstants.kBL);
-        m_FR = new WPI_TalonSRX(SubsystemConstants.kFR);
-        m_BR = new WPI_TalonSRX(SubsystemConstants.kBR);
+        m_FL = new WPI_TalonSRX(SubsystemConstants.DRIVE_FL);
+        m_BL = new WPI_TalonSRX(SubsystemConstants.DRIVE_BL);
+        m_FR = new WPI_TalonSRX(SubsystemConstants.DRIVE_FR);
+        m_BR = new WPI_TalonSRX(SubsystemConstants.DRIVE_BR);
 
         configMotors();
     }
@@ -91,23 +91,23 @@ public class Drivetrain extends SubsystemBase {
      * @param rot Angular rate of the robot.
      */
     public void drive(double x, double y, double rot) {
-        DifferentialDriveWheelSpeeds speed = DriveConstants.kDriveKinematics.toWheelSpeeds(
+        DifferentialDriveWheelSpeeds speed = DriveConstants.DRIVE_KINEMATICS.toWheelSpeeds(
                 new ChassisSpeeds(x, 0, rot));
 
-        speed.desaturate(DriveConstants.kMaxSpeed);
+        speed.desaturate(DriveConstants.MAX_VELOCITY);
 
-        m_FL.set(ControlMode.Velocity, speed.leftMetersPerSecond / 10. / DriveConstants.kEncoderDistancePerPulse,
+        m_FL.set(ControlMode.Velocity, speed.leftMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE,
                 DemandType.ArbitraryFeedForward,
-                DriveConstants.kFF.calculate(speed.leftMetersPerSecond) / DriveConstants.kNominalVoltage);
-        m_FR.set(ControlMode.Velocity, speed.rightMetersPerSecond / 10. / DriveConstants.kEncoderDistancePerPulse,
+                DriveConstants.FEED_FORWARD.calculate(speed.leftMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
+        m_FR.set(ControlMode.Velocity, speed.rightMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE,
                 DemandType.ArbitraryFeedForward,
-                DriveConstants.kFF.calculate(speed.rightMetersPerSecond) / DriveConstants.kNominalVoltage);
+                DriveConstants.FEED_FORWARD.calculate(speed.rightMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-                DriveConstants.kEncoderDistancePerPulse / m_FL.getSelectedSensorVelocity(),
-                DriveConstants.kEncoderDistancePerPulse / m_FR.getSelectedSensorVelocity());
+                DriveConstants.ENCODER_DISTANCE_PER_PULSE / m_FL.getSelectedSensorVelocity(),
+                DriveConstants.ENCODER_DISTANCE_PER_PULSE / m_FR.getSelectedSensorVelocity());
     }
 
     public void driveVolts(double left, double right) {
@@ -161,8 +161,8 @@ public class Drivetrain extends SubsystemBase {
         Rotation2d rot = getRotation();
 
         m_pose = m_odom.update(rot,
-                m_FL.getSelectedSensorVelocity() * DriveConstants.kWheelDiameter * 10.,
-                m_FR.getSelectedSensorVelocity() * DriveConstants.kWheelDiameter * 10.);
+                m_FL.getSelectedSensorVelocity() * DriveConstants.WHEEL_DIAMETER * 10.,
+                m_FR.getSelectedSensorVelocity() * DriveConstants.WHEEL_DIAMETER * 10.);
 
         SmartDashboard.putNumber("Heading", m_pose.getRotation().getDegrees());
     }

@@ -45,16 +45,16 @@ public final class BeakXBoxController {
         left_stick = new Thumbstick(controller, HAND.LEFT);
         right_stick = new Thumbstick(controller, HAND.RIGHT);
 
-        a = new JoystickButton(controller, 1);
-        b = new JoystickButton(controller, 2);
-        x = new JoystickButton(controller, 3);
-        y = new JoystickButton(controller, 4);
-        lb = new JoystickButton(controller, 5);
-        rb = new JoystickButton(controller, 6);
-        back = new JoystickButton(controller, 7);
-        start = new JoystickButton(controller, 8);
-        ls = new JoystickButton(controller, 9);
-        rs = new JoystickButton(controller, 10);
+        a = new JoystickButton(controller, Buttons.A);
+        b = new JoystickButton(controller, Buttons.B);
+        x = new JoystickButton(controller, Buttons.X);
+        y = new JoystickButton(controller, Buttons.Y);
+        lb = new JoystickButton(controller, Buttons.LEFT_BUMPER);
+        rb = new JoystickButton(controller, Buttons.RIGHT_BUMPER);
+        back = new JoystickButton(controller, Buttons.BACK);
+        start = new JoystickButton(controller, Buttons.START);
+        ls = new JoystickButton(controller, Buttons.LEFT_STICK);
+        rs = new JoystickButton(controller, Buttons.RIGHT_STICK);
 
         lt = new Trigger(controller, HAND.LEFT);
         rt = new Trigger(controller, HAND.RIGHT);
@@ -110,18 +110,18 @@ public final class BeakXBoxController {
             /* Initialize */
             this.parent = parent;
             this.hand = hand;
-            this.xDeadZone = ControllerConstants.kDeadband;
-            this.yDeadZone = ControllerConstants.kDeadband;
-            this.sensitivity = ControllerConstants.kSensitivity;
+            this.xDeadZone = ControllerConstants.THUMBSTICK_DEADBAND;
+            this.yDeadZone = ControllerConstants.THUMBSTICK_DEADBAND;
+            this.sensitivity = ControllerConstants.THUMBSTICK_SENSITIVITY;
 
             if (hand == HAND.LEFT) {
-                this.xAxisID = Axes.kLeftX;
-                this.yAxisID = Axes.kLeftY;
-                this.pressedID = Buttons.kLS;
+                this.xAxisID = Axes.LEFT_X;
+                this.yAxisID = Axes.LEFT_Y;
+                this.pressedID = Buttons.LEFT_STICK;
             } else { // If right hand
-                this.xAxisID = Axes.kRightX;
-                this.yAxisID = Axes.kRightY;
-                this.pressedID = Buttons.kRS;
+                this.xAxisID = Axes.RIGHT_X;
+                this.yAxisID = Axes.RIGHT_Y;
+                this.pressedID = Buttons.RIGHT_STICK;
             }
         }
 
@@ -338,8 +338,8 @@ public final class BeakXBoxController {
             /* Initialize */
             this.parent = joystick;
             this.hand = hand;
-            this.deadZone = ControllerConstants.kTriggerDeadband;
-            this.sensitivity = ControllerConstants.kTriggerSensitivity;
+            this.deadZone = ControllerConstants.TRIGGER_DEADBAND;
+            this.sensitivity = ControllerConstants.TRIGGER_SENSITIVITY;
         }
 
         /* Extended Methods */

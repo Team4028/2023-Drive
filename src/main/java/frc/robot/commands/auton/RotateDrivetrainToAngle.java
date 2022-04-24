@@ -18,7 +18,7 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     public RotateDrivetrainToAngle(Rotation2d goal) {
         super(
                 // The ProfiledPIDController used by the command
-                AutonConstants.kThetaController,
+                AutonConstants.THETA_CONTROLLER,
                 // This should return the measurement
                 () -> Drivetrain.getInstance().getRotation().getRadians(),
                 // This should return the goal (can also be a constant)

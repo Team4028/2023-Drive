@@ -41,12 +41,12 @@ public class RobotContainer {
     }
 
     public double speedScaledDriverLeftY() {
-        return -Util.speedScale(m_driverController.getLeftYAxis(), DriveConstants.kSpeedScale,
+        return -Util.speedScale(m_driverController.getLeftYAxis(), DriveConstants.SPEED_SCALE,
                 m_driverController.getRightTrigger());
     }
 
     public double speedScaledDriverRightX() {
-        return -Util.speedScale(m_driverController.getRightXAxis(), DriveConstants.kSpeedScale,
+        return -Util.speedScale(m_driverController.getRightXAxis(), DriveConstants.SPEED_SCALE,
                 m_driverController.getRightTrigger());
     }
 
