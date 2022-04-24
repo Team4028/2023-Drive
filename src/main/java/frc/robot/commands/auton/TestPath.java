@@ -7,13 +7,14 @@ package frc.robot.commands.auton;
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.Trajectories;
 import frc.robot.Util;
+import frc.robot.subsystems.Drivetrain;
 
 public class TestPath extends BeakAutonCommand {
     /** Creates a new TestPath. */
-    public TestPath() {
+    public TestPath(Drivetrain drivetrain) {
         super.addCommands(
-                Util.getTrajectoryCommand(Trajectories.Bruh()),
-                new RotateDrivetrainToAngle(Rotation2d.fromDegrees(0.)));
+                Util.getTrajectoryCommand(Trajectories.Bruh(), drivetrain),
+                new RotateDrivetrainToAngle(Rotation2d.fromDegrees(0.), drivetrain));
         super.setInitialPose(Trajectories.Bruh());
     }
 }

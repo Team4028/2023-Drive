@@ -24,18 +24,18 @@ public final class Util {
      * 
      * @param traj Trajectory to follow.
      */
-    public static final SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
+    public static final SequentialCommandGroup getTrajectoryCommand(Trajectory traj, Drivetrain drivetrain) {
         return new RamseteCommand(
                 traj,
-                Drivetrain.getInstance()::getPoseMeters,
+                drivetrain::getPoseMeters,
                 new RamseteController(),
                 DriveConstants.FEED_FORWARD,
                 DriveConstants.DRIVE_KINEMATICS,
-                Drivetrain.getInstance()::getWheelSpeeds,
+                drivetrain::getWheelSpeeds,
                 AutonConstants.DRIVE_CONTROLLER,
                 AutonConstants.DRIVE_CONTROLLER,
-                Drivetrain.getInstance()::driveVolts,
-                Drivetrain.getInstance()
-            ).andThen(() -> Drivetrain.getInstance().drive(0, 0, 0));
+                drivetrain::driveVolts,
+                drivetrain
+            ).andThen(() -> drivetrain.drive(0, 0, 0));
     }
 }

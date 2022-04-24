@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.TestPath;
@@ -16,7 +17,7 @@ import frc.robot.subsystems.Drivetrain;
 
 /** Add your docs here. */
 public class RobotContainer {
-    private BeakXBoxController m_driverController = new BeakXBoxController(0);
+    private BeakXBoxController m_driverController = new BeakXBoxController(OIConstants.DRIVER);
 
     private Drivetrain m_drive = Drivetrain.getInstance();
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
@@ -37,7 +38,7 @@ public class RobotContainer {
                         m_drive));
 
         m_driverController.start.whenPressed(m_drive::zero);
-        m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.)));
+        m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive));
     }
 
     public double speedScaledDriverLeftY() {
@@ -51,7 +52,7 @@ public class RobotContainer {
     }
 
     private void initAutonChooser() {
-        _autonChooser.setDefaultOption("Test Path", new TestPath());
+        _autonChooser.setDefaultOption("Test Path", new TestPath(m_drive));
     }
 
     /**

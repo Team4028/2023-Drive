@@ -89,7 +89,7 @@ public class Constants {
     }
 
     public static final class OIConstants {
-        public static final double DRIVER = 0;
+        public static final int DRIVER = 0;
     }
 
     public static final class ControllerConstants {

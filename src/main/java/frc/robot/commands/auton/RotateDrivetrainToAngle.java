@@ -15,25 +15,25 @@ import frc.robot.subsystems.Drivetrain;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     /** Creates a new RotateDrivetrainByAngle. */
-    public RotateDrivetrainToAngle(Rotation2d goal) {
+    public RotateDrivetrainToAngle(Rotation2d goal, Drivetrain drivetrain) {
         super(
                 // The ProfiledPIDController used by the command
                 AutonConstants.THETA_CONTROLLER,
                 // This should return the measurement
-                () -> Drivetrain.getInstance().getRotation().getRadians(),
+                () -> drivetrain.getRotation().getRadians(),
                 // This should return the goal (can also be a constant)
                 () -> goal.getRadians(),
                 // This uses the output
                 (output, setpoint) -> {
                     // Use the output (and setpoint, if desired) here
-                    Drivetrain.getInstance().drive(
+                    drivetrain.drive(
                             0.,
                             0.,
                             output + setpoint.velocity);
                 });
         // Use addRequirements() here to declare subsystem dependencies.
         // Configure additional PID options by calling `getController` here.
-        addRequirements(Drivetrain.getInstance());
+        addRequirements(drivetrain);
         getController().enableContinuousInput(-Math.PI, Math.PI);
         getController().setTolerance(Units.degreesToRadians(0.5));
     }
