@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -15,20 +16,26 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
+import frc.robot.sim.PhysicsSim;
 
 public class Drivetrain extends SubsystemBase {
     private WPI_TalonSRX m_FL, m_BL, m_FR, m_BR;
 
-    private AHRS m_gyro;
+    private Gyro m_gyro;
     private DifferentialDriveOdometry m_odom;
 
     private Pose2d m_pose;
+    Field2d field = new Field2d();
 
     private static Drivetrain m_instance = new Drivetrain();
 
@@ -42,13 +49,24 @@ public class Drivetrain extends SubsystemBase {
         m_FR = new WPI_TalonSRX(SubsystemConstants.DRIVE_FR);
         m_BR = new WPI_TalonSRX(SubsystemConstants.DRIVE_BR);
 
+        m_BL.follow(m_FL);
+        m_BR.follow(m_FR);
+
         configMotors();
+
+        if (Robot.isSimulation()) {
+            PhysicsSim.getInstance().addTalonSRX(m_FL, 0.5, 5100);
+            PhysicsSim.getInstance().addTalonSRX(m_FR, 0.5, 5100);
+            PhysicsSim.getInstance().addTalonSRX(m_BL, 0.5, 5100);
+            PhysicsSim.getInstance().addTalonSRX(m_BR, 0.5, 5100);
+        }
     }
 
     public void configMotors() {
         configPID();
         configNeutralMode();
         configInverted();
+        configSensors();
     }
 
     public void configPID() {
@@ -64,6 +82,13 @@ public class Drivetrain extends SubsystemBase {
 
         m_BR.config_kP(0, PIDConstants.Drive.kP);
         m_BR.config_kD(0, PIDConstants.Drive.kD);
+
+        if (Robot.isSimulation()) {
+            m_FL.config_kF(0, 0.2);
+            m_BL.config_kF(0, 0.2);
+            m_FR.config_kF(0, 0.2);
+            m_BR.config_kF(0, 0.2);
+        }
     }
 
     public void configNeutralMode() {
@@ -74,10 +99,17 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void configInverted() {
-        m_FL.setInverted(true);
-        m_BL.setInverted(true);
+        m_FL.setInverted(!Robot.isSimulation());
+        m_BL.setInverted(!Robot.isSimulation());
         m_FR.setInverted(false);
         m_BR.setInverted(false);
+    }
+
+    public void configSensors() {
+        m_FL.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, 0, 100);
+        m_BL.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, 0, 100);
+        m_FR.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, 0, 100);
+        m_BR.configSelectedFeedbackSensor(TalonSRXFeedbackDevice.QuadEncoder, 0, 100);
     }
 
     /* Drive & Auton commands */
@@ -94,14 +126,30 @@ public class Drivetrain extends SubsystemBase {
         DifferentialDriveWheelSpeeds speed = DriveConstants.DRIVE_KINEMATICS.toWheelSpeeds(
                 new ChassisSpeeds(x, 0, rot));
 
+        // System.out.println("Sneed");
+
+        if (x != 0. || rot != 0.) {
+            System.out.println(speed.rightMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE);
+            System.out.println(speed.leftMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE);
+        }
+
         speed.desaturate(DriveConstants.MAX_VELOCITY);
 
-        m_FL.set(ControlMode.Velocity, speed.leftMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE,
-                DemandType.ArbitraryFeedForward,
-                DriveConstants.FEED_FORWARD.calculate(speed.leftMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
-        m_FR.set(ControlMode.Velocity, speed.rightMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE,
-                DemandType.ArbitraryFeedForward,
-                DriveConstants.FEED_FORWARD.calculate(speed.rightMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
+        if (Robot.isSimulation()) {
+            m_FL.set(ControlMode.Velocity, speed.leftMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE);
+                    // DemandType.ArbitraryFeedForward,
+                    // DriveConstants.FEED_FORWARD.calculate(speed.leftMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
+            m_FR.set(ControlMode.Velocity, speed.rightMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE);
+                    // DemandType.ArbitraryFeedForward,
+                    // DriveConstants.FEED_FORWARD.calculate(speed.rightMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
+        } else {
+            m_FL.set(ControlMode.Velocity, speed.leftMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE,
+                    DemandType.ArbitraryFeedForward,
+                    DriveConstants.FEED_FORWARD.calculate(speed.leftMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
+            m_FR.set(ControlMode.Velocity, speed.rightMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE,
+                    DemandType.ArbitraryFeedForward,
+                    DriveConstants.FEED_FORWARD.calculate(speed.rightMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
+        }
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -111,6 +159,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void driveVolts(double left, double right) {
+        System.out.println("Going");
         m_FL.setVoltage(left);
         m_FR.setVoltage(right);
     }
@@ -164,6 +213,9 @@ public class Drivetrain extends SubsystemBase {
                 m_FL.getSelectedSensorVelocity() * DriveConstants.WHEEL_DIAMETER * 10.,
                 m_FR.getSelectedSensorVelocity() * DriveConstants.WHEEL_DIAMETER * 10.);
 
-        SmartDashboard.putNumber("Heading", m_pose.getRotation().getDegrees());
+        field.setRobotPose(m_pose);
+        SmartDashboard.putData(field);
+        SmartDashboard.putNumber("Heading", getHeading());//m_pose.getRotation().getDegrees());
+        SmartDashboard.putNumber("POSE", m_pose.getRotation().getDegrees());
     }
 }

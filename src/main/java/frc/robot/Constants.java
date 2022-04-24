@@ -23,7 +23,7 @@ public class Constants {
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
                 Units.inchesToMeters(TRACK_WIDTH));
 
-        public static final double SPEED_SCALE = 0.5;
+        public static final double SPEED_SCALE = 0.25;
         public static final double WHEEL_DIAMETER = Units.inchesToMeters(6.258);
 
         public static final double ENCODER_CPR = 4096. * 7.5;
@@ -74,8 +74,8 @@ public class Constants {
     public static final class PIDConstants {
         // TODO: get these from SysId
         public static final class Drive {
-            public static final double kP = 0.2;
-            public static final double kD = 0.0;
+            public static final double kP = 0.1;
+            public static final double kD = 3.0;
         }
 
         public static final class Theta {

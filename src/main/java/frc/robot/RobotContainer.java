@@ -5,7 +5,10 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.DriveConstants;
@@ -42,17 +45,21 @@ public class RobotContainer {
     }
 
     public double speedScaledDriverLeftY() {
-        return -Util.speedScale(m_driverController.getLeftYAxis(), DriveConstants.SPEED_SCALE,
-                m_driverController.getRightTrigger());
+        return -Util.speedScale(m_driverController.getLeftYAxis(),
+            DriveConstants.SPEED_SCALE,
+            Robot.isSimulation() ? m_driverController.getLeftTrigger() : m_driverController.getRightTrigger());
     }
 
     public double speedScaledDriverRightX() {
-        return -Util.speedScale(m_driverController.getRightXAxis(), DriveConstants.SPEED_SCALE,
-                m_driverController.getRightTrigger());
+        return -Util.speedScale(Robot.isSimulation() ? m_driverController.getLeftXAxis() : m_driverController.getRightXAxis(),
+            DriveConstants.SPEED_SCALE,
+            Robot.isSimulation() ? m_driverController.getLeftTrigger() : m_driverController.getRightTrigger());
     }
 
     private void initAutonChooser() {
         _autonChooser.setDefaultOption("Test Path", new TestPath(m_drive));
+
+        SmartDashboard.putData("Auton Chooser", _autonChooser);
     }
 
     /**
