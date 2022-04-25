@@ -36,6 +36,8 @@
     },
     "windows": {
       "/SmartDashboard/Field": {
+        "height": 15.849599838256836,
+        "units": "feet",
         "window": {
           "visible": true
         }

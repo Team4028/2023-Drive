@@ -24,14 +24,15 @@ public class Constants {
                 Units.inchesToMeters(TRACK_WIDTH));
 
         public static final double SPEED_SCALE = 0.25;
-        public static final double WHEEL_DIAMETER = Units.inchesToMeters(6.258);
+        public static final double WHEEL_DIAMETER = .15895;//Units.inchesToMeters(6.258);
 
-        public static final double ENCODER_CPR = 4096. * 7.5;
+        public static final double ENCODER_CPR = 4096.;
+        public static final double GEAR_RATIO = 7.5;
         public static final double ENCODER_DISTANCE_PER_PULSE =
                 // Assumes the encoders are directly mounted on the wheel shafts
                 (WHEEL_DIAMETER * Math.PI) / ENCODER_CPR;
 
-        public static final double MAX_VELOCITY = Units.feetToMeters(15.);
+        public static final double MAX_VELOCITY = 4.572;//Units.feetToMeters(15.);
 
         public static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
                 // TODO: get these from SysId
@@ -44,8 +45,8 @@ public class Constants {
 
     public static final class AutonConstants {
         // in radians per second
-        public static final double MAX_ANGULAR_VELOCITY = DriveConstants.MAX_VELOCITY /
-                Math.hypot(DriveConstants.TRACK_WIDTH / 2., DriveConstants.WHEEL_BASE / 2.);
+        public static final double MAX_ANGULAR_VELOCITY = 2.0;//DriveConstants.MAX_VELOCITY /
+                // Math.hypot(DriveConstants.TRACK_WIDTH / 2., DriveConstants.WHEEL_BASE / 2.);
 
         public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
                 MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
@@ -74,8 +75,8 @@ public class Constants {
     public static final class PIDConstants {
         // TODO: get these from SysId
         public static final class Drive {
-            public static final double kP = 0.1;
-            public static final double kD = 3.0;
+            public static final double kP = 0.01;
+            public static final double kD = 0.0;
         }
 
         public static final class Theta {
