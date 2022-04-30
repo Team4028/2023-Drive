@@ -35,7 +35,7 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
         // Configure additional PID options by calling `getController` here.
         addRequirements(drivetrain);
         getController().enableContinuousInput(-Math.PI, Math.PI);
-        getController().setTolerance(Units.degreesToRadians(0.5));
+        getController().setTolerance(Units.degreesToRadians(0.25));
     }
 
     // Returns true when the command should end.

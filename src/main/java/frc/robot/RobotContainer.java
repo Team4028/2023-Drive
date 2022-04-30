@@ -5,8 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -14,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
+import frc.robot.commands.auton.EpicPath;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.TestPath;
 import frc.robot.subsystems.Drivetrain;
@@ -45,19 +44,20 @@ public class RobotContainer {
     }
 
     public double speedScaledDriverLeftY() {
-        return -Util.speedScale(m_driverController.getLeftYAxis(),
+        return Util.speedScale(m_driverController.getLeftYAxis(),
             DriveConstants.SPEED_SCALE,
-            Robot.isSimulation() ? m_driverController.getLeftTrigger() : m_driverController.getRightTrigger());
+            m_driverController.getRightTrigger());
     }
 
     public double speedScaledDriverRightX() {
-        return -Util.speedScale(Robot.isSimulation() ? m_driverController.getLeftXAxis() : m_driverController.getRightXAxis(),
+        return -Util.speedScale(m_driverController.getRightXAxis(),
             DriveConstants.SPEED_SCALE,
-            Robot.isSimulation() ? m_driverController.getLeftTrigger() : m_driverController.getRightTrigger());
+            m_driverController.getRightTrigger());
     }
 
     private void initAutonChooser() {
-        _autonChooser.setDefaultOption("Test Path", new TestPath(m_drive));
+        _autonChooser.setDefaultOption("Epic Path", new EpicPath(m_drive));
+        _autonChooser.addOption("Test Path", new TestPath(m_drive));
 
         SmartDashboard.putData("Auton Chooser", _autonChooser);
     }

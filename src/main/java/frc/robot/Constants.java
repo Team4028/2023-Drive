@@ -45,7 +45,7 @@ public class Constants {
 
     public static final class AutonConstants {
         // in radians per second
-        public static final double MAX_ANGULAR_VELOCITY = 2.0;//DriveConstants.MAX_VELOCITY /
+        public static final double MAX_ANGULAR_VELOCITY = Math.PI;//DriveConstants.MAX_VELOCITY /
                 // Math.hypot(DriveConstants.TRACK_WIDTH / 2., DriveConstants.WHEEL_BASE / 2.);
 
         public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(

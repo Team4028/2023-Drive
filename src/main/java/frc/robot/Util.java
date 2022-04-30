@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;

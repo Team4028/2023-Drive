@@ -16,8 +16,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.AnalogGyro;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
@@ -25,7 +23,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.Util;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriveConstants;
@@ -53,7 +50,7 @@ public class Drivetrain extends SubsystemBase {
         } else {
             m_gyro = new AHRS(SPI.Port.kMXP);
         }
-        m_odom = new DifferentialDriveOdometry(getRotation());
+        m_odom = new DifferentialDriveOdometry(getGyroRotation());
 
         m_FL = new WPI_TalonSRX(SubsystemConstants.DRIVE_FL);
         m_BL = new WPI_TalonSRX(SubsystemConstants.DRIVE_BL);
@@ -135,14 +132,14 @@ public class Drivetrain extends SubsystemBase {
      */
     public void drive(double x, double y, double rot) {
         x *= DriveConstants.MAX_VELOCITY;
-        // rot *= AutonConstants.MAX_ANGULAR_VELOCITY;
+        rot *= AutonConstants.MAX_ANGULAR_VELOCITY;
         DifferentialDriveWheelSpeeds speed = DriveConstants.DRIVE_KINEMATICS.toWheelSpeeds(
                 new ChassisSpeeds(x, 0, rot));
 
         // System.out.println("Sneed");
 
-        double rightVel = speed.rightMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE;
-        double leftVel = speed.leftMetersPerSecond / 10. / DriveConstants.ENCODER_DISTANCE_PER_PULSE;
+        double rightVel = speed.rightMetersPerSecond / DriveConstants.ENCODER_DISTANCE_PER_PULSE;
+        double leftVel = speed.leftMetersPerSecond / DriveConstants.ENCODER_DISTANCE_PER_PULSE;
 
         if (x != 0. || rot != 0.) {
             System.out.println(rightVel);
@@ -181,13 +178,16 @@ public class Drivetrain extends SubsystemBase {
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-                DriveConstants.ENCODER_DISTANCE_PER_PULSE / m_FL.getSelectedSensorVelocity(),
-                DriveConstants.ENCODER_DISTANCE_PER_PULSE / m_FR.getSelectedSensorVelocity());
+            Util.NUtoMeters(m_FL.getSelectedSensorVelocity()),
+            Util.NUtoMeters(m_FR.getSelectedSensorVelocity()));
+                // DriveConstants.ENCODER_DISTANCE_PER_PULSE / m_FL.getSelectedSensorVelocity(),
+                // DriveConstants.ENCODER_DISTANCE_PER_PULSE / m_FR.getSelectedSensorVelocity());
     }
 
     public void driveVolts(double left, double right) {
         m_FL.setVoltage(left);
         m_FR.setVoltage(right);
+        m_gyroSim.setAngle(m_gyroSim.getAngle() + DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(getWheelSpeeds()).omegaRadiansPerSecond);
     }
 
     /**
@@ -200,7 +200,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /* NavX wrapper methods */
-    public Rotation2d getRotation() {
+    public Rotation2d getGyroRotation() {
         if (Robot.isSimulation()) {
             return Rotation2d.fromDegrees(m_gyroSim.getAngle());
         } else {
@@ -212,8 +212,8 @@ public class Drivetrain extends SubsystemBase {
         m_gyro.reset();
     }
 
-    public double getHeading() {
-        return getRotation().getDegrees();
+    public double getGyroHeading() {
+        return getGyroRotation().getDegrees();
     }
 
     public double getRate() {
@@ -229,31 +229,36 @@ public class Drivetrain extends SubsystemBase {
         return m_odom.getPoseMeters();
     }
 
+    public Rotation2d getRotation() {
+        return getPoseMeters().getRotation();
+    }
+
     /**
      * Reset odometry to specified pose.
      * 
      * @param pose Pose to reset odometry to.
      */
     public void resetOdometry(Pose2d pose) {
-        m_odom.resetPosition(pose, getRotation());
+        m_odom.resetPosition(pose, getGyroRotation());
     }
 
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        Rotation2d rot = getRotation();
+        Rotation2d rot = getGyroRotation();
 
         SmartDashboard.putNumber("FL vel meter", Util.NUtoMeters(m_FL.getSelectedSensorVelocity()));
         SmartDashboard.putNumber("FL vel meter2", m_FL.getSelectedSensorVelocity() * DriveConstants.ENCODER_DISTANCE_PER_PULSE);
         m_pose = m_odom.update(rot,
-                m_FL.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE,
-                m_FR.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE);
-                // Util.NUtoMeters(m_FL.getSelectedSensorVelocity()),
-                // Util.NUtoMeters(m_FR.getSelectedSensorVelocity()));
+                // m_FL.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE,
+                // m_FR.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE);
+                Util.NUtoMeters(m_FL.getSelectedSensorPosition()),
+                Util.NUtoMeters(m_FR.getSelectedSensorPosition()));
 
         field.setRobotPose(m_pose);
         SmartDashboard.putData(field);
-        SmartDashboard.putNumber("Heading", getHeading());// m_pose.getRotation().getDegrees());
-        SmartDashboard.putNumber("POSE", m_pose.getRotation().getDegrees());
+        SmartDashboard.putNumber("Heading", getRotation().getDegrees());
+        SmartDashboard.putNumber("X (meters)", m_pose.getX());
+        SmartDashboard.putNumber("Y (meters)", m_pose.getY());
     }
 }

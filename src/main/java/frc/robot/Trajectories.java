@@ -4,28 +4,42 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
 
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.Filesystem;
+import frc.robot.Constants.DriveConstants;
 
 /** Get auton trajectories from paths. */
 public class Trajectories {
-    public static Trajectory getTrajectory(String path) {
-        Trajectory traj = new Trajectory();
-        try {
-            Path trajPath = Filesystem.getDeployDirectory().toPath().resolve("output/" + path + ".wpilib.json");
-            traj = TrajectoryUtil.fromPathweaverJson(trajPath);
-        } catch (IOException e) {
-            System.out.println("Failed to load path " + path);
-        }
-
-        return traj;
+    public static PathPlannerTrajectory TestPath() {
+        return PathPlanner.loadPath("TestPath",
+            DriveConstants.MAX_VELOCITY,
+            DriveConstants.MAX_VELOCITY
+        );
     }
 
-    public static Trajectory Bruh() {
-        return getTrajectory("Bruh");
+    public static PathPlannerTrajectory Ball1() {
+        return PathPlanner.loadPath("Ball1",
+            DriveConstants.MAX_VELOCITY,
+            DriveConstants.MAX_VELOCITY
+        );
     }
+
+    public static PathPlannerTrajectory Ball2() {
+        return PathPlanner.loadPath("Ball2",
+            DriveConstants.MAX_VELOCITY,
+            DriveConstants.MAX_VELOCITY
+        );
+    }
+    // public static Trajectory getTrajectory(String path) {
+    //     Trajectory traj = new Trajectory();
+    //     try {
+    //         Path trajPath = Filesystem.getDeployDirectory().toPath().resolve("output/" + path + ".wpilib.json");
+    //         traj = TrajectoryUtil.fromPathweaverJson(trajPath);
+    //     } catch (IOException e) {
+    //         System.out.println("Failed to load path " + path);
+    //     }
+
+    //     return traj;
+    // }
 }

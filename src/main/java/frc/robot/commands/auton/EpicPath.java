@@ -9,12 +9,13 @@ import frc.robot.Trajectories;
 import frc.robot.Util;
 import frc.robot.subsystems.Drivetrain;
 
-public class TestPath extends BeakAutonCommand {
+public class EpicPath extends BeakAutonCommand {
     /** Creates a new TestPath. */
-    public TestPath(Drivetrain drivetrain) {
+    public EpicPath(Drivetrain drivetrain) {
         super.addCommands(
-                Util.getTrajectoryCommand(Trajectories.TestPath(), drivetrain),
-                new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), drivetrain));
-        super.setInitialPose(Trajectories.TestPath());
+                Util.getTrajectoryCommand(Trajectories.Ball1(), drivetrain),
+                Util.getTrajectoryCommand(Trajectories.Ball2(), drivetrain),
+                new RotateDrivetrainToAngle(Rotation2d.fromDegrees(-167.5), drivetrain));
+        super.setInitialPose(Trajectories.Ball1());
     }
 }
