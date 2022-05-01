@@ -40,7 +40,7 @@ public class RobotContainer {
                         m_drive));
 
         m_driverController.start.whenPressed(m_drive::zero);
-        m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive));
+        m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, true));
     }
 
     public double speedScaledDriverLeftY() {

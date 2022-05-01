@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
@@ -25,7 +27,7 @@ public final class Util {
      * 
      * @param traj Trajectory to follow.
      */
-    public static final SequentialCommandGroup getTrajectoryCommand(Trajectory traj, Drivetrain drivetrain) {
+    public static final SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj, Drivetrain drivetrain) {
         return new RamseteCommand(
                 traj,
                 drivetrain::getPoseMeters,

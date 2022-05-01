@@ -41,7 +41,7 @@ public class Drivetrain extends SubsystemBase {
 
     private AnalogGyroSim m_gyroSim;
 
-    private static Drivetrain m_instance = new Drivetrain();
+    private static Drivetrain m_instance;
 
     /* Config and initialization */
     public Drivetrain() {
@@ -136,17 +136,13 @@ public class Drivetrain extends SubsystemBase {
         DifferentialDriveWheelSpeeds speed = DriveConstants.DRIVE_KINEMATICS.toWheelSpeeds(
                 new ChassisSpeeds(x, 0, rot));
 
-        // System.out.println("Sneed");
-
         double rightVel = speed.rightMetersPerSecond / DriveConstants.ENCODER_DISTANCE_PER_PULSE;
         double leftVel = speed.leftMetersPerSecond / DriveConstants.ENCODER_DISTANCE_PER_PULSE;
 
-        if (x != 0. || rot != 0.) {
-            System.out.println(rightVel);
-            System.out.println(leftVel);
-        } else {
-            System.out.println("Sneed");
-        }
+        // if (x != 0. || rot != 0.) {
+        //     System.out.println(rightVel);
+        //     System.out.println(leftVel);
+        // }
 
         m_gyroSim.setAngle(m_gyroSim.getAngle() + rot);
 
@@ -196,6 +192,9 @@ public class Drivetrain extends SubsystemBase {
      * controllers and a NavX.
      **/
     public static Drivetrain getInstance() {
+        if (m_instance == null) {
+            m_instance = new Drivetrain();
+        }
         return m_instance;
     }
 

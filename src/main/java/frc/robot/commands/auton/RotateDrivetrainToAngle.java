@@ -14,15 +14,20 @@ import frc.robot.subsystems.Drivetrain;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
+    private boolean relative;
+    private Rotation2d initialRotation;
+    private Rotation2d goal;
+
+    private Drivetrain drivetrain;
     /** Creates a new RotateDrivetrainByAngle. */
-    public RotateDrivetrainToAngle(Rotation2d goal, Drivetrain drivetrain) {
+    public RotateDrivetrainToAngle(Rotation2d goal, Drivetrain drivetrain, boolean relative) {
         super(
                 // The ProfiledPIDController used by the command
                 AutonConstants.THETA_CONTROLLER,
                 // This should return the measurement
                 () -> drivetrain.getRotation().getRadians(),
                 // This should return the goal (can also be a constant)
-                () -> goal.getRadians(),
+                () -> AutonConstants.THETA_CONTROLLER.getGoal(),
                 // This uses the output
                 (output, setpoint) -> {
                     // Use the output (and setpoint, if desired) here
@@ -31,11 +36,24 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
                             0.,
                             output + setpoint.velocity);
                 });
+        this.drivetrain = drivetrain;
+        this.goal = goal;
+        this.relative = relative;
         // Use addRequirements() here to declare subsystem dependencies.
         // Configure additional PID options by calling `getController` here.
         addRequirements(drivetrain);
         getController().enableContinuousInput(-Math.PI, Math.PI);
         getController().setTolerance(Units.degreesToRadians(0.25));
+    }
+
+    public double getGoal() {
+        return goal.getRadians() + (relative ? initialRotation.getRadians() : 0.);
+    }
+
+    @Override
+    public void initialize() {
+        initialRotation = drivetrain.getRotation();
+        getController().setGoal(getGoal());
     }
 
     // Returns true when the command should end.
