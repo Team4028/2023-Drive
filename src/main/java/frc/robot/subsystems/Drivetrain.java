@@ -16,9 +16,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -42,6 +48,20 @@ public class Drivetrain extends SubsystemBase {
     private AnalogGyroSim m_gyroSim;
 
     private static Drivetrain m_instance;
+
+    DifferentialDrivetrainSim sim = DifferentialDrivetrainSim.createKitbotSim(
+        KitbotMotor.kDualCIMPerSide,
+        KitbotGearing.k7p31,
+        KitbotWheelSize.kSixInch,
+        null);/*new DifferentialDrivetrainSim(
+        DCMotor.getCIM(2),
+        DriveConstants.GEAR_RATIO,
+        7.5,
+        Units.lbsToKilograms(125.),
+        DriveConstants.WHEEL_DIAMETER / 2.,
+        DriveConstants.TRACK_WIDTH,
+        null
+    );*/
 
     /* Config and initialization */
     public Drivetrain() {
@@ -144,12 +164,14 @@ public class Drivetrain extends SubsystemBase {
         //     System.out.println(leftVel);
         // }
 
-        m_gyroSim.setAngle(m_gyroSim.getAngle() + rot);
+        // m_gyroSim.setAngle(m_gyroSim.getAngle() + rot);
 
         speed.desaturate(DriveConstants.MAX_VELOCITY);
 
         if (x != 0. || rot != 0.) {
             if (Robot.isSimulation()) {
+                // m_FL.set(speed.leftMetersPerSecond);
+                // m_FR.set(speed.rightMetersPerSecond);
                 m_FL.set(ControlMode.Velocity, leftVel);
                 // DemandType.ArbitraryFeedForward,
                 // DriveConstants.FEED_FORWARD.calculate(speed.leftMetersPerSecond) /
@@ -183,7 +205,7 @@ public class Drivetrain extends SubsystemBase {
     public void driveVolts(double left, double right) {
         m_FL.setVoltage(left);
         m_FR.setVoltage(right);
-        m_gyroSim.setAngle(m_gyroSim.getAngle() + DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(getWheelSpeeds()).omegaRadiansPerSecond);
+        // m_gyroSim.setAngle(m_gyroSim.getAngle() + DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(getWheelSpeeds()).omegaRadiansPerSecond);
     }
 
     /**
@@ -244,6 +266,11 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
+        System.out.println(m_FL.getMotorOutputPercent() * m_FL.getBusVoltage());
+        sim.setInputs(m_FL.getMotorOutputPercent() * m_FL.getBusVoltage(), m_FR.getMotorOutputPercent() * m_FR.getBusVoltage());
+        sim.update(0.02);
+
+        m_gyroSim.setAngle(-sim.getHeading().getDegrees());
         Rotation2d rot = getGyroRotation();
 
         SmartDashboard.putNumber("FL vel meter", Util.NUtoMeters(m_FL.getSelectedSensorVelocity()));
