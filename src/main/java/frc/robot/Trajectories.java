@@ -7,28 +7,28 @@ package frc.robot;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import frc.robot.Constants.TalonDriveConstants;
+import frc.robot.Constants.DriveConstants;
 
 /** Get auton trajectories from paths. */
 public class Trajectories {
     public static PathPlannerTrajectory TestPath() {
         return PathPlanner.loadPath("TestPath",
-            TalonDriveConstants.MAX_VELOCITY,
-            TalonDriveConstants.MAX_VELOCITY
+            DriveConstants.MAX_VELOCITY,
+            DriveConstants.MAX_VELOCITY
         );
     }
 
     public static PathPlannerTrajectory Ball1() {
         return PathPlanner.loadPath("Ball1",
-            TalonDriveConstants.MAX_VELOCITY,
-            TalonDriveConstants.MAX_VELOCITY
+            DriveConstants.MAX_VELOCITY,
+            DriveConstants.MAX_VELOCITY
         );
     }
 
     public static PathPlannerTrajectory Ball2() {
         return PathPlanner.loadPath("Ball2",
-            TalonDriveConstants.MAX_VELOCITY,
-            TalonDriveConstants.MAX_VELOCITY
+            DriveConstants.MAX_VELOCITY,
+            DriveConstants.MAX_VELOCITY
         );
     }
     // public static Trajectory getTrajectory(String path) {

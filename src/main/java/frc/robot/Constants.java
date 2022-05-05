@@ -14,7 +14,7 @@ import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
 public class Constants {
-    public static final class TalonDriveConstants {
+    public static final class DriveConstants {
         // distance from the right to left wheels on the robot
         public static final double TRACK_WIDTH = 24.25;
         // distance from the front to back wheels on the robot
@@ -43,35 +43,6 @@ public class Constants {
         public static final double NOMINAL_VOLTAGE = 12.;
     }
 
-    public static final class NEODriveConstants {
-        // distance from the right to left wheels on the robot
-        public static final double TRACK_WIDTH = 24.25;
-        // distance from the front to back wheels on the robot
-        public static final double WHEEL_BASE = 24.25;
-
-        public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
-                Units.inchesToMeters(TRACK_WIDTH));
-
-        public static final double SPEED_SCALE = 0.25;
-        public static final double WHEEL_DIAMETER = .15895;//Units.inchesToMeters(6.258);
-
-        public static final double ENCODER_CPR = 60;
-        public static final double GEAR_RATIO = 7.5;
-        public static final double ENCODER_DISTANCE_PER_PULSE =
-                // Assumes the encoders are directly mounted on the wheel shafts
-                (WHEEL_DIAMETER * Math.PI) / (GEAR_RATIO * ENCODER_CPR);
-
-        public static final double MAX_VELOCITY = 4.572;//Units.feetToMeters(15.);
-
-        public static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
-                // TODO: get these from SysId
-                0.0,
-                0.0,
-                0.0);
-
-        public static final double NOMINAL_VOLTAGE = 12.;
-    }
-
     public static final class AutonConstants {
         // in radians per second
         public static final double MAX_ANGULAR_VELOCITY = Math.PI;//DriveConstants.MAX_VELOCITY /
@@ -87,9 +58,9 @@ public class Constants {
                 THETA_CONSTRAINTS);
 
         public static final TrajectoryConfig AUTON_TRAJECTORY_CONFIG = new TrajectoryConfig(
-                TalonDriveConstants.MAX_VELOCITY,
-                TalonDriveConstants.MAX_VELOCITY)
-                        .setKinematics(TalonDriveConstants.DRIVE_KINEMATICS);
+                DriveConstants.MAX_VELOCITY,
+                DriveConstants.MAX_VELOCITY)
+                        .setKinematics(DriveConstants.DRIVE_KINEMATICS);
 
         public static final PIDController DRIVE_CONTROLLER = new PIDController(PIDConstants.DriveController.kP, 0, 0);
     }

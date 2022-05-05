@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.Constants.AutonConstants;
-import frc.robot.subsystems.BeakDrivetrain;
+import frc.robot.subsystems.Drivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -18,14 +18,14 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     private Rotation2d initialRotation;
     private Rotation2d goal;
 
-    private BeakDrivetrain drivetrain;
+    private Drivetrain drivetrain;
     /** Creates a new RotateDrivetrainByAngle. */
-    public RotateDrivetrainToAngle(Rotation2d goal, BeakDrivetrain drivetrain, boolean relative) {
+    public RotateDrivetrainToAngle(Rotation2d goal, Drivetrain drivetrain, boolean relative) {
         super(
                 // The ProfiledPIDController used by the command
                 AutonConstants.THETA_CONTROLLER,
                 // This should return the measurement
-                () -> drivetrain.getRotation2d().getRadians(),
+                () -> drivetrain.getRotation().getRadians(),
                 // This should return the goal (can also be a constant)
                 () -> AutonConstants.THETA_CONTROLLER.getGoal(),
                 // This uses the output
@@ -52,7 +52,7 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
 
     @Override
     public void initialize() {
-        initialRotation = drivetrain.getRotation2d();
+        initialRotation = drivetrain.getRotation();
         getController().setGoal(getGoal());
     }
 

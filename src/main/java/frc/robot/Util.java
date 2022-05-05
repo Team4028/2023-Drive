@@ -12,9 +12,8 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutonConstants;
-import frc.robot.Constants.TalonDriveConstants;
-import frc.robot.subsystems.BeakDifferentialDrivetrain;
-import frc.robot.subsystems.BeakDrivetrain;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.Drivetrain;
 
 /** Useful utility functions for drive. */
 public final class Util {
@@ -28,13 +27,13 @@ public final class Util {
      * 
      * @param traj Trajectory to follow.
      */
-    public static final SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj, BeakDifferentialDrivetrain drivetrain) {
+    public static final SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj, Drivetrain drivetrain) {
         return new RamseteCommand(
                 traj,
                 drivetrain::getPoseMeters,
                 new RamseteController(),
-                TalonDriveConstants.FEED_FORWARD,
-                TalonDriveConstants.DRIVE_KINEMATICS,
+                DriveConstants.FEED_FORWARD,
+                DriveConstants.DRIVE_KINEMATICS,
                 drivetrain::getWheelSpeeds,
                 AutonConstants.DRIVE_CONTROLLER,
                 AutonConstants.DRIVE_CONTROLLER,
@@ -75,6 +74,6 @@ public final class Util {
     }
 
     public static double NUtoMeters(double nu) {
-        return NUtoMeters(nu, TalonDriveConstants.ENCODER_CPR, TalonDriveConstants.GEAR_RATIO, Units.metersToInches(TalonDriveConstants.WHEEL_DIAMETER));
+        return NUtoMeters(nu, DriveConstants.ENCODER_CPR, DriveConstants.GEAR_RATIO, Units.metersToInches(DriveConstants.WHEEL_DIAMETER));
     }
 }

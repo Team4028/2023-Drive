@@ -31,22 +31,23 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Util;
 import frc.robot.Constants.AutonConstants;
-import frc.robot.Constants.TalonDriveConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.sim.PhysicsSim;
 
-public class TalonDrivetrain extends BeakDifferentialDrivetrain {
+public class Drivetrain extends SubsystemBase {
     private WPI_TalonSRX m_FL, m_BL, m_FR, m_BR;
 
     private Gyro m_gyro;
+    private DifferentialDriveOdometry m_odom;
 
     private Pose2d m_pose;
     Field2d field = new Field2d();
 
     private AnalogGyroSim m_gyroSim;
 
-    private static TalonDrivetrain m_instance;
+    private static Drivetrain m_instance;
 
     DifferentialDrivetrainSim sim = DifferentialDrivetrainSim.createKitbotSim(
         KitbotMotor.kDualCIMPerSide,
@@ -63,14 +64,13 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
     );*/
 
     /* Config and initialization */
-    public TalonDrivetrain() {
-        super(TalonDriveConstants.DRIVE_KINEMATICS);
+    public Drivetrain() {
         if (Robot.isSimulation()) {
             m_gyroSim = new AnalogGyroSim(1);
         } else {
             m_gyro = new AHRS(SPI.Port.kMXP);
         }
-        m_odom = new DifferentialDriveOdometry(getGyroRotation2d());
+        m_odom = new DifferentialDriveOdometry(getGyroRotation());
 
         m_FL = new WPI_TalonSRX(SubsystemConstants.DRIVE_FL);
         m_BL = new WPI_TalonSRX(SubsystemConstants.DRIVE_BL);
@@ -91,28 +91,25 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
     }
 
     public void configMotors() {
-        configPID(PIDConstants.Drive.kP, PIDConstants.Drive.kD);
+        configPID();
         configNeutralMode();
         configInverted();
         configSensors();
     }
 
-    public void configPID(
-        double kP,
-        double kD
-    ) {
+    public void configPID() {
         // TODO: get these from SysId
-        m_FL.config_kP(0, kP);
-        m_FL.config_kD(0, kD);
+        m_FL.config_kP(0, PIDConstants.Drive.kP);
+        m_FL.config_kD(0, PIDConstants.Drive.kD);
 
-        m_BL.config_kP(0, kP);
-        m_BL.config_kD(0, kD);
+        m_BL.config_kP(0, PIDConstants.Drive.kP);
+        m_BL.config_kD(0, PIDConstants.Drive.kD);
 
-        m_FR.config_kP(0, kP);
-        m_FR.config_kD(0, kD);
+        m_FR.config_kP(0, PIDConstants.Drive.kP);
+        m_FR.config_kD(0, PIDConstants.Drive.kD);
 
-        m_BR.config_kP(0, kP);
-        m_BR.config_kD(0, kD);
+        m_BR.config_kP(0, PIDConstants.Drive.kP);
+        m_BR.config_kD(0, PIDConstants.Drive.kD);
 
         if (Robot.isSimulation()) {
             m_FL.config_kF(0, 0.03);
@@ -130,8 +127,8 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
     }
 
     public void configInverted() {
-        m_FL.setInverted(true);
-        m_BL.setInverted(true);
+        m_FL.setInverted(!Robot.isSimulation());
+        m_BL.setInverted(!Robot.isSimulation());
         m_FR.setInverted(false);
         m_BR.setInverted(false);
     }
@@ -154,15 +151,22 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
      * @param rot Angular rate of the robot.
      */
     public void drive(double x, double y, double rot) {
-        DifferentialDriveWheelSpeeds speed = calcWheelSpeeds(
-            x,
-            rot,
-            TalonDriveConstants.MAX_VELOCITY,
-            AutonConstants.MAX_ANGULAR_VELOCITY
-        );
+        x *= DriveConstants.MAX_VELOCITY;
+        rot *= AutonConstants.MAX_ANGULAR_VELOCITY;
+        DifferentialDriveWheelSpeeds speed = DriveConstants.DRIVE_KINEMATICS.toWheelSpeeds(
+                new ChassisSpeeds(x, 0, rot));
 
-        double rightVel = speed.rightMetersPerSecond / TalonDriveConstants.ENCODER_DISTANCE_PER_PULSE;
-        double leftVel = speed.leftMetersPerSecond / TalonDriveConstants.ENCODER_DISTANCE_PER_PULSE;
+        double rightVel = speed.rightMetersPerSecond / DriveConstants.ENCODER_DISTANCE_PER_PULSE;
+        double leftVel = speed.leftMetersPerSecond / DriveConstants.ENCODER_DISTANCE_PER_PULSE;
+
+        // if (x != 0. || rot != 0.) {
+        //     System.out.println(rightVel);
+        //     System.out.println(leftVel);
+        // }
+
+        // m_gyroSim.setAngle(m_gyroSim.getAngle() + rot);
+
+        speed.desaturate(DriveConstants.MAX_VELOCITY);
 
         if (x != 0. || rot != 0.) {
             if (Robot.isSimulation()) {
@@ -179,10 +183,10 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
             } else {
                 m_FL.set(ControlMode.Velocity, leftVel,
                         DemandType.ArbitraryFeedForward,
-                        TalonDriveConstants.FEED_FORWARD.calculate(speed.leftMetersPerSecond) / TalonDriveConstants.NOMINAL_VOLTAGE);
+                        DriveConstants.FEED_FORWARD.calculate(speed.leftMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
                 m_FR.set(ControlMode.Velocity, rightVel,
                         DemandType.ArbitraryFeedForward,
-                        TalonDriveConstants.FEED_FORWARD.calculate(speed.rightMetersPerSecond) / TalonDriveConstants.NOMINAL_VOLTAGE);
+                        DriveConstants.FEED_FORWARD.calculate(speed.rightMetersPerSecond) / DriveConstants.NOMINAL_VOLTAGE);
             }
         } else {
             m_FL.set(0.);
@@ -201,6 +205,7 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
     public void driveVolts(double left, double right) {
         m_FL.setVoltage(left);
         m_FR.setVoltage(right);
+        // m_gyroSim.setAngle(m_gyroSim.getAngle() + DriveConstants.DRIVE_KINEMATICS.toChassisSpeeds(getWheelSpeeds()).omegaRadiansPerSecond);
     }
 
     /**
@@ -208,20 +213,28 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
      * differential drivetrain, with 4 TalonSRX
      * controllers and a NavX.
      **/
-    public static TalonDrivetrain getInstance() {
+    public static Drivetrain getInstance() {
         if (m_instance == null) {
-            m_instance = new TalonDrivetrain();
+            m_instance = new Drivetrain();
         }
         return m_instance;
     }
 
     /* NavX wrapper methods */
-    public Rotation2d getGyroRotation2d() {
+    public Rotation2d getGyroRotation() {
         if (Robot.isSimulation()) {
             return Rotation2d.fromDegrees(m_gyroSim.getAngle());
         } else {
             return m_gyro.getRotation2d();
         }
+    }
+
+    public void zero() {
+        m_gyro.reset();
+    }
+
+    public double getGyroHeading() {
+        return getGyroRotation().getDegrees();
     }
 
     public double getRate() {
@@ -233,6 +246,22 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
     }
 
     /* Pose & Odometry */
+    public Pose2d getPoseMeters() {
+        return m_odom.getPoseMeters();
+    }
+
+    public Rotation2d getRotation() {
+        return getPoseMeters().getRotation();
+    }
+
+    /**
+     * Reset odometry to specified pose.
+     * 
+     * @param pose Pose to reset odometry to.
+     */
+    public void resetOdometry(Pose2d pose) {
+        m_odom.resetPosition(pose, getGyroRotation());
+    }
 
     @Override
     public void periodic() {
@@ -242,10 +271,10 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
         sim.update(0.02);
 
         m_gyroSim.setAngle(-sim.getHeading().getDegrees());
-        Rotation2d rot = getGyroRotation2d();
+        Rotation2d rot = getGyroRotation();
 
         SmartDashboard.putNumber("FL vel meter", Util.NUtoMeters(m_FL.getSelectedSensorVelocity()));
-        SmartDashboard.putNumber("FL vel meter2", m_FL.getSelectedSensorVelocity() * TalonDriveConstants.ENCODER_DISTANCE_PER_PULSE);
+        SmartDashboard.putNumber("FL vel meter2", m_FL.getSelectedSensorVelocity() * DriveConstants.ENCODER_DISTANCE_PER_PULSE);
         m_pose = m_odom.update(rot,
                 // m_FL.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE,
                 // m_FR.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE);
@@ -254,7 +283,7 @@ public class TalonDrivetrain extends BeakDifferentialDrivetrain {
 
         field.setRobotPose(m_pose);
         SmartDashboard.putData(field);
-        SmartDashboard.putNumber("Heading", getRotation2d().getDegrees());
+        SmartDashboard.putNumber("Heading", getRotation().getDegrees());
         SmartDashboard.putNumber("X (meters)", m_pose.getX());
         SmartDashboard.putNumber("Y (meters)", m_pose.getY());
     }

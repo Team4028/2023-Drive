@@ -9,21 +9,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import frc.robot.Constants.TalonDriveConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
 import frc.robot.commands.auton.EpicPath;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.TestPath;
-import frc.robot.subsystems.BeakDifferentialDrivetrain;
-import frc.robot.subsystems.BeakDrivetrain;
-import frc.robot.subsystems.TalonDrivetrain;
+import frc.robot.subsystems.Drivetrain;
 
 /** Add your docs here. */
 public class RobotContainer {
     private BeakXBoxController m_driverController = new BeakXBoxController(OIConstants.DRIVER);
 
-    private BeakDifferentialDrivetrain m_drive = TalonDrivetrain.getInstance();
+    private Drivetrain m_drive = Drivetrain.getInstance();
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
 
     private static RobotContainer _instance = new RobotContainer();
@@ -47,13 +45,13 @@ public class RobotContainer {
 
     public double speedScaledDriverLeftY() {
         return Util.speedScale(m_driverController.getLeftYAxis(),
-            TalonDriveConstants.SPEED_SCALE,
+            DriveConstants.SPEED_SCALE,
             m_driverController.getRightTrigger());
     }
 
     public double speedScaledDriverRightX() {
         return -Util.speedScale(m_driverController.getRightXAxis(),
-            TalonDriveConstants.SPEED_SCALE,
+            DriveConstants.SPEED_SCALE,
             m_driverController.getRightTrigger());
     }
 
