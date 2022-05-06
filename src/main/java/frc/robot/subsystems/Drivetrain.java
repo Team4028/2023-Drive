@@ -267,7 +267,8 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         System.out.println(m_FL.getMotorOutputPercent() * m_FL.getBusVoltage());
-        sim.setInputs(m_FL.getMotorOutputPercent() * m_FL.getBusVoltage(), m_FR.getMotorOutputPercent() * m_FR.getBusVoltage());
+        // sim.setInputs(m_FR.getMotorOutputPercent() * m_FR.getBusVoltage(), m_FL.getMotorOutputPercent() * m_FL.getBusVoltage());
+        sim.setInputs(m_FR.getMotorOutputVoltage(), m_FL.getMotorOutputVoltage());
         sim.update(0.02);
 
         m_gyroSim.setAngle(-sim.getHeading().getDegrees());
