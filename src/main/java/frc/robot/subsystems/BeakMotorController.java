@@ -4,8 +4,11 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+
+
 /** Add your docs here. */
-public interface BeakMotorController {
+public interface BeakMotorController extends MotorController {
     public void setPIDF(
         double p,
         double i,

@@ -9,9 +9,6 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.sim.PhysicsSim;
-import frc.robot.subsystems.BeakTalon;
-import frc.robot.subsystems.BeakMotorController;
-import frc.robot.subsystems.BeakTalon.BeakTalonType;
 
 /**
  * The VM is configured to automatically run this class, and to call the

@@ -8,11 +8,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
-import com.ctre.phoenix.motorcontrol.can.BaseTalonPIDSetConfiguration;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 
 import edu.wpi.first.wpilibj.RobotController;
 
+// TODO: Set slots
 /** Add your docs here. */
 public class BeakTalon extends BaseTalon implements BeakMotorController {
     private int encoderCPR;
@@ -136,11 +136,6 @@ public class BeakTalon extends BaseTalon implements BeakMotorController {
     }
 
     @Override
-    public double getBusVoltage() {
-        return super.getBusVoltage();
-    }
-
-    @Override
     public double getOutputVoltage() {
         return super.getMotorOutputVoltage();
     }
@@ -169,5 +164,15 @@ public class BeakTalon extends BaseTalon implements BeakMotorController {
     @Override
     public double getF(int slot) {
         return getPIDF(slot).kF;
+    }
+
+    @Override
+    public void disable() {
+        stop();
+    }
+
+    @Override
+    public void stopMotor() {
+        stop();
     }
 }

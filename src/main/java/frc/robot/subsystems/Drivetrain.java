@@ -16,8 +16,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
@@ -266,7 +264,7 @@ public class Drivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        System.out.println(m_FL.getMotorOutputPercent() * m_FL.getBusVoltage());
+        // System.out.println(m_FL.getMotorOutputPercent() * m_FL.getBusVoltage());
         // sim.setInputs(m_FR.getMotorOutputPercent() * m_FR.getBusVoltage(), m_FL.getMotorOutputPercent() * m_FL.getBusVoltage());
         sim.setInputs(m_FR.getMotorOutputVoltage(), m_FL.getMotorOutputVoltage());
         sim.update(0.02);

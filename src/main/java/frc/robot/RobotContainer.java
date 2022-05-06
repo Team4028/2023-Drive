@@ -15,10 +15,7 @@ import frc.robot.commands.auton.BeakAutonCommand;
 import frc.robot.commands.auton.EpicPath;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.TestPath;
-import frc.robot.subsystems.BeakMotorController;
-import frc.robot.subsystems.BeakTalon;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.BeakTalon.BeakTalonType;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -35,8 +32,6 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        BeakTalon bruh = new BeakTalon(5, BeakTalonType.TalonSRX);
-        bruh.setPIDF(1, 0, 10, .05, 0);
         m_drive.setDefaultCommand(
                 new RunCommand(() -> m_drive.drive(
                         speedScaledDriverLeftY(),
