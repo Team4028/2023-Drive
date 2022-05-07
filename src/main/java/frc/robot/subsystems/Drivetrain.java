@@ -27,12 +27,12 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.Util;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.sim.PhysicsSim;
+import frc.robot.utilities.Util;
 
 public class Drivetrain extends SubsystemBase {
     private WPI_TalonSRX m_FL, m_BL, m_FR, m_BR;

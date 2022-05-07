@@ -2,11 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.utilities;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
+import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 
@@ -16,6 +18,7 @@ import edu.wpi.first.wpilibj.RobotController;
 /** Add your docs here. */
 public class BeakTalon extends BaseTalon implements BeakMotorController {
     private int encoderCPR;
+
     public BeakTalon(int port, BeakTalonType type, String canBus) {
         super(port, type.value, canBus);
 
@@ -53,14 +56,6 @@ public class BeakTalon extends BaseTalon implements BeakMotorController {
     }
 
     @Override
-    public void setPIDF(double p, double i, double d, double f, int slot) {
-        super.config_kP(slot, p);
-        super.config_kI(slot, i);
-        super.config_kD(slot, d);
-        super.config_kF(slot, f);
-    }
-
-    @Override
     public void set(double percentOutput) {
         super.set(ControlMode.PercentOutput, percentOutput);
     }
@@ -94,6 +89,16 @@ public class BeakTalon extends BaseTalon implements BeakMotorController {
     public void setPositionNU(double nu) {
         super.set(ControlMode.Position, nu);
     }
+    
+    @Override
+    public void setEncoderPositionMotorRotations(double rotations) {
+        setEncoderPositionNU(rotations * encoderCPR);
+    }
+
+    @Override
+    public void setEncoderPositionNU(double nu) {
+        super.setSelectedSensorPosition(nu);
+    }
 
     @Override
     public void setMotionMagicMotorRotations(double rotations) {
@@ -123,16 +128,6 @@ public class BeakTalon extends BaseTalon implements BeakMotorController {
     @Override
     public double getPositionNU() {
         return super.getSelectedSensorPosition();
-    }
-
-    @Override
-    public void stop() {
-        set(0.);
-    }
-
-    @Override
-    public void setVoltage(double voltage) {
-        set(voltage / RobotController.getBatteryVoltage());
     }
 
     @Override
@@ -166,13 +161,37 @@ public class BeakTalon extends BaseTalon implements BeakMotorController {
         return getPIDF(slot).kF;
     }
 
-    @Override
-    public void disable() {
-        stop();
+    public TalonSRXSimCollection getTalonSRXSimCollection() {
+        return super.getTalonSRXSimCollection();
+    }
+
+    public TalonFXSimCollection getTalonFXSimCollection() {
+        return super.getTalonFXSimCollection();
     }
 
     @Override
-    public void stopMotor() {
-        stop();
+    public void setP(double p, int slot) {
+        super.config_kP(slot, p);
+    }
+
+    @Override
+    public void setI(double i, int slot) {
+        super.config_kI(slot, i);
+    }
+
+    @Override
+    public void setD(double d, int slot) {
+        super.config_kD(slot, d);
+    }
+
+    @Override
+    public void setF(double f, int slot) {
+        super.config_kF(slot, f);
+    }
+
+    @Override
+    public double calculateFeedForward(double percentOutput, double desiredOutputNU) {
+        double pidControllerOutput = percentOutput / 1023;
+        return pidControllerOutput / desiredOutputNU;
     }
 }
