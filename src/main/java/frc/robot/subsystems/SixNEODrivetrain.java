@@ -26,14 +26,14 @@ import frc.robot.Constants.SubsystemConstants;
 import frc.robot.utilities.BeakSparkMAX;
 
 /** Add your docs here. */
-public class NEODrivetrain extends BeakDifferentialDrivetrain {
+public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
     private Field2d field = new Field2d();
 
-    private BeakSparkMAX m_FL, m_BL, m_FR, m_BR;
+    private BeakSparkMAX m_FL, m_BL, m_BL2, m_FR, m_BR, m_BR2;
 
-    private static NEODrivetrain m_instance;
+    private static SixNEODrivetrain m_instance;
 
-    public NEODrivetrain() {
+    public SixNEODrivetrain() {
         super(
                 DriveConstants.MAX_VELOCITY,
                 AutonConstants.MAX_ANGULAR_VELOCITY,
@@ -52,11 +52,15 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
 
         m_FL = new BeakSparkMAX(SubsystemConstants.DRIVE_FL);
         m_BL = new BeakSparkMAX(SubsystemConstants.DRIVE_BL);
+        m_BL2 = new BeakSparkMAX(5);
         m_FR = new BeakSparkMAX(SubsystemConstants.DRIVE_FR);
         m_BR = new BeakSparkMAX(SubsystemConstants.DRIVE_BR);
+        m_BR2 = new BeakSparkMAX(6);
 
         m_BL.follow(m_FL);
+        m_BL2.follow(m_FL);
         m_BR.follow(m_FR);
+        m_BR2.follow(m_FR);
 
         super.m_FL = m_FL;
         super.m_BL = m_BL;
@@ -68,15 +72,17 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
         if (Robot.isSimulation()) {
             REVPhysicsSim.getInstance().addSparkMax(m_FL, DCMotor.getNEO(1));
             REVPhysicsSim.getInstance().addSparkMax(m_BL, DCMotor.getNEO(1));
+            REVPhysicsSim.getInstance().addSparkMax(m_BL2, DCMotor.getNEO(1));
             REVPhysicsSim.getInstance().addSparkMax(m_FR, DCMotor.getNEO(1));
             REVPhysicsSim.getInstance().addSparkMax(m_BR, DCMotor.getNEO(1));
+            REVPhysicsSim.getInstance().addSparkMax(m_BR2, DCMotor.getNEO(1));
         }
 
         sim = DifferentialDrivetrainSim.createKitbotSim(
-                KitbotMotor.kDualCIMPerSide,
-                KitbotGearing.k5p95,
-                KitbotWheelSize.kSixInch,
-                null);
+            KitbotMotor.kDoubleNEOPerSide,
+            KitbotGearing.k5p95,
+            KitbotWheelSize.kSixInch,
+            null);
     }
 
     public void configMotors() {
@@ -90,27 +96,33 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
         double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getNEO(1).freeSpeedRadPerSec);
         m_FL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FL.calculateFeedForward(1, maxVel), 0);
         m_BL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BL.calculateFeedForward(1, maxVel), 0);
+        m_BL2.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BL2.calculateFeedForward(1, maxVel), 0);
         m_FR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FR.calculateFeedForward(1, maxVel), 0);
         m_BR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BR.calculateFeedForward(1, maxVel), 0);
+        m_BR2.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BR2.calculateFeedForward(1, maxVel), 0);
     }
 
     public void configNeutralMode() {
         m_FL.setBrake(true);
         m_BL.setBrake(true);
+        m_BL2.setBrake(true);
         m_FR.setBrake(true);
         m_BR.setBrake(true);
+        m_BR2.setBrake(true);
     }
 
     public void configInverted() {
         m_FL.setInverted(true);
         m_BL.setInverted(true);
+        m_BL2.setInverted(true);
         m_FR.setInverted(false);
         m_BR.setInverted(false);
+        m_BR2.setInverted(false);
     }
 
-    public static NEODrivetrain getInstance() {
+    public static SixNEODrivetrain getInstance() {
         if (m_instance == null) {
-            m_instance = new NEODrivetrain();
+            m_instance = new SixNEODrivetrain();
         }
         return m_instance;
     }
