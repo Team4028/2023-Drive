@@ -19,6 +19,7 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     private Rotation2d goal;
 
     private BeakDifferentialDrivetrain drivetrain;
+
     /** Creates a new RotateDrivetrainByAngle. */
     public RotateDrivetrainToAngle(Rotation2d goal, BeakDifferentialDrivetrain drivetrain, boolean relative) {
         super(

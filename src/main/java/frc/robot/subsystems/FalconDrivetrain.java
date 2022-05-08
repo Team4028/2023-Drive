@@ -90,7 +90,8 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
     public void configPID() {
         // TODO: get these from SysId
-        double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getFalcon500(1).freeSpeedRadPerSec) * 2048 / 600;
+        double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getFalcon500(1).freeSpeedRadPerSec) * 2048
+                / 600;
 
         m_FL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FL.calculateFeedForward(1, maxVel), 0);
         m_BL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BL.calculateFeedForward(1, maxVel), 0);

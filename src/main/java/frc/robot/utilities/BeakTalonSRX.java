@@ -52,7 +52,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     public void setPositionNU(double nu) {
         super.set(ControlMode.Position, nu);
     }
-    
+
     @Override
     public void setEncoderPositionMotorRotations(double rotations) {
         setEncoderPositionNU(rotations * 4096);

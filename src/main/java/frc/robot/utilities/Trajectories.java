@@ -13,33 +13,31 @@ import frc.robot.Constants.DriveConstants;
 public class Trajectories {
     public static PathPlannerTrajectory TestPath() {
         return PathPlanner.loadPath("TestPath",
-            DriveConstants.MAX_VELOCITY,
-            DriveConstants.MAX_VELOCITY
-        );
+                DriveConstants.MAX_VELOCITY,
+                DriveConstants.MAX_VELOCITY);
     }
 
     public static PathPlannerTrajectory Ball1() {
         return PathPlanner.loadPath("Ball1",
-            DriveConstants.MAX_VELOCITY,
-            DriveConstants.MAX_VELOCITY
-        );
+                DriveConstants.MAX_VELOCITY,
+                DriveConstants.MAX_VELOCITY);
     }
 
     public static PathPlannerTrajectory Ball2() {
         return PathPlanner.loadPath("Ball2",
-            DriveConstants.MAX_VELOCITY,
-            DriveConstants.MAX_VELOCITY
-        );
+                DriveConstants.MAX_VELOCITY,
+                DriveConstants.MAX_VELOCITY);
     }
     // public static Trajectory getTrajectory(String path) {
-    //     Trajectory traj = new Trajectory();
-    //     try {
-    //         Path trajPath = Filesystem.getDeployDirectory().toPath().resolve("output/" + path + ".wpilib.json");
-    //         traj = TrajectoryUtil.fromPathweaverJson(trajPath);
-    //     } catch (IOException e) {
-    //         System.out.println("Failed to load path " + path);
-    //     }
+    // Trajectory traj = new Trajectory();
+    // try {
+    // Path trajPath = Filesystem.getDeployDirectory().toPath().resolve("output/" +
+    // path + ".wpilib.json");
+    // traj = TrajectoryUtil.fromPathweaverJson(trajPath);
+    // } catch (IOException e) {
+    // System.out.println("Failed to load path " + path);
+    // }
 
-    //     return traj;
+    // return traj;
     // }
 }

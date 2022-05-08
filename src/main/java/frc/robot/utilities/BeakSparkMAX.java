@@ -15,7 +15,7 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     public BeakSparkMAX(int port) {
         super(port, MotorType.kBrushless);
-        
+
         resetControllers();
     }
 
@@ -116,7 +116,7 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public void setI(double i, int slot) {
-        pid.setI(i, slot);        
+        pid.setI(i, slot);
     }
 
     @Override
@@ -136,7 +136,7 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public double getVelocityEncoderCPR() {
-        //return encoder.getCountsPerRevolution();
+        // return encoder.getCountsPerRevolution();
         return 600.; // TEMP
     }
 

@@ -34,14 +34,13 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
 
     public NEODrivetrain() {
         super(
-            DriveConstants.MAX_VELOCITY,
-            AutonConstants.MAX_ANGULAR_VELOCITY,
-            DriveConstants.TRACK_WIDTH,
-            DriveConstants.WHEEL_BASE,
-            DriveConstants.WHEEL_DIAMETER,
-            DriveConstants.GEAR_RATIO,
-            DriveConstants.FEED_FORWARD
-        );
+                DriveConstants.MAX_VELOCITY,
+                AutonConstants.MAX_ANGULAR_VELOCITY,
+                DriveConstants.TRACK_WIDTH,
+                DriveConstants.WHEEL_BASE,
+                DriveConstants.WHEEL_DIAMETER,
+                DriveConstants.GEAR_RATIO,
+                DriveConstants.FEED_FORWARD);
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {
@@ -73,10 +72,10 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
         }
 
         sim = DifferentialDrivetrainSim.createKitbotSim(
-        KitbotMotor.kDualCIMPerSide,
-        KitbotGearing.k5p95,
-        KitbotWheelSize.kSixInch,
-        null);
+                KitbotMotor.kDualCIMPerSide,
+                KitbotGearing.k5p95,
+                KitbotWheelSize.kSixInch,
+                null);
     }
 
     public void configMotors() {

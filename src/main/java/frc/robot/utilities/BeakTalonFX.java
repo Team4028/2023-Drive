@@ -56,7 +56,7 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     public void setPositionNU(double nu) {
         super.set(ControlMode.Position, nu);
     }
-    
+
     @Override
     public void setEncoderPositionMotorRotations(double rotations) {
         setEncoderPositionNU(rotations * 2048);

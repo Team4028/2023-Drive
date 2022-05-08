@@ -20,7 +20,7 @@ public class BeakDrivetrain extends SubsystemBase {
 
     protected double m_trackWidth;
     protected double m_wheelBase;
-    
+
     protected double m_wheelDiameter;
 
     protected double m_gearRatio;
@@ -29,23 +29,25 @@ public class BeakDrivetrain extends SubsystemBase {
 
     /**
      * Construct a new generic drivetrain.
-     * @param maxVelocity Maximum velocity, in meters per second.
-     * @param maxAngularVelocity Maximum angular (rotational) velocity, in radians per second.
-     * @param trackWidth Track width (left wheel to right wheel), in inches.
-     * @param wheelBase Wheel base (back wheel to front wheel), in inches
-     * @param wheelDiameter Wheel diameter, in meters.
-     * @param gearRatio Gear ratio of the motors.
-     * @param feedForward A {@link SimpleMotorFeedforward} calculated from SysID.
+     * 
+     * @param maxVelocity        Maximum velocity, in meters per second.
+     * @param maxAngularVelocity Maximum angular (rotational) velocity, in radians
+     *                           per second.
+     * @param trackWidth         Track width (left wheel to right wheel), in inches.
+     * @param wheelBase          Wheel base (back wheel to front wheel), in inches
+     * @param wheelDiameter      Wheel diameter, in meters.
+     * @param gearRatio          Gear ratio of the motors.
+     * @param feedForward        A {@link SimpleMotorFeedforward} calculated from
+     *                           SysID.
      */
     public BeakDrivetrain(
-        double maxVelocity,
-        double maxAngularVelocity,
-        double trackWidth,
-        double wheelBase,
-        double wheelDiameter,
-        double gearRatio,
-        SimpleMotorFeedforward feedForward
-    ) {
+            double maxVelocity,
+            double maxAngularVelocity,
+            double trackWidth,
+            double wheelBase,
+            double wheelDiameter,
+            double gearRatio,
+            SimpleMotorFeedforward feedForward) {
         m_maxVelocity = maxVelocity;
         m_maxAngularVelocity = maxAngularVelocity;
         m_trackWidth = trackWidth;
@@ -55,7 +57,8 @@ public class BeakDrivetrain extends SubsystemBase {
         m_feedForward = feedForward;
     }
 
-    public void configMotors() {}
+    public void configMotors() {
+    }
 
     /**
      * Method to drive the robot using joystick info.
@@ -64,10 +67,12 @@ public class BeakDrivetrain extends SubsystemBase {
      * @param y   Speed of the robot in the y direction (sideways).
      * @param rot Angular rate of the robot.
      */
-    public void drive(double x, double y, double rot) {}
+    public void drive(double x, double y, double rot) {
+    }
 
     /**
      * Gets the gyro's reported angle.
+     * 
      * @return A {@link Rotation2d} containing the reported angle of the gyro.
      */
     public Rotation2d getGyroRotation2d() {
@@ -83,6 +88,7 @@ public class BeakDrivetrain extends SubsystemBase {
 
     /**
      * Get the gyro's reported heading.
+     * 
      * @return The reported angle of the gyro in degrees.
      */
     public double getGyroHeading() {
@@ -91,6 +97,7 @@ public class BeakDrivetrain extends SubsystemBase {
 
     /**
      * Get the gyro's reported rate
+     * 
      * @return The reported rate of the gyro in degrees per second.
      */
     public double getGyroRate() {
@@ -99,6 +106,7 @@ public class BeakDrivetrain extends SubsystemBase {
 
     /**
      * Get the robot's pose.
+     * 
      * @return The pose reported from the odometry, measured in meters.
      */
     public Pose2d getPoseMeters() {
@@ -107,7 +115,9 @@ public class BeakDrivetrain extends SubsystemBase {
 
     /**
      * Get the robot's rotation.
-     * @return A {@link Rotation2d} of the reported robot rotation from the odometry.
+     * 
+     * @return A {@link Rotation2d} of the reported robot rotation from the
+     *         odometry.
      */
     public Rotation2d getRotation2d() {
         return getPoseMeters().getRotation();
@@ -115,6 +125,7 @@ public class BeakDrivetrain extends SubsystemBase {
 
     /**
      * Get the robot's heading.
+     * 
      * @return The heading reported from the odometry, in degrees.
      */
     public double getHeading() {
@@ -126,10 +137,12 @@ public class BeakDrivetrain extends SubsystemBase {
      * 
      * @param pose Pose to reset odometry to.
      */
-    public void resetOdometry(Pose2d pose) {}
+    public void resetOdometry(Pose2d pose) {
+    }
 
     /**
      * Update the robot odometry.
+     * 
      * @return Updated pose.
      */
     public Pose2d updateOdometry() {

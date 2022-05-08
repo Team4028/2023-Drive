@@ -15,7 +15,8 @@ public class EpicPath extends BeakAutonCommand {
         super.addCommands(
                 Util.getTrajectoryCommand(Trajectories.Ball1(), drivetrain),
                 Util.getTrajectoryCommand(Trajectories.Ball2(), drivetrain),
-                // new InstantCommand(() -> drivetrain.resetOdometry(Trajectories.Ball2().getEndState().poseMeters)),
+                // new InstantCommand(() ->
+                // drivetrain.resetOdometry(Trajectories.Ball2().getEndState().poseMeters)),
                 new RotateDrivetrainToAngle(Rotation2d.fromDegrees(12.5), drivetrain, false));
         super.setInitialPose(Trajectories.Ball1());
     }

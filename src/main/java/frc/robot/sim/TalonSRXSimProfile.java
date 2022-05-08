@@ -23,15 +23,17 @@ class TalonSRXSimProfile extends SimProfile {
      * Creates a new simulation profile for a TalonSRX device.
      * 
      * @param talon
-     *        The TalonSRX device
+     *                        The TalonSRX device
      * @param accelToFullTime
-     *        The time the motor takes to accelerate from 0 to full, in seconds
+     *                        The time the motor takes to accelerate from 0 to full,
+     *                        in seconds
      * @param fullVel
-     *        The maximum motor velocity, in ticks per 100ms
+     *                        The maximum motor velocity, in ticks per 100ms
      * @param sensorPhase
-     *        The phase of the TalonSRX sensors
+     *                        The phase of the TalonSRX sensors
      */
-    public TalonSRXSimProfile(final TalonSRX talon, final double accelToFullTime, final double fullVel, final boolean sensorPhase) {
+    public TalonSRXSimProfile(final TalonSRX talon, final double accelToFullTime, final double fullVel,
+            final boolean sensorPhase) {
         this._talon = talon;
         this._accelToFullTime = accelToFullTime;
         this._fullVel = fullVel;
@@ -41,7 +43,8 @@ class TalonSRXSimProfile extends SimProfile {
     /**
      * Runs the simulation profile.
      * 
-     * This uses very rudimentary physics simulation and exists to allow users to test
+     * This uses very rudimentary physics simulation and exists to allow users to
+     * test
      * features of our products in simulation using our examples out of the box.
      * Users may modify this to utilize more accurate physics simulation.
      */
@@ -60,25 +63,23 @@ class TalonSRXSimProfile extends SimProfile {
         // Simulate motor load
         if (theoreticalVel > _vel + accelAmount) {
             _vel += accelAmount;
-        }
-        else if (theoreticalVel < _vel - accelAmount) {
+        } else if (theoreticalVel < _vel - accelAmount) {
             _vel -= accelAmount;
-        }
-        else {
+        } else {
             _vel += 0.9 * (theoreticalVel - _vel);
         }
         _pos += _vel * period / 100;
 
         /// SET SIM PHYSICS INPUTS
 
-        _talon.getSimCollection().addQuadraturePosition((int)(_vel * period / 100));
-        _talon.getSimCollection().setQuadratureVelocity((int)_vel);
+        _talon.getSimCollection().addQuadraturePosition((int) (_vel * period / 100));
+        _talon.getSimCollection().setQuadratureVelocity((int) _vel);
 
         double supplyCurrent = Math.abs(outPerc) * 30 * random(0.95, 1.05);
         double statorCurrent = outPerc == 0 ? 0 : supplyCurrent / Math.abs(outPerc);
         _talon.getSimCollection().setSupplyCurrent(supplyCurrent);
         _talon.getSimCollection().setStatorCurrent(statorCurrent);
 
-        _talon.getSimCollection().setBusVoltage(12 - outPerc * outPerc * 3/4 * random(0.95, 1.05));
+        _talon.getSimCollection().setBusVoltage(12 - outPerc * outPerc * 3 / 4 * random(0.95, 1.05));
     }
 }
