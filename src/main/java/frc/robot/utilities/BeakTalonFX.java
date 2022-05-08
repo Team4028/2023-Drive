@@ -158,7 +158,7 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
 
     @Override
     public double calculateFeedForward(double percentOutput, double desiredOutputNU) {
-        double pidControllerOutput = percentOutput / 1023;
+        double pidControllerOutput = percentOutput * 1023;
         return pidControllerOutput / desiredOutputNU;
     }
 

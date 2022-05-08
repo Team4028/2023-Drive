@@ -50,6 +50,39 @@ public class PhysicsSim {
     }
 
     /**
+     * Adds a TalonFX controller to the simulator.
+     * 
+     * @param falcon
+     *        The TalonFX device
+     * @param accelToFullTime
+     *        The time the motor takes to accelerate from 0 to full, in seconds
+     * @param fullVel
+     *        The maximum motor velocity, in ticks per 100ms
+     */
+    public void addTalonFX(TalonFX falcon, final double accelToFullTime, final double fullVel) {
+        addTalonFX(falcon, accelToFullTime, fullVel, false);
+    }
+
+    /**
+     * Adds a TalonFX controller to the simulator.
+     * 
+     * @param falcon
+     *        The TalonFX device
+     * @param accelToFullTime
+     *        The time the motor takes to accelerate from 0 to full, in seconds
+     * @param fullVel
+     *        The maximum motor velocity, in ticks per 100ms
+     * @param sensorPhase
+     *        The phase of the TalonFX sensors
+     */
+    public void addTalonFX(TalonFX falcon, final double accelToFullTime, final double fullVel, final boolean sensorPhase) {
+        if (falcon != null) {
+            TalonFXSimProfile simFalcon = new TalonFXSimProfile(falcon, accelToFullTime, fullVel, sensorPhase);
+            _simProfiles.add(simFalcon);
+        }
+    }
+
+    /**
      * Runs the simulator:
      * - enable the robot
      * - simulate sensors
