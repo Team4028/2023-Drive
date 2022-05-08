@@ -31,6 +31,11 @@ public class Constants {
         public static final double ENCODER_DISTANCE_PER_PULSE =
                 // Assumes the encoders are directly mounted on the wheel shafts
                 (WHEEL_DIAMETER * Math.PI) / ENCODER_CPR;
+        
+        public static final double NEO_ENCODER_CPR = 600.;
+        public static final double NEO_ENCODER_DISTANCE_PER_PULSE =
+                // Assumes the encoders are directly mounted on the wheel shafts
+                (WHEEL_DIAMETER * Math.PI) / NEO_ENCODER_CPR;
 
         public static final double MAX_VELOCITY = 4.572;//Units.feetToMeters(15.);
 

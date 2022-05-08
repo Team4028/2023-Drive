@@ -91,6 +91,7 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public double getP(int slot) {
+        resetControllers();
         return pid.getP(slot);
     }
 
