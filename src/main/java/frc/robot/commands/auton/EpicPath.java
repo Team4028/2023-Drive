@@ -5,14 +5,13 @@
 package frc.robot.commands.auton;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.BeakDifferentialDrivetrain;
 import frc.robot.utilities.Trajectories;
 import frc.robot.utilities.Util;
 
 public class EpicPath extends BeakAutonCommand {
     /** Creates a new TestPath. */
-    public EpicPath(Drivetrain drivetrain) {
+    public EpicPath(BeakDifferentialDrivetrain drivetrain) {
         super.addCommands(
                 Util.getTrajectoryCommand(Trajectories.Ball1(), drivetrain),
                 Util.getTrajectoryCommand(Trajectories.Ball2(), drivetrain),

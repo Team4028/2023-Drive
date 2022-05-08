@@ -15,6 +15,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import frc.robot.Robot;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.utilities.BeakMotorController;
 import frc.robot.utilities.Util;
 

@@ -5,10 +5,10 @@
 package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.REVPhysicsSim;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
@@ -22,26 +22,26 @@ import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
-import frc.robot.utilities.BeakSparkMAX;
+import frc.robot.sim.PhysicsSim;
+import frc.robot.utilities.BeakTalonSRX;
 
 /** Add your docs here. */
-public class TestDrivetrain extends BeakDifferentialDrivetrain {
+public class CIMDrivetrain extends BeakDifferentialDrivetrain {
     private Field2d field = new Field2d();
 
-    private BeakSparkMAX m_FL, m_BL, m_FR, m_BR;
+    private BeakTalonSRX m_FL, m_BL, m_FR, m_BR;
 
-    private static TestDrivetrain m_instance;
+    private static CIMDrivetrain m_instance;
 
-    public TestDrivetrain() {
+    public CIMDrivetrain() {
         super(
-            DriveConstants.MAX_VELOCITY,
-            AutonConstants.MAX_ANGULAR_VELOCITY,
-            DriveConstants.TRACK_WIDTH,
-            DriveConstants.WHEEL_BASE,
-            DriveConstants.WHEEL_DIAMETER,
-            DriveConstants.GEAR_RATIO,
-            DriveConstants.FEED_FORWARD
-        );
+                DriveConstants.MAX_VELOCITY,
+                AutonConstants.MAX_ANGULAR_VELOCITY,
+                DriveConstants.TRACK_WIDTH,
+                DriveConstants.WHEEL_BASE,
+                DriveConstants.WHEEL_DIAMETER,
+                DriveConstants.GEAR_RATIO,
+                DriveConstants.FEED_FORWARD);
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {
@@ -50,10 +50,10 @@ public class TestDrivetrain extends BeakDifferentialDrivetrain {
 
         m_odom = new DifferentialDriveOdometry(getGyroRotation2d());
 
-        m_FL = new BeakSparkMAX(SubsystemConstants.DRIVE_FL);
-        m_BL = new BeakSparkMAX(SubsystemConstants.DRIVE_BL);
-        m_FR = new BeakSparkMAX(SubsystemConstants.DRIVE_FR);
-        m_BR = new BeakSparkMAX(SubsystemConstants.DRIVE_BR);
+        m_FL = new BeakTalonSRX(SubsystemConstants.DRIVE_FL);
+        m_BL = new BeakTalonSRX(SubsystemConstants.DRIVE_BL);
+        m_FR = new BeakTalonSRX(SubsystemConstants.DRIVE_FR);
+        m_BR = new BeakTalonSRX(SubsystemConstants.DRIVE_BR);
 
         m_BL.follow(m_FL);
         m_BR.follow(m_FR);
@@ -66,17 +66,20 @@ public class TestDrivetrain extends BeakDifferentialDrivetrain {
         configMotors();
 
         if (Robot.isSimulation()) {
-            REVPhysicsSim.getInstance().addSparkMax(m_FL, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_BL, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_FR, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_BR, DCMotor.getNEO(1));
+            DCMotor cim = DCMotor.getCIM(1);
+            double accel = 0.5;
+            double maxVel = Units.radiansPerSecondToRotationsPerMinute(cim.freeSpeedRadPerSec) * 4096 / 600;
+            PhysicsSim.getInstance().addTalonSRX(m_FL, accel, maxVel);
+            PhysicsSim.getInstance().addTalonSRX(m_FR, accel, maxVel);
+            PhysicsSim.getInstance().addTalonSRX(m_BL, accel, maxVel);
+            PhysicsSim.getInstance().addTalonSRX(m_BR, accel, maxVel);
         }
 
         sim = DifferentialDrivetrainSim.createKitbotSim(
-        KitbotMotor.kDualCIMPerSide,
-        KitbotGearing.k5p95,
-        KitbotWheelSize.kSixInch,
-        null);
+                KitbotMotor.kDualCIMPerSide,
+                KitbotGearing.k5p95,
+                KitbotWheelSize.kSixInch,
+                null);
     }
 
     public void configMotors() {
@@ -87,15 +90,12 @@ public class TestDrivetrain extends BeakDifferentialDrivetrain {
 
     public void configPID() {
         // TODO: get these from SysId
-        // for (BeakSparkMAX spark : motors) {
-            // spark.setP(PIDConstants.Drive.kP, 0);
-            // spark.setD(PIDConstants.Drive.kD, 0);
-            // spark.setF(1 / 5676, 0);
-        // }
-        m_FL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FL.calculateFeedForward(1, 5676), 0);
-        m_BL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BL.calculateFeedForward(1, 5676), 0);
-        m_FR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FR.calculateFeedForward(1, 5676), 0);
-        m_BR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BR.calculateFeedForward(1, 5676), 0);
+        double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getCIM(1).freeSpeedRadPerSec) * 4096 / 600;
+
+        m_FL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FL.calculateFeedForward(1, maxVel), 0);
+        m_BL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BL.calculateFeedForward(1, maxVel), 0);
+        m_FR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FR.calculateFeedForward(1, maxVel), 0);
+        m_BR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BR.calculateFeedForward(1, maxVel), 0);
     }
 
     public void configNeutralMode() {
@@ -112,9 +112,9 @@ public class TestDrivetrain extends BeakDifferentialDrivetrain {
         m_BR.setInverted(false);
     }
 
-    public static TestDrivetrain getInstance() {
+    public static CIMDrivetrain getInstance() {
         if (m_instance == null) {
-            m_instance = new TestDrivetrain();
+            m_instance = new CIMDrivetrain();
         }
         return m_instance;
     }

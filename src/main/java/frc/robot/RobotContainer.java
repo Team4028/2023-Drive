@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,10 +15,8 @@ import frc.robot.commands.auton.BeakAutonCommand;
 import frc.robot.commands.auton.EpicPath;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.TestPath;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.CIMDrivetrain;
 import frc.robot.subsystems.NEODrivetrain;
-import frc.robot.subsystems.TestDrivetrain;
-import frc.robot.utilities.BeakSparkMAX;
 import frc.robot.utilities.BeakXBoxController;
 import frc.robot.utilities.Util;
 
@@ -30,7 +25,7 @@ public class RobotContainer {
     private BeakXBoxController m_driverController = new BeakXBoxController(OIConstants.DRIVER);
 
     // private NEODrivetrain m_drive = NEODrivetrain.getInstance();
-    private TestDrivetrain m_drive = TestDrivetrain.getInstance();
+    private CIMDrivetrain m_drive = CIMDrivetrain.getInstance();
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
 
     private static RobotContainer _instance = new RobotContainer();
@@ -49,7 +44,7 @@ public class RobotContainer {
                         m_drive));
 
         m_driverController.start.whenPressed(m_drive::zero);
-        // m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, true));
+        m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, true));
     }
 
     public double speedScaledDriverLeftY() {
@@ -65,8 +60,8 @@ public class RobotContainer {
     }
 
     private void initAutonChooser() {
-        // _autonChooser.setDefaultOption("Epic Path", new EpicPath(m_drive));
-        // _autonChooser.addOption("Test Path", new TestPath(m_drive));
+        _autonChooser.setDefaultOption("Epic Path", new EpicPath(m_drive));
+        _autonChooser.addOption("Test Path", new TestPath(m_drive));
 
         SmartDashboard.putData("Auton Chooser", _autonChooser);
     }

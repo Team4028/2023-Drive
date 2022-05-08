@@ -234,9 +234,14 @@ public interface BeakMotorController extends MotorController {
     public double getPositionEncoderCPR();
 
     /**
-     * Follow a TalonSRX/FX motor.
+     * Follow a TalonFX motor.
      */
-    default void follow(BeakTalon master) {}
+    default void follow(BeakTalonFX master) {}
+
+    /**
+     * Follow a TalonSRX motor.
+     */
+    default void follow(BeakTalonSRX master) {}
 
     /**
      * Follow a SparkMAX motor.

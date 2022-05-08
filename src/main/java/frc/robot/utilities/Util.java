@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.BeakDifferentialDrivetrain;
 
 /** Useful utility functions for drive. */
 public final class Util {
@@ -27,7 +27,7 @@ public final class Util {
      * 
      * @param traj Trajectory to follow.
      */
-    public static final SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj, Drivetrain drivetrain) {
+    public static final SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj, BeakDifferentialDrivetrain drivetrain) {
         return new RamseteCommand(
                 traj,
                 drivetrain::getPoseMeters,

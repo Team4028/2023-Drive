@@ -51,6 +51,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/CIMDrivetrain": "Subsystem",
       "/LiveWindow/Drivetrain": "Subsystem",
       "/LiveWindow/NEODrivetrain": "Subsystem",
       "/LiveWindow/TestDrivetrain": "Subsystem",
