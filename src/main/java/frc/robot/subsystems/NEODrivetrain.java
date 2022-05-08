@@ -4,12 +4,6 @@
 
 package frc.robot.subsystems;
 
-import java.util.List;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.REVPhysicsSim;
 
@@ -35,8 +29,6 @@ import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
-import frc.robot.commands.auton.BeakAutonCommand;
-import frc.robot.sim.PhysicsSim;
 import frc.robot.utilities.BeakSparkMAX;
 import frc.robot.utilities.Util;
 
@@ -142,22 +134,9 @@ public class NEODrivetrain extends SubsystemBase {
         rot *= AutonConstants.MAX_ANGULAR_VELOCITY;
         DifferentialDriveWheelSpeeds speed = DriveConstants.DRIVE_KINEMATICS.toWheelSpeeds(
                 new ChassisSpeeds(x, 0, rot));
-        
-        final double ENCODER_CPR = 600.;
-        double GEAR_RATIO = 7.5;
-        final double ENCODER_DISTANCE_PER_PULSE =
-                // Assumes the encoders are directly mounted on the wheel shafts
-                (6 * Math.PI) / ENCODER_CPR;
 
         double rightVel = speed.rightMetersPerSecond / DriveConstants.NEO_ENCODER_DISTANCE_PER_PULSE;
         double leftVel = speed.leftMetersPerSecond / DriveConstants.NEO_ENCODER_DISTANCE_PER_PULSE;
-
-        // if (x != 0. || rot != 0.) {
-        //     System.out.println(rightVel);
-        //     System.out.println(leftVel);
-        // }
-
-        // m_gyroSim.setAngle(m_gyroSim.getAngle() + rot);
 
         speed.desaturate(DriveConstants.MAX_VELOCITY);
 
@@ -262,8 +241,6 @@ public class NEODrivetrain extends SubsystemBase {
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
-        // System.out.println(m_FL.getMotorOutputPercent() * m_FL.getBusVoltage());
-        // sim.setInputs(m_FR.getMotorOutputPercent() * m_FR.getBusVoltage(), m_FL.getMotorOutputPercent() * m_FL.getBusVoltage());
         sim.setInputs(
             m_FR.getAppliedOutput() * m_FR.getBusVoltage(),
             m_FL.getAppliedOutput() * m_FR.getBusVoltage());
@@ -272,12 +249,7 @@ public class NEODrivetrain extends SubsystemBase {
         m_gyroSim.setAngle(-sim.getHeading().getDegrees());
         Rotation2d rot = getGyroRotation();
 
-        // SmartDashboard.putNumber("FL vel meter", Util.NUtoMeters(m_FL.getSelectedSensorVelocity()));
-        // SmartDashboard.putNumber("FL vel meter2", m_FL.getSelectedSensorVelocity() * DriveConstants.ENCODER_DISTANCE_PER_PULSE);
-        DifferentialDriveWheelSpeeds speeds = getWheelSpeeds();
         m_pose = m_odom.update(rot,
-                // m_FL.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE,
-                // m_FR.getSelectedSensorPosition() * DriveConstants.ENCODER_DISTANCE_PER_PULSE);
                 Util.NUtoMeters(m_FL.getPositionNU(), 1, DriveConstants.GEAR_RATIO, Units.metersToInches(DriveConstants.WHEEL_DIAMETER)),
                 Util.NUtoMeters(m_FR.getPositionNU(), 1, DriveConstants.GEAR_RATIO, Units.metersToInches(DriveConstants.WHEEL_DIAMETER))
         );

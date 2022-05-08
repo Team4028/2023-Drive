@@ -12,8 +12,6 @@ import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.BaseTalon;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 
-import edu.wpi.first.wpilibj.RobotController;
-
 // TODO: Set slots
 /** Add your docs here. */
 public class BeakTalon extends BaseTalon implements BeakMotorController {
@@ -193,5 +191,15 @@ public class BeakTalon extends BaseTalon implements BeakMotorController {
     public double calculateFeedForward(double percentOutput, double desiredOutputNU) {
         double pidControllerOutput = percentOutput / 1023;
         return pidControllerOutput / desiredOutputNU;
+    }
+
+    @Override
+    public double getVelocityEncoderCPR() {
+        return encoderCPR;
+    }
+
+    @Override
+    public double getPositionEncoderCPR() {
+        return encoderCPR;
     }
 }

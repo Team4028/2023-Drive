@@ -91,7 +91,6 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public double getP(int slot) {
-        resetControllers();
         return pid.getP(slot);
     }
 
@@ -133,5 +132,27 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     @Override
     public double calculateFeedForward(double percentOutput, double desiredOutputNU) {
         return percentOutput / desiredOutputNU;
+    }
+
+    @Override
+    public double getVelocityEncoderCPR() {
+        //return encoder.getCountsPerRevolution();
+        return 600.; // TEMP
+    }
+
+    @Override
+    public double getPositionEncoderCPR() {
+        // return encoder.getCountsPerRevolution();
+        return 1.; // TEMP
+    }
+
+    @Override
+    public double getOutputVoltage() {
+        return super.getAppliedOutput() * super.getBusVoltage();
+    }
+
+    @Override
+    public void follow(int leaderCANId) {
+        super.follow(ExternalFollower.kFollowerSparkMax, leaderCANId);
     }
 }

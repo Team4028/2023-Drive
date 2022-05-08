@@ -222,4 +222,29 @@ public interface BeakMotorController extends MotorController {
      * For SparkMAXes, this will be a very small number.
      */
     public double calculateFeedForward(double percentOutput, double desiredOutputNU);
+
+    /**
+     * Get the counts per revolution for the encoder when in velocity mode.
+     */
+    public double getVelocityEncoderCPR();
+
+    /**
+     * Get the counts per revolution for the encoder when in velocity mode.
+     */
+    public double getPositionEncoderCPR();
+
+    /**
+     * Follow a TalonSRX/FX motor.
+     */
+    default void follow(BeakTalon master) {}
+
+    /**
+     * Follow a SparkMAX motor.
+     */
+    default void follow(BeakSparkMAX master) {}
+
+    /**
+     * Follow another motor.
+     */
+    default void follow(int leaderCANId) {}
 }
