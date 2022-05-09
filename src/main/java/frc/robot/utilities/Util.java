@@ -82,6 +82,6 @@ public final class Util {
 
     public static double NUtoMeters(double nu) {
         return NUtoMeters(nu, DriveConstants.ENCODER_CPR, DriveConstants.GEAR_RATIO,
-                Units.metersToInches(DriveConstants.WHEEL_DIAMETER));
+                DriveConstants.WHEEL_DIAMETER);
     }
 }

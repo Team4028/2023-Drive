@@ -35,7 +35,7 @@ public class BeakDrivetrain extends SubsystemBase {
      *                           per second.
      * @param trackWidth         Track width (left wheel to right wheel), in inches.
      * @param wheelBase          Wheel base (back wheel to front wheel), in inches
-     * @param wheelDiameter      Wheel diameter, in meters.
+     * @param wheelDiameter      Wheel diameter, in inches.
      * @param gearRatio          Gear ratio of the motors.
      * @param feedForward        A {@link SimpleMotorFeedforward} calculated from
      *                           SysID.

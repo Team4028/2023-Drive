@@ -87,7 +87,7 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
         DifferentialDriveWheelSpeeds speed = calcWheelSpeeds(x, rot);
 
         // Assumes all motor controllers are of the same type.
-        encoderDistancePerPulse = (m_wheelDiameter * Math.PI) / m_FL.getVelocityEncoderCPR();
+        encoderDistancePerPulse = (Units.inchesToMeters(m_wheelDiameter) * Math.PI) / m_FL.getVelocityEncoderCPR();
 
         double rightVel = speed.rightMetersPerSecond / encoderDistancePerPulse;
         double leftVel = speed.leftMetersPerSecond / encoderDistancePerPulse;
@@ -126,9 +126,9 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(
                 Util.NUtoMeters(m_FL.getVelocityNU(), m_FL.getVelocityEncoderCPR(), m_gearRatio,
-                        Units.metersToInches(m_wheelDiameter)),
+                        m_wheelDiameter),
                 Util.NUtoMeters(m_FR.getVelocityNU(), m_FR.getVelocityEncoderCPR(), m_gearRatio,
-                        Units.metersToInches(m_wheelDiameter)));
+                        m_wheelDiameter));
     }
 
     /**
@@ -189,9 +189,9 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
 
         m_pose = m_odom.update(rot,
                 Util.NUtoMeters(m_FL.getPositionNU(), m_FL.getPositionEncoderCPR(), m_gearRatio,
-                        Units.metersToInches(m_wheelDiameter)),
+                        m_wheelDiameter),
                 Util.NUtoMeters(m_FR.getPositionNU(), m_FR.getPositionEncoderCPR(), m_gearRatio,
-                        Units.metersToInches(m_wheelDiameter)));
+                        m_wheelDiameter));
 
         return m_pose;
     }

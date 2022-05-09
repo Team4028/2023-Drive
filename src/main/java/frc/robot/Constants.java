@@ -24,7 +24,7 @@ public class Constants {
                 Units.inchesToMeters(TRACK_WIDTH));
 
         public static final double SPEED_SCALE = 0.25;
-        public static final double WHEEL_DIAMETER = .15895;// Units.inchesToMeters(6.258);
+        public static final double WHEEL_DIAMETER = 6.258;
 
         public static final double ENCODER_CPR = 4096.;
         public static final double GEAR_RATIO = 7.5;
