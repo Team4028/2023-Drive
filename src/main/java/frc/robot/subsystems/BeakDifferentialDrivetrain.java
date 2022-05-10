@@ -154,12 +154,6 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
         return m_odom.getPoseMeters();
     }
 
-    /**
-     * Reset odometry to specified pose.
-     * 
-     * @param pose Pose to reset odometry to.
-     */
-    // TODO: Implement as a override in subclasses to reset encoders.
     public void resetOdometry(Pose2d pose) {
         m_odom.resetPosition(pose, getGyroRotation2d());
     }

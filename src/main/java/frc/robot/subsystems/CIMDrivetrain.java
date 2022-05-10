@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -113,20 +114,25 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
         double[] velocities = calcDesiredMotorVelocities(m_FL, x, rot);
 
         m_FL.setVelocityNU(velocities[0]);
-        //elocityNU(velocities[0]);
         m_FR.setVelocityNU(velocities[1]);
-        //elocityNU(velocities[1]);
     }
 
     public void driveVolts(double left, double right) {
         m_FL.setVoltage(left);
-        //oltage(left);
         m_FR.setVoltage(right);
-        //oltage(right);
     }
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return super.getWheelSpeeds(m_FL, m_FR);
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        super.resetOdometry(pose);
+        
+        m_FL.resetEncoder();
+        m_BL.resetEncoder();
+        m_FR.resetEncoder();
+        m_BR.resetEncoder();
     }
 
     public static CIMDrivetrain getInstance() {

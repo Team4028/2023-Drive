@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.REVPhysicsSim;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -137,6 +138,17 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
 
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return super.getWheelSpeeds(m_FL, m_FR);
+    }
+
+    public void resetOdometry(Pose2d pose) {
+        super.resetOdometry(pose);
+        
+        m_FL.resetEncoder();
+        m_BL.resetEncoder();
+        m_BL2.resetEncoder();
+        m_FR.resetEncoder();
+        m_BR.resetEncoder();
+        m_BR2.resetEncoder();
     }
 
     public static SixNEODrivetrain getInstance() {
