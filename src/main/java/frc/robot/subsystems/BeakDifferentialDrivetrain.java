@@ -28,9 +28,6 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
 
     protected double encoderDistancePerPulse;
 
-    // Additional followers (e.g. 6-NEO) must be created and configured separately
-    protected BeakMotorController m_FL, m_BL, m_FR, m_BR;
-
     /**
      * Construct a new differential drivetrain.
      * 
@@ -76,46 +73,30 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     }
 
     /**
-     * Method to drive the robot using joystick info.
-     *
-     * @param x   Speed of the robot in the x direction (forward).
-     * @param y   Speed of the robot in the y direction (sideways) -- UNUSED FOR NOW
-     *            NOT SWERVE.
+     * Method to calculate needed motor velocities for the left and right side of the drivetrain.</p>
+     * 
+     * x and rot values should be from joysticks.
+     * @param motorController Any motor controller on the drivetrain.
+     * @param x Speed of the robot in the x direction (forward).
      * @param rot Angular rate of the robot.
+     * @return {left velocity in NU, right velocity in NU}
      */
-    public void drive(double x, double y, double rot) {
+    public double[] calcDesiredMotorVelocities(
+        BeakMotorController motorController,
+        double x,
+        double rot
+    ) {
         DifferentialDriveWheelSpeeds speed = calcWheelSpeeds(x, rot);
 
         // Assumes all motor controllers are of the same type.
-        encoderDistancePerPulse = (Units.inchesToMeters(m_wheelDiameter) * Math.PI) / m_FL.getVelocityEncoderCPR();
+        encoderDistancePerPulse = (Units.inchesToMeters(m_wheelDiameter) * Math.PI) / motorController.getVelocityEncoderCPR();
 
         double rightVel = speed.rightMetersPerSecond / encoderDistancePerPulse;
         double leftVel = speed.leftMetersPerSecond / encoderDistancePerPulse;
 
-        if (x != 0. || rot != 0.) {
-            if (Robot.isSimulation()) {
-                m_FR.setVelocityNU(rightVel);
-                // DemandType.ArbitraryFeedForward,
-                // DriveConstants.FEED_FORWARD.calculate(speed.leftMetersPerSecond) /
-                // DriveConstants.NOMINAL_VOLTAGE);
-                m_FL.setVelocityNU(leftVel);
-                // DemandType.ArbitraryFeedForward,
-                // DriveConstants.FEED_FORWARD.calculate(speed.rightMetersPerSecond) /
-                // DriveConstants.NOMINAL_VOLTAGE);
-            } else {
-                // m_FL.set(ControlMode.Velocity, leftVel,
-                // DemandType.ArbitraryFeedForward,
-                // DriveConstants.FEED_FORWARD.calculate(speed.leftMetersPerSecond) /
-                // DriveConstants.NOMINAL_VOLTAGE);
-                // m_FR.set(ControlMode.Velocity, rightVel,
-                // DemandType.ArbitraryFeedForward,
-                // DriveConstants.FEED_FORWARD.calculate(speed.rightMetersPerSecond) /
-                // DriveConstants.NOMINAL_VOLTAGE);
-            }
-        } else {
-            m_FL.setVelocityNU(0.);
-            m_FR.setVelocityNU(0.);
-        }
+        double[] vels = {leftVel, rightVel};
+
+        return vels;
     }
 
     /**
@@ -124,10 +105,19 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      * @return Current wheel speeds of the robot.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return null;
+    }
+
+    /**
+     * Get the current wheel speeds.
+     * 
+     * @return Current wheel speeds of the robot.
+     */
+    public DifferentialDriveWheelSpeeds getWheelSpeeds(BeakMotorController frontLeft, BeakMotorController frontRight) {
         return new DifferentialDriveWheelSpeeds(
-                Util.NUtoMeters(m_FL.getVelocityNU(), m_FL.getVelocityEncoderCPR(), m_gearRatio,
+                Util.NUtoMeters(frontLeft.getVelocityNU(), frontLeft.getVelocityEncoderCPR(), m_gearRatio,
                         m_wheelDiameter),
-                Util.NUtoMeters(m_FR.getVelocityNU(), m_FR.getVelocityEncoderCPR(), m_gearRatio,
+                Util.NUtoMeters(frontRight.getVelocityNU(), frontRight.getVelocityEncoderCPR(), m_gearRatio,
                         m_wheelDiameter));
     }
 
@@ -137,10 +127,7 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      * @param left  Volts to send to the left side of the drivetrain.
      * @param right Volts to send to the right side of the drivetrain.
      */
-    public void driveVolts(double left, double right) {
-        m_FL.setVoltage(left);
-        m_FR.setVoltage(right);
-    }
+    public void driveVolts(double left, double right) {}
 
     public Rotation2d getGyroRotation2d() {
         if (Robot.isSimulation()) {
@@ -172,15 +159,19 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      * 
      * @param pose Pose to reset odometry to.
      */
+    // TODO: Implement as a override in subclasses to reset encoders.
     public void resetOdometry(Pose2d pose) {
         m_odom.resetPosition(pose, getGyroRotation2d());
     }
 
-    public Pose2d updateOdometry() {
+    public Pose2d updateOdometry(
+        BeakMotorController frontLeftMotorController,
+        BeakMotorController frontRightMotorController
+    ) {
         if (Robot.isSimulation()) {
             sim.setInputs(
-                    m_FR.getOutputVoltage(),
-                    m_FL.getOutputVoltage());
+                    frontRightMotorController.getOutputVoltage(),
+                    frontLeftMotorController.getOutputVoltage());
             sim.update(0.02);
 
             m_gyroSim.setAngle(-sim.getHeading().getDegrees());
@@ -188,9 +179,9 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
         Rotation2d rot = getGyroRotation2d();
 
         m_pose = m_odom.update(rot,
-                Util.NUtoMeters(m_FL.getPositionNU(), m_FL.getPositionEncoderCPR(), m_gearRatio,
+                Util.NUtoMeters(frontLeftMotorController.getPositionNU(), frontLeftMotorController.getPositionEncoderCPR(), m_gearRatio,
                         m_wheelDiameter),
-                Util.NUtoMeters(m_FR.getPositionNU(), m_FR.getPositionEncoderCPR(), m_gearRatio,
+                Util.NUtoMeters(frontRightMotorController.getPositionNU(), frontRightMotorController.getPositionEncoderCPR(), m_gearRatio,
                         m_wheelDiameter));
 
         return m_pose;

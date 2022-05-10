@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
@@ -58,11 +59,6 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
         m_BL.follow(m_FL);
         m_BR.follow(m_FR);
 
-        super.m_FL = m_FL;
-        super.m_BL = m_BL;
-        super.m_FR = m_FR;
-        super.m_BR = m_BR;
-
         configMotors();
 
         if (Robot.isSimulation()) {
@@ -112,6 +108,27 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
         m_BR.setInverted(false);
     }
 
+    
+    public void drive(double x, double y, double rot) {
+        double[] velocities = calcDesiredMotorVelocities(m_FL, x, rot);
+
+        m_FL.setVelocityNU(velocities[0]);
+        m_BL.setVelocityNU(velocities[0]);
+        m_FR.setVelocityNU(velocities[1]);
+        m_BR.setVelocityNU(velocities[1]);
+    }
+
+    public void driveVolts(double left, double right) {
+        m_FL.setVoltage(left);
+        m_BL.setVoltage(left);
+        m_FR.setVoltage(right);
+        m_BR.setVoltage(right);
+    }
+
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return super.getWheelSpeeds(m_FL, m_FR);
+    }
+
     public static CIMDrivetrain getInstance() {
         if (m_instance == null) {
             m_instance = new CIMDrivetrain();
@@ -121,7 +138,7 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
 
     @Override
     public void periodic() {
-        updateOdometry();
+        updateOdometry(m_FL, m_FR);
 
         field.setRobotPose(m_pose);
         SmartDashboard.putData(field);
