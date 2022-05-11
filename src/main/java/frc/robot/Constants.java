@@ -86,7 +86,7 @@ public class Constants {
 
         public static final class Theta {
             public static final double kP = 4.5;
-            public static final double kD = 0.1;
+            public static final double kD = 0.15;
         }
 
         public static final class DriveController {

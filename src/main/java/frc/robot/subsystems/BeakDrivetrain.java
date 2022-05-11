@@ -148,4 +148,16 @@ public class BeakDrivetrain extends SubsystemBase {
     public Pose2d updateOdometry() {
         return m_pose;
     }
+
+    /**
+     * Get the angle to a target position on the field.</p>
+     * 
+     * Positions are relative to the bottom-left corner of the field (for Rapid React, the blue alliance HP station)
+     * @param x The X position of the target, in inches.
+     * @param y The Y position of the target, in inches.
+     * @return A {@link Rotation2d} of the drivetrain's angle to the target position.
+     */
+    public Rotation2d getAngleToTargetPosition(double x, double y) {
+        return new Rotation2d();
+    }
 }

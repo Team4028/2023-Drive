@@ -14,6 +14,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
 import frc.robot.commands.auton.EpicPath;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
+import frc.robot.commands.auton.RotateDrivetrainToTargetPosition;
 import frc.robot.commands.auton.TestPath;
 import frc.robot.subsystems.CIMDrivetrain;
 import frc.robot.subsystems.FalconDrivetrain;
@@ -49,6 +50,7 @@ public class RobotContainer {
 
         m_driverController.start.whenPressed(m_drive::zero);
         m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, true));
+        m_driverController.b.whenPressed(new RotateDrivetrainToTargetPosition(324, 162, m_drive).withTimeout(2.0));
     }
 
     public double speedScaledDriverLeftY() {
