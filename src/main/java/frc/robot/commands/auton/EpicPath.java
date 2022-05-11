@@ -6,7 +6,7 @@ package frc.robot.commands.auton;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.BeakDifferentialDrivetrain;
+import frc.robot.utilities.BeakDifferentialDrivetrain;
 import frc.robot.utilities.Trajectories;
 import frc.robot.utilities.Util;
 

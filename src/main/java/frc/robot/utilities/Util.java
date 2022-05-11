@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.BeakDifferentialDrivetrain;
 
 /** Useful utility functions for drive. */
 public final class Util {

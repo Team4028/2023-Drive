@@ -25,6 +25,7 @@ import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
+import frc.robot.utilities.BeakDifferentialDrivetrain;
 import frc.robot.utilities.BeakSparkMAX;
 
 /** Add your docs here. */
