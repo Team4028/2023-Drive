@@ -51,6 +51,8 @@ public class Constants {
                 0.0);
 
         public static final double NOMINAL_VOLTAGE = 12.;
+
+        public static final String CAN_BUS = "rio";
     }
 
     public static final class AutonConstants {

@@ -36,6 +36,10 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
     private static FalconDrivetrain m_instance;
 
     public FalconDrivetrain() {
+        this("");
+    }
+
+    public FalconDrivetrain(String canBus) {
         super(
             DriveConstants.PHYSICS,
             DriveConstants.FEED_FORWARD
@@ -48,10 +52,10 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
         m_odom = new DifferentialDriveOdometry(getGyroRotation2d());
 
-        m_FL = new BeakTalonFX(SubsystemConstants.DRIVE_FL);
-        m_BL = new BeakTalonFX(SubsystemConstants.DRIVE_BL);
-        m_FR = new BeakTalonFX(SubsystemConstants.DRIVE_FR);
-        m_BR = new BeakTalonFX(SubsystemConstants.DRIVE_BR);
+        m_FL = new BeakTalonFX(SubsystemConstants.DRIVE_FL, canBus);
+        m_BL = new BeakTalonFX(SubsystemConstants.DRIVE_BL, canBus);
+        m_FR = new BeakTalonFX(SubsystemConstants.DRIVE_FR, canBus);
+        m_BR = new BeakTalonFX(SubsystemConstants.DRIVE_BR, canBus);
 
         m_BL.follow(m_FL);
         m_BR.follow(m_FR);
@@ -134,7 +138,7 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
     public static FalconDrivetrain getInstance() {
         if (m_instance == null) {
-            m_instance = new FalconDrivetrain();
+            m_instance = new FalconDrivetrain(DriveConstants.CAN_BUS);
         }
         return m_instance;
     }
