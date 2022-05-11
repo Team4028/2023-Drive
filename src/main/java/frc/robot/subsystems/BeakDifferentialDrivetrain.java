@@ -180,15 +180,4 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
 
         return m_pose;
     }
-
-    // FIXME: Some math is off here somehow
-    public Rotation2d getAngleToTargetPosition(double x, double y) {
-        double xDelta = Units.inchesToMeters(x) - m_odom.getPoseMeters().getX();
-        double yDelta = Units.inchesToMeters(y) - m_odom.getPoseMeters().getY();
-
-        double radiansToTarget = Math.atan2(xDelta, yDelta);
-
-        System.out.println(Units.radiansToDegrees(radiansToTarget));
-        return new Rotation2d(radiansToTarget);
-    }
 }

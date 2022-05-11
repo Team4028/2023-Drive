@@ -85,7 +85,7 @@ public class Constants {
         }
 
         public static final class Theta {
-            public static final double kP = 4.5;
+            public static final double kP = 6.5;
             public static final double kD = 0.15;
         }
 

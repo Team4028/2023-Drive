@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -158,6 +159,11 @@ public class BeakDrivetrain extends SubsystemBase {
      * @return A {@link Rotation2d} of the drivetrain's angle to the target position.
      */
     public Rotation2d getAngleToTargetPosition(double x, double y) {
-        return new Rotation2d();
+        double xDelta = Units.inchesToMeters(x) - getPoseMeters().getX();
+        double yDelta = Units.inchesToMeters(y) - getPoseMeters().getY();
+
+        double radiansToTarget = Math.atan2(yDelta, xDelta);
+
+        return new Rotation2d(radiansToTarget);
     }
 }
