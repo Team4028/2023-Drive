@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
@@ -190,5 +191,31 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     @Override
     public boolean getForwardLimitSwitch() {
         return super.getSensorCollection().isFwdLimitSwitchClosed();
+    }
+    
+    @Override
+    public void setSupplyCurrentLimit(int amps) {
+        super.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, amps, amps + 5, 0.1));
+    }
+
+    @Override
+    public void setStatorCurrentLimit(int amps) {
+        throw new RuntimeException("CTRE Talon SRX does not support Stator current limiting.");
+    }
+    
+    @Override
+    public void restoreFactoryDefault() {
+        super.configFactoryDefault();
+    }
+
+    @Override
+    public void setAllowedClosedLoopError(double error, int slot) {
+        super.configAllowableClosedloopError(slot, error);
+    }
+    
+    @Override
+    public void setVoltageCompensationSaturation(double saturation) {
+        super.enableVoltageCompensation(saturation > 0.);
+        super.configVoltageCompSaturation(saturation);
     }
 }

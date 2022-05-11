@@ -178,4 +178,29 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     public boolean getForwardLimitSwitch() {
         return fwdLimitSwitch.isPressed();
     }
+
+    @Override
+    public void setSupplyCurrentLimit(int amps) {
+        super.setSmartCurrentLimit(amps);
+    }
+
+    @Override
+    public void setStatorCurrentLimit(int amps) {
+        throw new RuntimeException("REV Spark MAX does not support Stator current limiting.");
+    }
+
+    @Override
+    public void restoreFactoryDefault() {
+        super.restoreFactoryDefaults();
+    }
+
+    @Override
+    public void setAllowedClosedLoopError(double error, int slot) {
+        throw new RuntimeException("REV Spark MAX does not supporting setting the allowable closed loop error.");
+    }
+
+    @Override
+    public void setVoltageCompensationSaturation(double saturation) {
+        throw new RuntimeException("REV Spark MAX does not support voltage compensation. Use setVoltage() if you want to account for voltage drops.");
+    }
 }

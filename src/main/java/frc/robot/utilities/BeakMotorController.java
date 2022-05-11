@@ -298,4 +298,44 @@ public interface BeakMotorController extends MotorController {
      * when it's configured to be normally closed.
      */
     public boolean getForwardLimitSwitch();
+
+    /**
+     * Set the supply (PDH to controller) current limit.</p>
+     * 
+     * For Talons, the "tripping" point is set to this plus 5, and the time to trip back to the limit is set to 0.1 seconds.
+     * @param amps The maximum amps to allow the motor controller to receive.
+     */
+    public void setSupplyCurrentLimit(int amps);
+
+    /**
+     * Set the stator (controller to motor) current limit.</p>
+     * 
+     * Only supported on TalonFX.</p>
+     * 
+     * The "tripping" point is set to this plus 5, and the time to trip back to the limit is set to 0.1 seconds.
+     * @param amps The maximum amps to allow the motor controller to send.
+     */
+    public void setStatorCurrentLimit(int amps);
+
+    /**
+     * Restore the motor controller's factory default settings.
+     */
+    public void restoreFactoryDefault();
+
+    /**
+     * Set the deadband, in NU, where PID control will no longer attempt to respond to an error.</p>
+     * 
+     * Not supported on Spark MAX.
+     * @param error Error deadband.
+     * @param slot Slot to set to.
+     */
+    public void setAllowedClosedLoopError(double error, int slot);
+
+    /**
+     * Set the voltage compensation saturation for the motor controller.</p>
+     * 
+     * See CTRE's docs for more info on voltage compensation. Not supported on Spark MAX.
+     * @param saturation Saturation.
+     */
+    public void setVoltageCompensationSaturation(double saturation);
 }
