@@ -5,6 +5,8 @@
 package frc.robot.utilities;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
@@ -16,6 +18,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     public BeakTalonFX(int port, String canBus) {
         super(port, canBus);
+        super.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        super.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
     }
 
     public BeakTalonFX(int port) {
@@ -170,5 +174,27 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     @Override
     public double getPositionEncoderCPR() {
         return 2048;
+    }
+
+    @Override
+    public void setReverseLimitSwitchNormallyClosed(boolean normallyClosed) {
+        super.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+            normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
+    }
+
+    @Override
+    public void setForwardLimitSwitchNormallyClosed(boolean normallyClosed) {
+        super.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+            normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
+    }
+
+    @Override
+    public boolean getReverseLimitSwitch() {
+        return super.getSensorCollection().isRevLimitSwitchClosed() == 1 ? true : false;
+    }
+
+    @Override
+    public boolean getForwardLimitSwitch() {
+        return super.getSensorCollection().isFwdLimitSwitchClosed() == 1 ? true : false;
     }
 }

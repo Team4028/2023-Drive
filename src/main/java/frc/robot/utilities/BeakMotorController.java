@@ -273,27 +273,29 @@ public interface BeakMotorController extends MotorController {
      */
     public double getPositionEncoderCPR();
 
-    // /**
-    //  * Follow a TalonFX motor.
-    //  */
-    // default void follow(BeakTalonFX master) {
-    // }
-
-    // /**
-    //  * Follow a TalonSRX motor.
-    //  */
-    // default void follow(BeakTalonSRX master) {
-    // }
-
-    // /**
-    //  * Follow a SparkMAX motor.
-    //  */
-    // default void follow(BeakSparkMAX master) {
-    // }
+    /**
+     * Set the reverse limit switch's default state
+     * @param normallyClosed True if its normal state is "closed", false if its normal state is "open"
+     */
+    public void setReverseLimitSwitchNormallyClosed(boolean normallyClosed);
 
     /**
-     * Follow another motor.
+     * Set the forward limit switch's default state
+     * @param normallyClosed True if its normal state is "closed", false if its normal state is "open"
      */
-    default void follow(int leaderCANId) {
-    }
+    public void setForwardLimitSwitchNormallyClosed(boolean normallyClosed);
+
+    /**
+     * Whether or not the limit switch is closed. This is independent of the polarity (normally-closed) option on 
+     * CTRE devices, but on Spark MAXes, it is dependent--i.e. returning true if the limit switch is not pressed,
+     * when it's configured to be normally closed.
+     */
+    public boolean getReverseLimitSwitch();
+
+    /**
+     * Whether or not the limit switch is closed. This is independent of the polarity (normally-closed) option on 
+     * CTRE devices, but on Spark MAXes, it is dependent--i.e. returning true if the limit switch is not pressed,
+     * when it's configured to be normally closed.
+     */
+    public boolean getForwardLimitSwitch();
 }

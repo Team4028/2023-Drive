@@ -5,6 +5,8 @@
 package frc.robot.utilities;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
@@ -166,5 +168,27 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     @Override
     public double getPositionEncoderCPR() {
         return 4096;
+    }
+
+    @Override
+    public void setReverseLimitSwitchNormallyClosed(boolean normallyClosed) {
+        super.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+            normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
+    }
+
+    @Override
+    public void setForwardLimitSwitchNormallyClosed(boolean normallyClosed) {
+        super.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
+            normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
+    }
+
+    @Override
+    public boolean getReverseLimitSwitch() {
+        return super.getSensorCollection().isRevLimitSwitchClosed();
+    }
+
+    @Override
+    public boolean getForwardLimitSwitch() {
+        return super.getSensorCollection().isFwdLimitSwitchClosed();
     }
 }

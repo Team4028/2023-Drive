@@ -6,12 +6,17 @@ package frc.robot.utilities;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.SparkMaxLimitSwitch.Type;
 
 /** Add your docs here. */
 public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     private RelativeEncoder encoder;
     private SparkMaxPIDController pid;
+
+    SparkMaxLimitSwitch revLimitSwitch;
+    SparkMaxLimitSwitch fwdLimitSwitch;
 
     public BeakSparkMAX(int port) {
         super(port, MotorType.kBrushless);
@@ -22,6 +27,9 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     private void resetControllers() {
         encoder = super.getEncoder();
         pid = super.getPIDController();
+
+        revLimitSwitch = super.getReverseLimitSwitch(Type.kNormallyOpen);
+        fwdLimitSwitch = super.getForwardLimitSwitch(Type.kNormallyOpen);
     }
 
     @Override
@@ -152,7 +160,22 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     }
 
     @Override
-    public void follow(int leaderCANId) {
-        super.follow(ExternalFollower.kFollowerSparkMax, leaderCANId);
+    public void setReverseLimitSwitchNormallyClosed(boolean normallyClosed) {
+        revLimitSwitch = super.getReverseLimitSwitch(normallyClosed ? Type.kNormallyClosed : Type.kNormallyOpen);
+    }
+
+    @Override
+    public void setForwardLimitSwitchNormallyClosed(boolean normallyClosed) {
+        fwdLimitSwitch = super.getForwardLimitSwitch(normallyClosed ? Type.kNormallyClosed : Type.kNormallyOpen);        
+    }
+
+    @Override
+    public boolean getReverseLimitSwitch() {
+       return revLimitSwitch.isPressed();
+    }
+
+    @Override
+    public boolean getForwardLimitSwitch() {
+        return fwdLimitSwitch.isPressed();
     }
 }
