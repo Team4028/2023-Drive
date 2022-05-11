@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import frc.robot.utilities.RobotPhysics;
 
 /** Add your docs here. */
 public class Constants {
@@ -20,24 +21,28 @@ public class Constants {
         // distance from the front to back wheels on the robot
         public static final double WHEEL_BASE = 24.25;
 
-        public static final DifferentialDriveKinematics DRIVE_KINEMATICS = new DifferentialDriveKinematics(
+        public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(
                 Units.inchesToMeters(TRACK_WIDTH));
 
         public static final double SPEED_SCALE = 0.25;
         public static final double WHEEL_DIAMETER = 6.258;
 
-        public static final double ENCODER_CPR = 4096.;
         public static final double GEAR_RATIO = 7.5;
-        public static final double ENCODER_DISTANCE_PER_PULSE =
-                // Assumes the encoders are directly mounted on the wheel shafts
-                (WHEEL_DIAMETER * Math.PI) / ENCODER_CPR;
-
-        public static final double NEO_ENCODER_CPR = 600.;
-        public static final double NEO_ENCODER_DISTANCE_PER_PULSE =
-                // Assumes the encoders are directly mounted on the wheel shafts
-                (WHEEL_DIAMETER * Math.PI) / NEO_ENCODER_CPR;
 
         public static final double MAX_VELOCITY = 4.572;// Units.feetToMeters(15.);
+
+        // in radians per second
+        public static final double MAX_ANGULAR_VELOCITY = Math.PI;// DriveConstants.MAX_VELOCITY /
+        // Math.hypot(DriveConstants.TRACK_WIDTH / 2., DriveConstants.WHEEL_BASE / 2.);
+        
+        public static final RobotPhysics PHYSICS = new RobotPhysics(
+            MAX_VELOCITY,
+            MAX_ANGULAR_VELOCITY,
+            TRACK_WIDTH,
+            WHEEL_BASE,
+            WHEEL_DIAMETER,
+            GEAR_RATIO
+        );
 
         public static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
                 // TODO: get these from SysId
@@ -49,12 +54,8 @@ public class Constants {
     }
 
     public static final class AutonConstants {
-        // in radians per second
-        public static final double MAX_ANGULAR_VELOCITY = Math.PI;// DriveConstants.MAX_VELOCITY /
-        // Math.hypot(DriveConstants.TRACK_WIDTH / 2., DriveConstants.WHEEL_BASE / 2.);
-
         public static final TrapezoidProfile.Constraints THETA_CONSTRAINTS = new TrapezoidProfile.Constraints(
-                MAX_ANGULAR_VELOCITY, MAX_ANGULAR_VELOCITY);
+                DriveConstants.MAX_ANGULAR_VELOCITY, DriveConstants.MAX_ANGULAR_VELOCITY);
 
         public static final ProfiledPIDController THETA_CONTROLLER = new ProfiledPIDController(
                 PIDConstants.Theta.kP,
@@ -65,7 +66,7 @@ public class Constants {
         public static final TrajectoryConfig AUTON_TRAJECTORY_CONFIG = new TrajectoryConfig(
                 DriveConstants.MAX_VELOCITY,
                 DriveConstants.MAX_VELOCITY)
-                        .setKinematics(DriveConstants.DRIVE_KINEMATICS);
+                        .setKinematics(DriveConstants.KINEMATICS);
 
         public static final PIDController DRIVE_CONTROLLER = new PIDController(PIDConstants.DriveController.kP, 0, 0);
     }

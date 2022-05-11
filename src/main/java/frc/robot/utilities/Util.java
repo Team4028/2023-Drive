@@ -32,7 +32,7 @@ public final class Util {
                 drivetrain::getPoseMeters,
                 new RamseteController(),
                 DriveConstants.FEED_FORWARD,
-                DriveConstants.DRIVE_KINEMATICS,
+                DriveConstants.KINEMATICS,
                 drivetrain::getWheelSpeeds,
                 AutonConstants.DRIVE_CONTROLLER,
                 AutonConstants.DRIVE_CONTROLLER,
@@ -76,10 +76,5 @@ public final class Util {
                                                                                                   // travelled by the
                                                                                                   // wheel.
         return positionMeters;
-    }
-
-    public static double NUtoMeters(double nu) {
-        return NUtoMeters(nu, DriveConstants.ENCODER_CPR, DriveConstants.GEAR_RATIO,
-                DriveConstants.WHEEL_DIAMETER);
     }
 }

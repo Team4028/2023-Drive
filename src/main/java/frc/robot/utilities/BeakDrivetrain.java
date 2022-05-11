@@ -31,30 +31,19 @@ public class BeakDrivetrain extends SubsystemBase {
     /**
      * Construct a new generic drivetrain.
      * 
-     * @param maxVelocity        Maximum velocity, in meters per second.
-     * @param maxAngularVelocity Maximum angular (rotational) velocity, in radians
-     *                           per second.
-     * @param trackWidth         Track width (left wheel to right wheel), in inches.
-     * @param wheelBase          Wheel base (back wheel to front wheel), in inches
-     * @param wheelDiameter      Wheel diameter, in inches.
-     * @param gearRatio          Gear ratio of the motors.
+     * @param physics A {@link RobotPhysics} object containing the relevant information for your robot.
      * @param feedForward        A {@link SimpleMotorFeedforward} calculated from
      *                           SysID.
      */
     public BeakDrivetrain(
-            double maxVelocity,
-            double maxAngularVelocity,
-            double trackWidth,
-            double wheelBase,
-            double wheelDiameter,
-            double gearRatio,
+            RobotPhysics physics,
             SimpleMotorFeedforward feedForward) {
-        m_maxVelocity = maxVelocity;
-        m_maxAngularVelocity = maxAngularVelocity;
-        m_trackWidth = trackWidth;
-        m_wheelBase = wheelBase;
-        m_wheelDiameter = wheelDiameter;
-        m_gearRatio = gearRatio;
+        m_maxVelocity = physics.maxVelocity;
+        m_maxAngularVelocity = physics.maxAngularVelocity;
+        m_trackWidth = physics.trackWidth;
+        m_wheelBase = physics.wheelBase;
+        m_wheelDiameter = physics.wheelDiameter;
+        m_gearRatio = physics.driveGearRatio;
         m_feedForward = feedForward;
     }
 
@@ -68,8 +57,7 @@ public class BeakDrivetrain extends SubsystemBase {
      * @param y   Speed of the robot in the y direction (sideways).
      * @param rot Angular rate of the robot.
      */
-    public void drive(double x, double y, double rot) {
-    }
+    public void drive(double x, double y, double rot) {}
 
     /**
      * Gets the gyro's reported angle.

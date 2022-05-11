@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSiz
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.Constants.AutonConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
@@ -38,13 +37,9 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
     public FalconDrivetrain() {
         super(
-                DriveConstants.MAX_VELOCITY,
-                AutonConstants.MAX_ANGULAR_VELOCITY,
-                DriveConstants.TRACK_WIDTH,
-                DriveConstants.WHEEL_BASE,
-                DriveConstants.WHEEL_DIAMETER,
-                DriveConstants.GEAR_RATIO,
-                DriveConstants.FEED_FORWARD);
+            DriveConstants.PHYSICS,
+            DriveConstants.FEED_FORWARD
+        );
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {

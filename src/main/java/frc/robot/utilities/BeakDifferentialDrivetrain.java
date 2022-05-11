@@ -29,25 +29,14 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     /**
      * Construct a new differential drivetrain.
      * 
-     * @param maxVelocity        Maximum velocity, in meters per second.
-     * @param maxAngularVelocity Maximum angular (rotational) velocity, in radians
-     *                           per second.
-     * @param trackWidth         Track width (left wheel to right wheel), in inches.
-     * @param wheelBase          Wheel base (back wheel to front wheel), in inches
-     * @param wheelDiameter      Wheel diameter, in meters.
-     * @param gearRatio          Gear ratio of the motors.
+     * @param physics A {@link RobotPhysics} object containing the relevant information for your robot.
      * @param feedForward        A {@link SimpleMotorFeedforward} calculated from
      *                           SysID.
      */
     public BeakDifferentialDrivetrain(
-            double maxVelocity,
-            double maxAngularVelocity,
-            double trackWidth,
-            double wheelBase,
-            double wheelDiameter,
-            double gearRatio,
+            RobotPhysics physics,
             SimpleMotorFeedforward feedForward) {
-        super(maxVelocity, maxAngularVelocity, trackWidth, wheelBase, wheelDiameter, gearRatio, feedForward);
+        super(physics, feedForward);
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(m_trackWidth));
     }
 
