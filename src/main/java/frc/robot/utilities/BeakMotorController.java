@@ -105,8 +105,6 @@ public interface BeakMotorController extends MotorController {
     /**
      * Runs the motor in motion magic mode, in NU.
      * </p>
-     * Not currently supported by SparkMAX.
-     * </p>
      * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
      * SparkMAX.
      * 
@@ -323,9 +321,7 @@ public interface BeakMotorController extends MotorController {
     public void restoreFactoryDefault();
 
     /**
-     * Set the deadband, in NU, where PID control will no longer attempt to respond to an error.</p>
-     * 
-     * Not supported on Spark MAX.
+     * Set the deadband, in NU, where PID control will no longer attempt to respond to an error.
      * @param error Error deadband.
      * @param slot Slot to set to.
      */
@@ -338,4 +334,22 @@ public interface BeakMotorController extends MotorController {
      * @param saturation Saturation.
      */
     public void setVoltageCompensationSaturation(double saturation);
+
+    /**
+     * Set the Motion Magic cruise velocity.</p>
+     * 
+     * See CTRE's Motion Magic documentation, or REV's Smart Motion example
+     * to see what this means.
+     * @param velocity Cruise velocity, in NU.
+     */
+    public void setMotionMagicCruiseVelocity(double velocity, int slot);
+
+    /**
+     * Set the Motion Magic acceleration.</p>
+     * 
+     * See CTRE's Motion Magic documentation, or REV's Smart Motion example
+     * to see what this means.
+     * @param accel Acceleration, in NU per second.
+     */
+    public void setMotionMagicAcceleration(double accel, int slot);
 }

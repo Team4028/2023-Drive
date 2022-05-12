@@ -191,12 +191,12 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
 
     @Override
     public boolean getReverseLimitSwitch() {
-        return super.getSensorCollection().isRevLimitSwitchClosed() == 1 ? true : false;
+        return super.isRevLimitSwitchClosed() == 1;
     }
 
     @Override
     public boolean getForwardLimitSwitch() {
-        return super.getSensorCollection().isFwdLimitSwitchClosed() == 1 ? true : false;
+        return super.isFwdLimitSwitchClosed() == 1;
     }
 
     @Override
@@ -224,4 +224,16 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
         super.enableVoltageCompensation(saturation > 0.);
         super.configVoltageCompSaturation(saturation);
     }
+
+    @Override
+    public void setMotionMagicAcceleration(double accel, int slot) {
+        selectProfileSlot(slot, 0);
+        super.configMotionAcceleration(accel);
+    }
+
+    @Override
+    public void setMotionMagicCruiseVelocity(double velocity, int slot) {
+        selectProfileSlot(slot, 0);
+        super.configMotionCruiseVelocity(velocity);
+    }    
 }

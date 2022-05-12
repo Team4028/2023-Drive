@@ -74,7 +74,7 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public void setMotionMagicNU(double nu) {
-        throw new RuntimeException("REV Spark MAX does not support Motion Magic.");
+        pid.setReference(nu, ControlType.kSmartMotion);
     }
 
     @Override
@@ -196,11 +196,21 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public void setAllowedClosedLoopError(double error, int slot) {
-        throw new RuntimeException("REV Spark MAX does not supporting setting the allowable closed loop error.");
+        pid.setSmartMotionAllowedClosedLoopError(error, slot);
     }
 
     @Override
     public void setVoltageCompensationSaturation(double saturation) {
         throw new RuntimeException("REV Spark MAX does not support voltage compensation. Use setVoltage() if you want to account for voltage drops.");
+    }
+
+    @Override
+    public void setMotionMagicAcceleration(double accel, int slot) {
+        pid.setSmartMotionMaxAccel(accel, slot);
+    }
+
+    @Override
+    public void setMotionMagicCruiseVelocity(double velocity, int slot) {
+        pid.setSmartMotionMaxVelocity(velocity, slot); 
     }
 }
