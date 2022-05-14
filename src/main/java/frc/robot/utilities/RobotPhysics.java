@@ -4,6 +4,8 @@
 
 package frc.robot.utilities;
 
+import edu.wpi.first.math.util.Units;
+
 /** Add your docs here. */
 public class RobotPhysics {
     public double maxVelocity;
@@ -29,14 +31,14 @@ public class RobotPhysics {
     public RobotPhysics(double maxVelocity, double maxAngularVelocity, double trackWidth, double wheelBase,
             double wheelDiameter, double driveGearRatio) {
         this.maxVelocity = maxVelocity;
-        this.maxAngularVelocity = (maxAngularVelocity == 0. ? calcTheoreticalAngularVelocity() : maxAngularVelocity);
         this.trackWidth = trackWidth;
         this.wheelBase = wheelBase;
+        this.maxAngularVelocity = (maxAngularVelocity == 0. ? calcTheoreticalAngularVelocity() : maxAngularVelocity);
         this.wheelDiameter = wheelDiameter;
         this.driveGearRatio = driveGearRatio;
     }
 
     protected double calcTheoreticalAngularVelocity() {
-        return maxVelocity / Math.hypot(trackWidth / 2, wheelBase / 2);
+        return maxVelocity / Math.hypot(Units.inchesToMeters(trackWidth) / 2.0, Units.inchesToMeters(wheelBase) / 2.0);
     }
 }

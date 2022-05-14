@@ -17,9 +17,9 @@ import frc.robot.utilities.RobotPhysics;
 public class Constants {
     public static final class DriveConstants {
         // distance from the right to left wheels on the robot
-        public static final double TRACK_WIDTH = 24.25;
+        public static final double TRACK_WIDTH = 26;
         // distance from the front to back wheels on the robot
-        public static final double WHEEL_BASE = 24.25;
+        public static final double WHEEL_BASE = 28;
 
         public static final DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(
                 Units.inchesToMeters(TRACK_WIDTH));
@@ -29,7 +29,10 @@ public class Constants {
 
         public static final double GEAR_RATIO = 7.5;
 
-        public static final double MAX_VELOCITY = 4.572;// Units.feetToMeters(15.);
+        public static final double MAX_VELOCITY =
+            Units.feetToMeters(17.2); // Falcon
+            // Units.feetToMeters(15.5); // NEO
+            // Units.feetToMeters(14.4); // CIM
 
         // in radians per second
         public static final double MAX_ANGULAR_VELOCITY = Math.PI;// DriveConstants.MAX_VELOCITY /
@@ -37,7 +40,7 @@ public class Constants {
         
         public static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
-            MAX_ANGULAR_VELOCITY,
+            0,// MAX_ANGULAR_VELOCITY,
             TRACK_WIDTH,
             WHEEL_BASE,
             WHEEL_DIAMETER,
@@ -84,7 +87,7 @@ public class Constants {
         // TODO: get these from SysId
         public static final class Drive {
             public static final double kP = 0.01;
-            public static final double kD = 0.0;
+            public static final double kD = 0.02;
         }
 
         public static final class Theta {
