@@ -15,9 +15,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
@@ -71,10 +68,13 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
             REVPhysicsSim.getInstance().addSparkMax(m_BR2, DCMotor.getNEO(1));
         }
 
-        sim = DifferentialDrivetrainSim.createKitbotSim(
-            KitbotMotor.kDoubleNEOPerSide,
-            KitbotGearing.k5p95,
-            KitbotWheelSize.kSixInch,
+        sim = new DifferentialDrivetrainSim(
+            DCMotor.getNEO(3),
+            7.51,
+            0.9,
+            Units.lbsToKilograms(60.),
+            Units.inchesToMeters(3.),
+            Units.inchesToMeters(DriveConstants.TRACK_WIDTH),
             null);
     }
 
