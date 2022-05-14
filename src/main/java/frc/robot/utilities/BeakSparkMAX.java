@@ -38,23 +38,23 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     }
 
     @Override
-    public void setVelocityRPM(double rpm) {
-        setVelocityNU(rpm);
+    public void setVelocityRPM(double rpm, double arbFeedforward, int slot) {
+        setVelocityNU(rpm, arbFeedforward, slot);
     }
 
     @Override
-    public void setVelocityNU(double nu) {
-        pid.setReference(nu, ControlType.kVelocity);
+    public void setVelocityNU(double nu, double arbFeedforward, int slot) {
+        pid.setReference(nu, ControlType.kVelocity, slot, arbFeedforward);
     }
 
     @Override
-    public void setPositionMotorRotations(double rotations) {
-        setPositionNU(rotations * encoder.getCountsPerRevolution());
+    public void setPositionMotorRotations(double rotations, double arbFeedforward, int slot) {
+        setPositionNU(rotations * encoder.getCountsPerRevolution(), arbFeedforward, slot);
     }
 
     @Override
-    public void setPositionNU(double nu) {
-        pid.setReference(nu, ControlType.kPosition);
+    public void setPositionNU(double nu, double arbFeedforward, int slot) {
+        pid.setReference(nu, ControlType.kPosition, slot, arbFeedforward);
     }
 
     @Override
@@ -68,13 +68,13 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     }
 
     @Override
-    public void setMotionMagicMotorRotations(double rotations) {
-        setMotionMagicNU(rotations);
+    public void setMotionMagicMotorRotations(double rotations, double arbFeedforward, int slot) {
+        setMotionMagicNU(rotations, arbFeedforward, slot);
     }
 
     @Override
-    public void setMotionMagicNU(double nu) {
-        pid.setReference(nu, ControlType.kSmartMotion);
+    public void setMotionMagicNU(double nu, double arbFeedforward, int slot) {
+        pid.setReference(nu, ControlType.kSmartMotion, slot, arbFeedforward);
     }
 
     @Override
@@ -212,5 +212,10 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     @Override
     public void setMotionMagicCruiseVelocity(double velocity, int slot) {
         pid.setSmartMotionMaxVelocity(velocity, slot); 
+    }
+
+    @Override
+    public void set(double percentOutput, double arbFeedforward) {
+        pid.setReference(percentOutput, ControlType.kDutyCycle, 0, arbFeedforward);
     }
 }

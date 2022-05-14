@@ -40,8 +40,18 @@ public interface BeakMotorController extends MotorController {
      * Run the motor in velocity mode, in RPM.
      * 
      * @param rpm RPM to run.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
      */
-    public void setVelocityRPM(double rpm);
+    public void setVelocityRPM(double rpm, double arbFeedforward, int slot);
+
+    /**
+     * Run the motor in velocity mode, in RPM.
+     * 
+     * @param rpm RPM to run.
+     */
+    default void setVelocityRPM(double rpm, int slot) {
+        setVelocityRPM(rpm, 0, slot);
+    }
 
     /**
      * Run the motor in velocity mode, in NU.
@@ -49,15 +59,61 @@ public interface BeakMotorController extends MotorController {
      * NU/100ms for Talons, RPM for SparkMAX.
      * 
      * @param nu NU to run.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param slot PID slot to run.
      */
-    public void setVelocityNU(double nu);
+    public void setVelocityNU(double nu, double arbFeedforward, int slot);
+
+    /**
+     * Run the motor in velocity mode, in NU.
+     * </p>
+     * NU/100ms for Talons, RPM for SparkMAX.
+     * 
+     * @param nu NU to run.
+     * @param slot PID slot to run.
+     */
+    default void setVelocityNU(double nu, int slot) {
+        setVelocityNU(nu, 0, slot);
+    }
+
+        /**
+     * Run the motor in velocity mode, in NU.
+     * </p>
+     * NU/100ms for Talons, RPM for SparkMAX.
+     * 
+     * @param nu NU to run.
+     */
+    default void setVelocityNU(double nu) {
+        setVelocityNU(nu, 0, 0);
+    }
 
     /**
      * Run the motor in position mode, in motor rotations.
      * 
      * @param rotations Rotations to run.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param slot PID slot to run.
      */
-    public void setPositionMotorRotations(double rotations);
+    public void setPositionMotorRotations(double rotations, double arbFeedforward, int slot);
+
+    /**
+     * Run the motor in position mode, in motor rotations.
+     * 
+     * @param rotations Rotations to run.
+     * @param slot PID slot to run.
+     */
+    default void setPositionMotorRotations(double rotations, int slot) {
+        setPositionMotorRotations(rotations, 0, slot);
+    }
+
+        /**
+     * Run the motor in position mode, in motor rotations.
+     * 
+     * @param rotations Rotations to run.
+     */
+    default void setPositionMotorRotations(double rotations) {
+        setPositionMotorRotations(rotations, 0, 0);
+    }
 
     /**
      * Run the motor in position mode, in NU.
@@ -66,8 +122,35 @@ public interface BeakMotorController extends MotorController {
      * SparkMAX.
      * 
      * @param nu NU to run.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param slot PID slot to run.
      */
-    public void setPositionNU(double nu);
+    public void setPositionNU(double nu, double arbFeedforward, int slot);
+
+    /**
+     * Run the motor in position mode, in NU.
+     * </p>
+     * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
+     * SparkMAX.
+     * 
+     * @param nu NU to run.
+     * @param slot PID slot to run.
+     */
+    default void setPositionNU(double nu, int slot) {
+        setPositionNU(nu, 0, slot);
+    }
+
+        /**
+     * Run the motor in position mode, in NU.
+     * </p>
+     * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
+     * SparkMAX.
+     * 
+     * @param nu NU to run.
+     */
+    default void setPositionNU(double nu) {
+        setPositionNU(nu, 0, 0);
+    }
 
     /**
      * Sets the encoder's position, in motor rotations.
@@ -99,8 +182,33 @@ public interface BeakMotorController extends MotorController {
      * Not currently supported by SparkMAX.
      * 
      * @param rotations Rotations to run.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param slot PID slot to run.
      */
-    public void setMotionMagicMotorRotations(double rotations);
+    public void setMotionMagicMotorRotations(double rotations, double arbFeedforward, int slot);
+
+    /**
+     * Runs the motor in motion magic mode, in motor rotations.
+     * </p>
+     * Not currently supported by SparkMAX.
+     * 
+     * @param rotations Rotations to run.
+     * @param slot PID slot to run.
+     */
+    default void setMotionMagicMotorRotations(double rotations, int slot) {
+        setMotionMagicMotorRotations(rotations, 0, slot);
+    }
+    
+    /**
+     * Runs the motor in motion magic mode, in motor rotations.
+     * </p>
+     * Not currently supported by SparkMAX.
+     * 
+     * @param rotations Rotations to run.
+     */
+    default void setMotionMagicMotorRotations(double rotations) {
+        setMotionMagicMotorRotations(rotations, 0, 0);
+    }
 
     /**
      * Runs the motor in motion magic mode, in NU.
@@ -109,8 +217,35 @@ public interface BeakMotorController extends MotorController {
      * SparkMAX.
      * 
      * @param nu NU to run.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param slot PID slot to run.
      */
-    public void setMotionMagicNU(double nu);
+    public void setMotionMagicNU(double nu, double arbFeedforward, int slot);
+
+    /**
+     * Runs the motor in motion magic mode, in NU.
+     * </p>
+     * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
+     * SparkMAX.
+     * 
+     * @param nu NU to run.
+     * @param slot PID slot to run.
+     */
+    default void setMotionMagicNU(double nu, int slot) {
+        setMotionMagicNU(nu, 0, slot);
+    }
+    
+    /**
+     * Runs the motor in motion magic mode, in NU.
+     * </p>
+     * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
+     * SparkMAX.
+     * 
+     * @param nu NU to run.
+     */
+    default void setMotionMagicNU(double nu) {
+        setMotionMagicNU(nu, 0, 0);
+    }
 
     /**
      * Get the motor velocity, in RPM.
@@ -352,4 +487,12 @@ public interface BeakMotorController extends MotorController {
      * @param accel Acceleration, in NU per second.
      */
     public void setMotionMagicAcceleration(double accel, int slot);
+
+    /**
+     * Set the motor controller's speed, in range [-1.0, 1.0], with an arbitrary feed forward.
+     * 
+     * @param percentOutput Percent output to pass to the motor controller.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     */
+    public void set(double percentOutput, double arbFeedforward);
 }

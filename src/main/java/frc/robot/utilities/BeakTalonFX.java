@@ -5,6 +5,7 @@
 package frc.robot.utilities;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -27,14 +28,8 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
         this(port, "");
     }
 
-    @Override
-    public void set(double percentOutput) {
-        super.set(ControlMode.PercentOutput, percentOutput);
-    }
-
-    @Override
-    public double get() {
-        return super.getMotorOutputPercent();
+    public void setSlot(int slot) {
+        super.selectProfileSlot(slot, 0);
     }
 
     @Override
@@ -43,23 +38,25 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     }
 
     @Override
-    public void setVelocityRPM(double rpm) {
-        setVelocityNU(rpm * 2048 / 600);
+    public void setVelocityRPM(double rpm, double arbFeedforward, int slot) {
+        setVelocityNU(rpm * 2048 / 600, arbFeedforward, slot);
     }
 
     @Override
-    public void setVelocityNU(double nu) {
-        super.set(ControlMode.Velocity, nu);
+    public void setVelocityNU(double nu, double arbFeedforward, int slot) {
+        setSlot(slot);
+        super.set(ControlMode.Velocity, nu, DemandType.ArbitraryFeedForward, arbFeedforward);
     }
 
     @Override
-    public void setPositionMotorRotations(double rotations) {
-        setPositionNU(rotations * 2048);
+    public void setPositionMotorRotations(double rotations, double arbFeedforward, int slot) {
+        setPositionNU(rotations * 2048, arbFeedforward, slot);
     }
 
     @Override
-    public void setPositionNU(double nu) {
-        super.set(ControlMode.Position, nu);
+    public void setPositionNU(double nu, double arbFeedforward, int slot) {
+        setSlot(slot);
+        super.set(ControlMode.Position, nu, DemandType.ArbitraryFeedForward, slot);
     }
 
     @Override
@@ -73,13 +70,14 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     }
 
     @Override
-    public void setMotionMagicMotorRotations(double rotations) {
-        setMotionMagicNU(rotations * 2048);
+    public void setMotionMagicMotorRotations(double rotations, double arbFeedforward, int slot) {
+        setMotionMagicNU(rotations * 2048, arbFeedforward, slot);
     }
 
     @Override
-    public void setMotionMagicNU(double nu) {
-        super.set(ControlMode.MotionMagic, nu);
+    public void setMotionMagicNU(double nu, double arbFeedforward, int slot) {
+        setSlot(slot);
+        super.set(ControlMode.MotionMagic, nu, DemandType.ArbitraryFeedForward, arbFeedforward);
     }
 
     @Override
@@ -227,13 +225,18 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
 
     @Override
     public void setMotionMagicAcceleration(double accel, int slot) {
-        selectProfileSlot(slot, 0);
+        setSlot(slot);
         super.configMotionAcceleration(accel);
     }
 
     @Override
     public void setMotionMagicCruiseVelocity(double velocity, int slot) {
-        selectProfileSlot(slot, 0);
+        setSlot(slot);
         super.configMotionCruiseVelocity(velocity);
+    }
+
+    @Override
+    public void set(double percentOutput, double arbFeedforward) {
+        super.set(ControlMode.PercentOutput, percentOutput, DemandType.ArbitraryFeedForward, arbFeedforward);
     }    
 }
