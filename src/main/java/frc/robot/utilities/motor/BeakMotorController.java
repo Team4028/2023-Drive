@@ -465,7 +465,16 @@ public interface BeakMotorController extends MotorController {
     /**
      * Set the voltage compensation saturation for the motor controller.</p>
      * 
-     * See CTRE's docs for more info on voltage compensation. Not supported on Spark MAX.
+     * See CTRE's docs for more info on voltage compensation.</p>
+     * 
+     * Note: due to the closed-source nature of the motor controller's
+     * implementations (JNI), the exact way this works on Spark MAXes and
+     * Talons may be inconsistent. For more consistent behavior, use 
+     * <code>setVoltage</code> instead. This will directly account for
+     * voltage drops, with a standardized compensation value on Talons,
+     * or directly on the motor controller with PID on the Spark MAX.</p> 
+     * 
+     * For any motor controller, set this to anything greater than 0 to enable it.
      * @param saturation Saturation.
      */
     public void setVoltageCompensationSaturation(double saturation);

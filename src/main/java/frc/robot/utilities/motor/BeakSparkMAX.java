@@ -15,8 +15,8 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     private RelativeEncoder encoder;
     private SparkMaxPIDController pid;
 
-    SparkMaxLimitSwitch revLimitSwitch;
-    SparkMaxLimitSwitch fwdLimitSwitch;
+    private SparkMaxLimitSwitch revLimitSwitch;
+    private SparkMaxLimitSwitch fwdLimitSwitch;
 
     public BeakSparkMAX(int port) {
         super(port, MotorType.kBrushless);
@@ -201,7 +201,7 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public void setVoltageCompensationSaturation(double saturation) {
-        throw new RuntimeException("REV Spark MAX does not support voltage compensation. Use setVoltage() if you want to account for voltage drops.");
+        super.enableVoltageCompensation(saturation);
     }
 
     @Override
