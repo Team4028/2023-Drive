@@ -118,22 +118,6 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      */
     public void driveVolts(double left, double right) {}
 
-    public Rotation2d getGyroRotation2d() {
-        if (Robot.isSimulation()) {
-            return Rotation2d.fromDegrees(m_gyroSim.getAngle());
-        } else {
-            return m_gyro.getRotation2d();
-        }
-    }
-
-    public double getGyroRate() {
-        if (Robot.isSimulation()) {
-            return m_gyroSim.getRate();
-        } else {
-            return m_gyro.getRate();
-        }
-    }
-
     /**
      * Get the robot's pose.
      * 

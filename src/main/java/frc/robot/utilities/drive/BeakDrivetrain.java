@@ -8,13 +8,11 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utilities.subsystem.BeakGyroSubsystem;
 
 /** Add your docs here. */
-public class BeakDrivetrain extends SubsystemBase {
+public class BeakDrivetrain extends BeakGyroSubsystem {
     public Pose2d m_pose;
-    public Gyro m_gyro;
 
     protected double m_maxVelocity;
     protected double m_maxAngularVelocity;
@@ -58,40 +56,6 @@ public class BeakDrivetrain extends SubsystemBase {
      * @param rot Angular rate of the robot.
      */
     public void drive(double x, double y, double rot) {}
-
-    /**
-     * Gets the gyro's reported angle.
-     * 
-     * @return A {@link Rotation2d} containing the reported angle of the gyro.
-     */
-    public Rotation2d getGyroRotation2d() {
-        return m_gyro.getRotation2d();
-    }
-
-    /**
-     * Zero the gyro.
-     */
-    public void zero() {
-        m_gyro.reset();
-    }
-
-    /**
-     * Get the gyro's reported heading.
-     * 
-     * @return The reported angle of the gyro in degrees.
-     */
-    public double getGyroHeading() {
-        return getGyroRotation2d().getDegrees();
-    }
-
-    /**
-     * Get the gyro's reported rate
-     * 
-     * @return The reported rate of the gyro in degrees per second.
-     */
-    public double getGyroRate() {
-        return m_gyro.getRate();
-    }
 
     /**
      * Get the robot's pose.

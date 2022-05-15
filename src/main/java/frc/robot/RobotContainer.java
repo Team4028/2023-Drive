@@ -48,7 +48,7 @@ public class RobotContainer {
                         speedScaledDriverRightX()),
                         m_drive));
 
-        m_driverController.start.whenPressed(m_drive::zero);
+        m_driverController.start.whenPressed(m_drive::resetGyro);
         m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, true));
         m_driverController.b.whenPressed(new RotateDrivetrainToTargetPosition(324, 162, m_drive).withTimeout(2.0));
     }
