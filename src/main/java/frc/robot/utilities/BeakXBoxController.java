@@ -6,12 +6,40 @@ package frc.robot.utilities;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.ControllerConstants.*;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public final class BeakXBoxController {
+    public static final double THUMBSTICK_DEADBAND = 0.05; // Jiggle room for the thumbsticks
+    public static final double THUMBSTICK_SENSITIVITY = 0.05;
+    public static final double TRIGGER_DEADBAND = 0.01; // Jiggle room for the triggers
+    public static final double TRIGGER_SENSITIVITY = 0.6; // If the trigger is beyond this limit, say it has been
+                                                            // pressed
+
+    /* Button Mappings */
+    public static final class Buttons {
+        public static final int A = 1;
+        public static final int B = 2;
+        public static final int X = 3;
+        public static final int Y = 4;
+        public static final int LEFT_BUMPER = 5;
+        public static final int RIGHT_BUMPER = 6;
+        public static final int BACK = 7;
+        public static final int START = 8;
+        public static final int LEFT_STICK = 9;
+        public static final int RIGHT_STICK = 10;
+    }
+
+    /* Axis Mappings */
+    public static final class Axes {
+        public static final int LEFT_X = 0;
+        public static final int LEFT_Y = 1;
+        public static final int LEFT_TRIGGER = 2;
+        public static final int RIGHT_TRIGGER = 3;
+        public static final int RIGHT_X = 4;
+        public static final int RIGHT_Y = 5;
+    }
+
     private XboxController controller;
 
     public Thumbstick left_stick;
@@ -110,9 +138,9 @@ public final class BeakXBoxController {
             /* Initialize */
             this.parent = parent;
             this.hand = hand;
-            this.xDeadZone = ControllerConstants.THUMBSTICK_DEADBAND;
-            this.yDeadZone = ControllerConstants.THUMBSTICK_DEADBAND;
-            this.sensitivity = ControllerConstants.THUMBSTICK_SENSITIVITY;
+            this.xDeadZone = THUMBSTICK_DEADBAND;
+            this.yDeadZone = THUMBSTICK_DEADBAND;
+            this.sensitivity = THUMBSTICK_SENSITIVITY;
 
             if (hand == HAND.LEFT) {
                 this.xAxisID = Axes.LEFT_X;
@@ -338,8 +366,8 @@ public final class BeakXBoxController {
             /* Initialize */
             this.parent = joystick;
             this.hand = hand;
-            this.deadZone = ControllerConstants.TRIGGER_DEADBAND;
-            this.sensitivity = ControllerConstants.TRIGGER_SENSITIVITY;
+            this.deadZone = TRIGGER_DEADBAND;
+            this.sensitivity = TRIGGER_SENSITIVITY;
         }
 
         /* Extended Methods */

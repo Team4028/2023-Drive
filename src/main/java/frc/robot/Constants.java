@@ -103,36 +103,4 @@ public class Constants {
     public static final class OIConstants {
         public static final int DRIVER = 0;
     }
-
-    public static final class ControllerConstants {
-        public static final double THUMBSTICK_DEADBAND = 0.05; // Jiggle room for the thumbsticks
-        public static final double THUMBSTICK_SENSITIVITY = 0.05;
-        public static final double TRIGGER_DEADBAND = 0.01; // Jiggle room for the triggers
-        public static final double TRIGGER_SENSITIVITY = 0.6; // If the trigger is beyond this limit, say it has been
-                                                              // pressed
-
-        /* Button Mappings */
-        public static final class Buttons {
-            public static final int A = 1;
-            public static final int B = 2;
-            public static final int X = 3;
-            public static final int Y = 4;
-            public static final int LEFT_BUMPER = 5;
-            public static final int RIGHT_BUMPER = 6;
-            public static final int BACK = 7;
-            public static final int START = 8;
-            public static final int LEFT_STICK = 9;
-            public static final int RIGHT_STICK = 10;
-        }
-
-        /* Axis Mappings */
-        public static final class Axes {
-            public static final int LEFT_X = 0;
-            public static final int LEFT_Y = 1;
-            public static final int LEFT_TRIGGER = 2;
-            public static final int RIGHT_TRIGGER = 3;
-            public static final int RIGHT_X = 4;
-            public static final int RIGHT_Y = 5;
-        }
-    }
 }
