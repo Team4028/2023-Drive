@@ -2,26 +2,32 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.utilities;
+package frc.robot.utilities.motor;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.SupplyCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.TalonFXSimCollection;
 import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-// TODO: Set slots
 /** Add your docs here. */
-public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
-    public BeakTalonSRX(int port) {
-        super(port);
+public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
+    public BeakTalonFX(int port, String canBus) {
+        super(port, canBus);
+        super.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
+        super.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
     }
-    
+
+    public BeakTalonFX(int port) {
+        this(port, "");
+    }
+
     public void setSlot(int slot) {
         super.selectProfileSlot(slot, 0);
     }
@@ -55,7 +61,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
 
     @Override
     public void setEncoderPositionMotorRotations(double rotations) {
-        setEncoderPositionNU(rotations * 4096);
+        setEncoderPositionNU(rotations * 2048);
     }
 
     @Override
@@ -76,7 +82,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
 
     @Override
     public double getVelocityRPM() {
-        return getVelocityNU() * 4096 / 600;
+        return getVelocityNU() * 2048 / 600;
     }
 
     @Override
@@ -86,7 +92,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
 
     @Override
     public double getPositionMotorRotations() {
-        return getPositionNU() * 4096;
+        return getPositionNU() * 2048;
     }
 
     @Override
@@ -161,12 +167,12 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
 
     @Override
     public double getVelocityEncoderCPR() {
-        return 4096;
+        return 2048;
     }
 
     @Override
     public double getPositionEncoderCPR() {
-        return 4096;
+        return 2048;
     }
 
     @Override
@@ -190,7 +196,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     public boolean getForwardLimitSwitch() {
         return super.isFwdLimitSwitchClosed() == 1;
     }
-    
+
     @Override
     public void setSupplyCurrentLimit(int amps) {
         super.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, amps, amps + 5, 0.1));
@@ -198,9 +204,9 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
 
     @Override
     public void setStatorCurrentLimit(int amps) {
-        throw new RuntimeException("CTRE Talon SRX does not support Stator current limiting.");
+        super.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, amps, amps + 5, 0.1));        
     }
-    
+
     @Override
     public void restoreFactoryDefault() {
         super.configFactoryDefault();
@@ -210,7 +216,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     public void setAllowedClosedLoopError(double error, int slot) {
         super.configAllowableClosedloopError(slot, error);
     }
-    
+
     @Override
     public void setVoltageCompensationSaturation(double saturation) {
         super.enableVoltageCompensation(saturation > 0.);
@@ -232,5 +238,5 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     @Override
     public void set(double percentOutput, double arbFeedforward) {
         super.set(ControlMode.PercentOutput, percentOutput, DemandType.ArbitraryFeedForward, arbFeedforward);
-    }
+    }    
 }

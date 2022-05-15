@@ -11,7 +11,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.robot.utilities.RobotPhysics;
+import frc.robot.utilities.drive.RobotPhysics;
 
 /** Add your docs here. */
 public class Constants {

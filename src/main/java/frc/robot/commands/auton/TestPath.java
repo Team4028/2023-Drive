@@ -5,9 +5,9 @@
 package frc.robot.commands.auton;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.utilities.BeakDifferentialDrivetrain;
-import frc.robot.utilities.Trajectories;
 import frc.robot.utilities.Util;
+import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.drive.Trajectories;
 
 public class TestPath extends BeakAutonCommand {
     /** Creates a new TestPath. */

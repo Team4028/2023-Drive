@@ -24,8 +24,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.sim.PhysicsSim;
-import frc.robot.utilities.BeakDifferentialDrivetrain;
-import frc.robot.utilities.BeakTalonFX;
+import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.motor.BeakTalonFX;
 
 /** Add your docs here. */
 public class FalconDrivetrain extends BeakDifferentialDrivetrain {

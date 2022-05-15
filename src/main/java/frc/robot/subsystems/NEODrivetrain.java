@@ -24,8 +24,8 @@ import frc.robot.Robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
-import frc.robot.utilities.BeakDifferentialDrivetrain;
-import frc.robot.utilities.BeakSparkMAX;
+import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.motor.BeakSparkMAX;
 
 /** Add your docs here. */
 public class NEODrivetrain extends BeakDifferentialDrivetrain {

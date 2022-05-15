@@ -24,8 +24,8 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.sim.PhysicsSim;
-import frc.robot.utilities.BeakDifferentialDrivetrain;
-import frc.robot.utilities.BeakTalonSRX;
+import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.motor.BeakTalonSRX;
 
 /** Add your docs here. */
 public class CIMDrivetrain extends BeakDifferentialDrivetrain {

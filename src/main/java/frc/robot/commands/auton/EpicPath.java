@@ -6,9 +6,9 @@ package frc.robot.commands.auton;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.utilities.BeakDifferentialDrivetrain;
-import frc.robot.utilities.Trajectories;
 import frc.robot.utilities.Util;
+import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.drive.Trajectories;
 
 public class EpicPath extends BeakAutonCommand {
     /** Creates a new TestPath. */
