@@ -45,17 +45,29 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
         m_feedForward = feedForward;
     }
 
-    public void configMotors() {
-    }
+    public void configMotors() {}
 
     /**
      * Method to drive the robot using joystick info.
      *
-     * @param x   Speed of the robot in the x direction (forward).
-     * @param y   Speed of the robot in the y direction (sideways).
-     * @param rot Angular rate of the robot.
+     * @param x             Speed of the robot in the x direction (forward).
+     * @param y             Speed of the robot in the y direction (sideways).
+     * @param rot           Angular rate of the robot.
+     * @param fieldRelative Whether or not the x and y speeds are relative to
+     *                      the field, for holonomic drivetrains.
      */
-    public void drive(double x, double y, double rot) {}
+    public void drive(double x, double y, double rot, boolean fieldRelative) {}
+
+    /**
+     * Method to drive the robot using joystick info.
+     *
+     * @param x             Speed of the robot in the x direction (forward).
+     * @param y             Speed of the robot in the y direction (sideways).
+     * @param rot           Angular rate of the robot.
+     */
+    public void drive(double x, double y, double rot) {
+        drive(x, y, rot, false);
+    }
 
     /**
      * Get the robot's pose.

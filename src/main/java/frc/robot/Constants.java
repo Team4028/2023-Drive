@@ -90,6 +90,10 @@ public class Constants {
             public static final double kD = 0.02;
         }
 
+        public static final class Turn {
+            public static final double kP = 0.2;
+        }
+
         public static final class Theta {
             public static final double kP = 6.5;
             public static final double kD = 0.15;
