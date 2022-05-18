@@ -6,13 +6,13 @@ import com.ctre.phoenix.motorcontrol.can.*;
 /**
  * Manages physics simulation for CTRE products.
  */
-public class PhysicsSim {
-    private static final PhysicsSim sim = new PhysicsSim();
+public class CTREPhysicsSim {
+    private static final CTREPhysicsSim sim = new CTREPhysicsSim();
 
     /**
      * Gets the robot simulator instance.
      */
-    public static PhysicsSim getInstance() {
+    public static CTREPhysicsSim getInstance() {
         return sim;
     }
 

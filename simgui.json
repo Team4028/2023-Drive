@@ -16,6 +16,11 @@
           "open": true
         }
       },
+      "SPARK MAX [4]": {
+        "header": {
+          "open": true
+        }
+      },
       "SPARK MAX [7]": {
         "header": {
           "open": true
@@ -106,7 +111,6 @@
           "width": 0.6096000075340271
         },
         "height": 8.229599952697754,
-        "image": "C:\\Users\\botto\\Downloads\\2022-field.png",
         "units": "feet",
         "window": {
           "visible": true

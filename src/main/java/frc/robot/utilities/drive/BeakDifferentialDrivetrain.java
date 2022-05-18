@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import frc.robot.Robot;
 import frc.robot.utilities.Util;
@@ -23,7 +22,6 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     public DifferentialDriveKinematics m_kinematics;
     public DifferentialDriveOdometry m_odom;
 
-    protected AnalogGyroSim m_gyroSim;
     protected DifferentialDrivetrainSim sim;
 
     protected double encoderDistancePerPulse;

@@ -14,16 +14,13 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotGearing;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotMotor;
-import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim.KitbotWheelSize;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
-import frc.robot.sim.PhysicsSim;
+import frc.robot.sim.CTREPhysicsSim;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
 import frc.robot.utilities.motor.BeakTalonFX;
 
@@ -66,17 +63,20 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
             DCMotor falcon = DCMotor.getFalcon500(1);
             double accel = 0.5;
             double maxVel = Units.radiansPerSecondToRotationsPerMinute(falcon.freeSpeedRadPerSec) * 2048 / 600;
-            PhysicsSim.getInstance().addTalonFX(m_FL, accel, maxVel);
-            PhysicsSim.getInstance().addTalonFX(m_FR, accel, maxVel);
-            PhysicsSim.getInstance().addTalonFX(m_BL, accel, maxVel);
-            PhysicsSim.getInstance().addTalonFX(m_BR, accel, maxVel);
+            CTREPhysicsSim.getInstance().addTalonFX(m_FL, accel, maxVel);
+            CTREPhysicsSim.getInstance().addTalonFX(m_FR, accel, maxVel);
+            CTREPhysicsSim.getInstance().addTalonFX(m_BL, accel, maxVel);
+            CTREPhysicsSim.getInstance().addTalonFX(m_BR, accel, maxVel);
         }
 
-        sim = DifferentialDrivetrainSim.createKitbotSim(
-                KitbotMotor.kDoubleFalcon500PerSide,
-                KitbotGearing.k5p95,
-                KitbotWheelSize.kSixInch,
-                null);
+        sim = new DifferentialDrivetrainSim(
+            DCMotor.getFalcon500(2),
+            7.51,
+            0.9,
+            Units.lbsToKilograms(60.),
+            Units.inchesToMeters(3.),
+            Units.inchesToMeters(DriveConstants.TRACK_WIDTH),
+            null);
     }
 
     public void configMotors() {
