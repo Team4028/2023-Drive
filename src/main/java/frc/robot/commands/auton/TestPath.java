@@ -13,8 +13,8 @@ public class TestPath extends BeakAutonCommand {
     /** Creates a new TestPath. */
     public TestPath(BeakDifferentialDrivetrain drivetrain) {
         super.addCommands(
-                Util.getTrajectoryCommand(Trajectories.TestPath(), drivetrain),
+                Util.getTrajectoryCommand(Trajectories.TestPath(drivetrain), drivetrain),
                 new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), drivetrain, false));
-        super.setInitialPose(Trajectories.TestPath());
+        super.setInitialPose(Trajectories.TestPath(drivetrain));
     }
 }

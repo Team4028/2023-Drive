@@ -24,15 +24,21 @@ public class BeakLimelight extends SubsystemBase {
             this.value = value;
         }
     }
-    
-    /* Mounting height of the Limelight, in inches--center of the lens to the floor */
+
+    /*
+     * Mounting height of the Limelight, in inches--center of the lens to the floor
+     */
     public static double MOUNT_HEIGHT = 0.;
 
     public static double HEIGHT_DELTA;
 
-    /* Mounting angle of the Limelight, in degrees, from perfect-vertical--see Limelight's docs
-     * for a way to calculate a theoretical angle. You can also make guesses, and in either case,
-     * ensure to tune further. */
+    /*
+     * Mounting angle of the Limelight, in degrees, from perfect-vertical--see
+     * Limelight's docs
+     * for a way to calculate a theoretical angle. You can also make guesses, and in
+     * either case,
+     * ensure to tune further.
+     */
     public static double MOUNT_ANGLE = 0.;
 
     protected NetworkTable nt = NetworkTableInstance.getDefault().getTable("limelight");
@@ -58,6 +64,7 @@ public class BeakLimelight extends SubsystemBase {
 
     /**
      * Set the Limelight's mounting height.
+     * 
      * @param height Distance from the floor to the center of the lens, in inches.
      */
     public void setMountHeight(double height) {
@@ -67,6 +74,7 @@ public class BeakLimelight extends SubsystemBase {
 
     /**
      * Set the target height, using a preset from a game's goal.
+     * 
      * @param height A {@link TargetHeight} enum containing the desired game.
      */
     public void setTargetHeight(TargetHeight height) {
@@ -76,7 +84,9 @@ public class BeakLimelight extends SubsystemBase {
 
     /**
      * Set the target height, as a custom value.
-     * @param height Height of the goal (approx. center of reflective tape), in inches.
+     * 
+     * @param height Height of the goal (approx. center of reflective tape), in
+     *               inches.
      */
     public void setTargetHeight(double height) {
         TARGET_HEIGHT = height;
@@ -85,9 +95,12 @@ public class BeakLimelight extends SubsystemBase {
 
     /**
      * Set the Limelight's mounting angle.
-     * @param angle Angle in degrees, from perfectly vertical, of the Limelight. See Limelight's docs
-     * for a way to calculate a theoretical angle. You can also make guesses, and in either case,
-     * ensure to tune further.
+     * 
+     * @param angle Angle in degrees, from perfectly vertical, of the Limelight. See
+     *              Limelight's docs
+     *              for a way to calculate a theoretical angle. You can also make
+     *              guesses, and in either case,
+     *              ensure to tune further.
      */
     public void setMountAngle(double angle) {
         MOUNT_ANGLE = angle;
@@ -104,15 +117,20 @@ public class BeakLimelight extends SubsystemBase {
     /**
      * Get the Limelight's LED mode.
      * 
-     * @return LED mode.</p>
+     * @return LED mode.
+     *         </p>
      *
-     *         0 = use pipeline's LED mode</p>
+     *         0 = use pipeline's LED mode
+     *         </p>
      * 
-     *         1 = force off</p>
+     *         1 = force off
+     *         </p>
      * 
-     *         2 = blink</p>
+     *         2 = blink
+     *         </p>
      * 
-     *         3 = force on</p>
+     *         3 = force on
+     *         </p>
      */
     public double getLedMode() {
         return ledMode.getDouble(0);
@@ -121,15 +139,20 @@ public class BeakLimelight extends SubsystemBase {
     /**
      * Set the Limelight's LED mode.
      * 
-     * @param mode LED mode.</p>
+     * @param mode LED mode.
+     *             </p>
      *
-     *             0 = use pipeline's LED mode</p>
+     *             0 = use pipeline's LED mode
+     *             </p>
      * 
-     *             1 = force off</p>
+     *             1 = force off
+     *             </p>
      * 
-     *             2 = blink</p>
+     *             2 = blink
+     *             </p>
      * 
-     *             3 = force on</p>
+     *             3 = force on
+     *             </p>
      */
     public void setLedMode(double mode) {
         ledMode.forceSetDouble(mode);
@@ -181,6 +204,7 @@ public class BeakLimelight extends SubsystemBase {
 
     /**
      * Get the distance calculated from the Limelight.
+     * 
      * @return Distance, in feet.
      */
     public double getDistance() {

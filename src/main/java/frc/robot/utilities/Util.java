@@ -11,7 +11,6 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutonConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
 
 /** Useful utility functions for drive. */
@@ -32,8 +31,8 @@ public final class Util {
                 traj,
                 drivetrain::getPoseMeters,
                 new RamseteController(),
-                DriveConstants.FEED_FORWARD,
-                DriveConstants.KINEMATICS,
+                drivetrain.getFeedforward(),
+                drivetrain.getKinematics(),
                 drivetrain::getWheelSpeeds,
                 AutonConstants.DRIVE_CONTROLLER,
                 AutonConstants.DRIVE_CONTROLLER,

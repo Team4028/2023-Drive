@@ -7,4 +7,5 @@ package frc.robot.utilities.drive.swerve;
 // TODO: Ambiguity
 // BeakAnalogEncoder?
 /** Add your docs here. */
-public class BeakSwerveModule {}
+public class BeakSwerveModule {
+}

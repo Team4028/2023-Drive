@@ -30,22 +30,26 @@ public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
     /**
      * Create a new Mk4i Swerve Drivetrain.
      * 
-     * @param frontLeftConfig {@link SwerveModuleConfiguration} for the front left module.
-     * @param frontRightConfig {@link SwerveModuleConfiguration} for the front right module.
-     * @param backLeftConfig {@link SwerveModuleConfiguration} for the back left module.
-     * @param backRightConfig {@link SwerveModuleConfiguration} for the back right module.
-     * @param physics {@link RobotPhysics} containing the robot's physical details.
-     * @param pigeonID ID of the Pigeon2 IMU.
+     * @param frontLeftConfig  {@link SwerveModuleConfiguration} for the front left
+     *                         module.
+     * @param frontRightConfig {@link SwerveModuleConfiguration} for the front right
+     *                         module.
+     * @param backLeftConfig   {@link SwerveModuleConfiguration} for the back left
+     *                         module.
+     * @param backRightConfig  {@link SwerveModuleConfiguration} for the back right
+     *                         module.
+     * @param physics          {@link RobotPhysics} containing the robot's physical
+     *                         details.
+     * @param pigeonID         ID of the Pigeon2 IMU.
      */
     public BeakMk4iSwerveDrivetrain(
-        SwerveModuleConfiguration frontLeftConfig,
-        SwerveModuleConfiguration frontRightConfig,
-        SwerveModuleConfiguration backLeftConfig,
-        SwerveModuleConfiguration backRightConfig,
-        RobotPhysics physics,
-        int pigeonID
-    ) {
-        super(physics, null);
+            SwerveModuleConfiguration frontLeftConfig,
+            SwerveModuleConfiguration frontRightConfig,
+            SwerveModuleConfiguration backLeftConfig,
+            SwerveModuleConfiguration backRightConfig,
+            RobotPhysics physics,
+            int pigeonID) {
+        super(physics);
 
         m_physics = physics;
 
@@ -57,22 +61,20 @@ public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
         m_gyro = new WPI_Pigeon2(pigeonID);
 
         m_kinematics = new SwerveDriveKinematics(
-            new Translation2d(physics.wheelBase / 2, physics.trackWidth / 2),
-            new Translation2d(physics.wheelBase / 2, -physics.trackWidth / 2),
-            new Translation2d(-physics.wheelBase / 2, physics.trackWidth / 2),
-            new Translation2d(-physics.wheelBase / 2, -physics.trackWidth / 2)
-        );
+                new Translation2d(physics.wheelBase / 2, physics.trackWidth / 2),
+                new Translation2d(physics.wheelBase / 2, -physics.trackWidth / 2),
+                new Translation2d(-physics.wheelBase / 2, physics.trackWidth / 2),
+                new Translation2d(-physics.wheelBase / 2, -physics.trackWidth / 2));
     }
 
     public Pose2d updateOdometry() {
         m_pose = m_odom.update(
-            getGyroRotation2d(),
-            m_FL.getState(),
-            m_BL.getState(),
-            m_FR.getState(),
-            m_BR.getState()
-        );
-        
+                getGyroRotation2d(),
+                m_FL.getState(),
+                m_BL.getState(),
+                m_FR.getState(),
+                m_BR.getState());
+
         return m_pose;
     }
 
@@ -90,10 +92,8 @@ public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
         rot *= m_physics.maxAngularVelocity;
 
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(
-            fieldRelative ?
-                ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, getRotation2d()) :
-                new ChassisSpeeds(x, y, rot)
-        );
+                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, getRotation2d())
+                        : new ChassisSpeeds(x, y, rot));
 
         setModuleStates(states);
     }
@@ -121,10 +121,10 @@ public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
      */
     public SwerveModuleState[] getModuleStates() {
         return new SwerveModuleState[] {
-            m_FL.getState(),
-            m_FR.getState(),
-            m_BL.getState(),
-            m_BR.getState()
+                m_FL.getState(),
+                m_FR.getState(),
+                m_BL.getState(),
+                m_BR.getState()
         };
     }
 
@@ -158,12 +158,12 @@ public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
 
     private ChassisSpeeds getChassisSpeeds() {
         return m_kinematics.toChassisSpeeds(
-            getModuleStates()
-        );
+                getModuleStates());
     }
 
     /**
      * Get the forward velocity of the drivetrain.
+     * 
      * @return The X (forward) velocity of the drivetrain, in meters per second.
      */
     public double getForwardVelocity() {
@@ -172,6 +172,7 @@ public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
 
     /**
      * Get the sideways velocity of the drivetrain.
+     * 
      * @return The Y (sideways) velocity of the drivetrain, in meters per second.
      */
     public double getSidewaysVelocity() {
@@ -180,6 +181,7 @@ public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
 
     /**
      * Get the angular velocity of the drivetrain.
+     * 
      * @return The angular velocity of the drivetrain, in radians per second.
      */
     public double getAngularVelocity() {

@@ -7,26 +7,24 @@ package frc.robot.utilities.drive;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
-import frc.robot.Constants.DriveConstants;
-
 /** Get auton trajectories from paths. */
 public class Trajectories {
-    public static PathPlannerTrajectory TestPath() {
+    public static PathPlannerTrajectory TestPath(BeakDrivetrain drivetrain) {
         return PathPlanner.loadPath("TestPath",
-                DriveConstants.MAX_VELOCITY,
-                DriveConstants.MAX_VELOCITY);
+                drivetrain.getPhysics().maxVelocity,
+                drivetrain.getPhysics().maxVelocity);
     }
 
-    public static PathPlannerTrajectory Ball1() {
+    public static PathPlannerTrajectory Ball1(BeakDrivetrain drivetrain) {
         return PathPlanner.loadPath("Ball1",
-                DriveConstants.MAX_VELOCITY,
-                DriveConstants.MAX_VELOCITY);
+                drivetrain.getPhysics().maxVelocity,
+                drivetrain.getPhysics().maxVelocity);
     }
 
-    public static PathPlannerTrajectory Ball2() {
+    public static PathPlannerTrajectory Ball2(BeakDrivetrain drivetrain) {
         return PathPlanner.loadPath("Ball2",
-                DriveConstants.MAX_VELOCITY,
-                DriveConstants.MAX_VELOCITY);
+                drivetrain.getPhysics().maxVelocity,
+                drivetrain.getPhysics().maxVelocity);
     }
     // public static Trajectory getTrajectory(String path) {
     // Trajectory traj = new Trajectory();

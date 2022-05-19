@@ -18,9 +18,7 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
-import frc.robot.Constants.SubsystemConstants;
 import frc.robot.sim.CTREPhysicsSim;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
@@ -32,6 +30,16 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
     private BeakTalonFX m_FL, m_BL, m_FR, m_BR;
 
+    private static final double kP = 0.01;
+    private static final double kD = 0.02;
+
+    private static final int FL_ID = 1;
+    private static final int BL_ID = 2;
+    private static final int FR_ID = 3;
+    private static final int BR_ID = 4;
+
+    private static final String CAN_BUS = "";
+
     private static final double MAX_VELOCITY = Units.feetToMeters(17.2);
 
     // distance from the right to left wheels on the robot
@@ -42,29 +50,28 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
     private static final double WHEEL_DIAMETER = 6.258;
     private static final double GEAR_RATIO = 7.5;
 
+    private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
+            0,
+            0,
+            0);
+
     private static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
             0,
             TRACK_WIDTH,
             WHEEL_BASE,
             WHEEL_DIAMETER,
-            GEAR_RATIO);
-
-    private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
-            0,
-            0,
-            0);
+            GEAR_RATIO,
+            FEED_FORWARD);
 
     private static FalconDrivetrain m_instance;
 
-    public FalconDrivetrain() {
-        this("");
-    }
+    /** Methods */
 
-    public FalconDrivetrain(String canBus) {
+    public FalconDrivetrain() {
         super(
                 PHYSICS,
-                FEED_FORWARD);
+                PIDConstants.Theta.gains);
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {
@@ -73,10 +80,10 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
         m_odom = new DifferentialDriveOdometry(getGyroRotation2d());
 
-        m_FL = new BeakTalonFX(SubsystemConstants.DRIVE_FL, canBus);
-        m_BL = new BeakTalonFX(SubsystemConstants.DRIVE_BL, canBus);
-        m_FR = new BeakTalonFX(SubsystemConstants.DRIVE_FR, canBus);
-        m_BR = new BeakTalonFX(SubsystemConstants.DRIVE_BR, canBus);
+        m_FL = new BeakTalonFX(FL_ID, CAN_BUS);
+        m_BL = new BeakTalonFX(BL_ID, CAN_BUS);
+        m_FR = new BeakTalonFX(FR_ID, CAN_BUS);
+        m_BR = new BeakTalonFX(BR_ID, CAN_BUS);
 
         m_BL.follow(m_FL);
         m_BR.follow(m_FR);
@@ -94,13 +101,13 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
         }
 
         sim = new DifferentialDrivetrainSim(
-            DCMotor.getFalcon500(2),
-            7.51,
-            0.9,
-            Units.lbsToKilograms(60.),
-            Units.inchesToMeters(3.),
-            Units.inchesToMeters(DriveConstants.TRACK_WIDTH),
-            null);
+                DCMotor.getFalcon500(2),
+                7.51,
+                0.9,
+                Units.lbsToKilograms(60.),
+                Units.inchesToMeters(3.),
+                Units.inchesToMeters(TRACK_WIDTH),
+                null);
     }
 
     public void configMotors() {
@@ -114,10 +121,10 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
         double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getFalcon500(1).freeSpeedRadPerSec) * 2048
                 / 600;
 
-        m_FL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FL.calculateFeedForward(1, maxVel), 0);
-        m_BL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BL.calculateFeedForward(1, maxVel), 0);
-        m_FR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FR.calculateFeedForward(1, maxVel), 0);
-        m_BR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BR.calculateFeedForward(1, maxVel), 0);
+        m_FL.setPIDF(kP, 0., kD, m_FL.calculateFeedForward(1, maxVel), 0);
+        m_BL.setPIDF(kP, 0., kD, m_BL.calculateFeedForward(1, maxVel), 0);
+        m_FR.setPIDF(kP, 0., kD, m_FR.calculateFeedForward(1, maxVel), 0);
+        m_BR.setPIDF(kP, 0., kD, m_BR.calculateFeedForward(1, maxVel), 0);
     }
 
     public void configNeutralMode() {
@@ -161,7 +168,7 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
     public static FalconDrivetrain getInstance() {
         if (m_instance == null) {
-            m_instance = new FalconDrivetrain(DriveConstants.CAN_BUS);
+            m_instance = new FalconDrivetrain();
         }
         return m_instance;
     }

@@ -19,17 +19,21 @@ public class SdsModuleConfiguration {
      * Creates a new module configuration.
      *
      * @param wheelDiameter  The diameter of the module's wheel in meters.
-     * @param driveGearRatio The overall drive reduction of the module. Multiplying motor rotations by this value
+     * @param driveGearRatio The overall drive reduction of the module. Multiplying
+     *                       motor rotations by this value
      *                       should result in wheel rotations.
-     * @param driveInverted  Whether the drive motor should be inverted. If there is an odd number of gea reductions
+     * @param driveInverted  Whether the drive motor should be inverted. If there is
+     *                       an odd number of gea reductions
      *                       this is typically true.
-     * @param turnGearRatio  The overall steer reduction of the module. Multiplying motor rotations by this value
+     * @param turnGearRatio  The overall steer reduction of the module. Multiplying
+     *                       motor rotations by this value
      *                       should result in rotations of the steering pulley.
-     * @param turnInverted   Whether the steer motor should be inverted. If there is an odd number of gear reductions
+     * @param turnInverted   Whether the steer motor should be inverted. If there is
+     *                       an odd number of gear reductions
      *                       this is typically true.
      */
     public SdsModuleConfiguration(double wheelDiameter, double driveReduction, boolean driveInverted,
-                               double steerReduction, boolean steerInverted) {
+            double steerReduction, boolean steerInverted) {
         this.wheelDiameter = wheelDiameter;
         this.driveGearRatio = driveReduction;
         this.driveInverted = driveInverted;
@@ -47,7 +51,8 @@ public class SdsModuleConfiguration {
     /**
      * Gets the overall reduction of the drive system.
      * <p>
-     * If this value is multiplied by drive motor rotations the result would be drive wheel rotations.
+     * If this value is multiplied by drive motor rotations the result would be
+     * drive wheel rotations.
      */
     public double getDriveReduction() {
         return driveGearRatio;
@@ -63,7 +68,8 @@ public class SdsModuleConfiguration {
     /**
      * Gets the overall reduction of the steer system.
      * <p>
-     * If this value is multiplied by steering motor rotations the result would be steering pulley rotations.
+     * If this value is multiplied by steering motor rotations the result would be
+     * steering pulley rotations.
      */
     public double getSteerReduction() {
         return turnGearRatio;
@@ -78,8 +84,10 @@ public class SdsModuleConfiguration {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         SdsModuleConfiguration that = (SdsModuleConfiguration) o;
         return Double.compare(that.getWheelDiameter(), getWheelDiameter()) == 0 &&
                 Double.compare(that.getDriveReduction(), getDriveReduction()) == 0 &&
@@ -95,8 +103,7 @@ public class SdsModuleConfiguration {
                 getDriveReduction(),
                 isDriveInverted(),
                 getSteerReduction(),
-                isSteerInverted()
-        );
+                isSteerInverted());
     }
 
     @Override

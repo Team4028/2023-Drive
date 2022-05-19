@@ -1,141 +1,142 @@
 {
-  "HALProvider": {
-    "Other Devices": {
-      "SPARK MAX [1]": {
-        "header": {
-          "open": true
+    "HALProvider": {
+        "Other Devices": {
+            "SPARK MAX [1]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "SPARK MAX [2]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "SPARK MAX [3]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "SPARK MAX [4]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "SPARK MAX [7]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "Talon FX[1]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "Talon FX[2]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "Talon FX[3]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "Talon FX[4]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "Talon SRX[1]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "Talon SRX[1]/Pulse Width Input": {
+                "header": {
+                    "open": true
+                }
+            },
+            "Talon SRX[1]/Quad Encoder": {
+                "header": {
+                    "open": true
+                }
+            },
+            "Talon SRX[2]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "Talon SRX[3]": {
+                "header": {
+                    "open": true
+                }
+            },
+            "navX-Sensor[0]": {
+                "header": {
+                    "open": true
+                }
+            }
         }
-      },
-      "SPARK MAX [2]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [3]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [4]": {
-        "header": {
-          "open": true
-        }
-      },
-      "SPARK MAX [7]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[1]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[2]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[3]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon FX[4]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon SRX[1]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon SRX[1]/Pulse Width Input": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon SRX[1]/Quad Encoder": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon SRX[2]": {
-        "header": {
-          "open": true
-        }
-      },
-      "Talon SRX[3]": {
-        "header": {
-          "open": true
-        }
-      },
-      "navX-Sensor[0]": {
-        "header": {
-          "open": true
-        }
-      }
-    }
-  },
-  "NTProvider": {
-    "types": {
-      "/FMSInfo": "FMSInfo",
-      "/LiveWindow/CIMDrivetrain": "Subsystem",
-      "/LiveWindow/Drivetrain": "Subsystem",
-      "/LiveWindow/FalconDrivetrain": "Subsystem",
-      "/LiveWindow/NEODrivetrain": "Subsystem",
-      "/LiveWindow/SixNEODrivetrain": "Subsystem",
-      "/LiveWindow/TestDrivetrain": "Subsystem",
-      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
-      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
-      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
-      "/LiveWindow/Ungrouped/Talon FX [1]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon FX [2]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon FX [3]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon FX [4]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon SRX [1]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon SRX [2]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon SRX [3]": "Motor Controller",
-      "/LiveWindow/Ungrouped/Talon SRX [4]": "Motor Controller",
-      "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
-      "/SmartDashboard/Auton Chooser": "String Chooser",
-      "/SmartDashboard/Field": "Field2d"
     },
-    "windows": {
-      "/SmartDashboard/Field": {
-        "Robot": {
-          "length": 0.6096000075340271,
-          "style": "Box/Image",
-          "weight": 2.0,
-          "width": 0.6096000075340271
+    "NTProvider": {
+        "types": {
+            "/FMSInfo": "FMSInfo",
+            "/LiveWindow/CIMDrivetrain": "Subsystem",
+            "/LiveWindow/Drivetrain": "Subsystem",
+            "/LiveWindow/FalconDrivetrain": "Subsystem",
+            "/LiveWindow/NEODrivetrain": "Subsystem",
+            "/LiveWindow/SixNEODrivetrain": "Subsystem",
+            "/LiveWindow/TestDrivetrain": "Subsystem",
+            "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+            "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+            "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+            "/LiveWindow/Ungrouped/Talon FX [1]": "Motor Controller",
+            "/LiveWindow/Ungrouped/Talon FX [2]": "Motor Controller",
+            "/LiveWindow/Ungrouped/Talon FX [3]": "Motor Controller",
+            "/LiveWindow/Ungrouped/Talon FX [4]": "Motor Controller",
+            "/LiveWindow/Ungrouped/Talon SRX [1]": "Motor Controller",
+            "/LiveWindow/Ungrouped/Talon SRX [2]": "Motor Controller",
+            "/LiveWindow/Ungrouped/Talon SRX [3]": "Motor Controller",
+            "/LiveWindow/Ungrouped/Talon SRX [4]": "Motor Controller",
+            "/LiveWindow/Ungrouped/navX-Sensor[4]": "Gyro",
+            "/SmartDashboard/Auton Chooser": "String Chooser",
+            "/SmartDashboard/Field": "Field2d"
         },
-        "height": 8.229599952697754,
-        "units": "feet",
-        "window": {
-          "visible": true
+        "windows": {
+            "/SmartDashboard/Field": {
+                "Robot": {
+                    "length": 0.6096000075340271,
+                    "style": "Box/Image",
+                    "weight": 2.0,
+                    "width": 0.6096000075340271
+                },
+                "height": 8.229599952697754,
+                "image": "C:\\Users\\botto\\Downloads\\2022-field.png",
+                "units": "feet",
+                "window": {
+                    "visible": true
+                }
+            }
         }
-      }
-    }
-  },
-  "NetworkTables": {
-    "LiveWindow": {
-      "Ungrouped": {
-        "PIDController[1]": {
-          "open": true
-        },
-        "PIDController[2]": {
-          "open": true
-        },
-        "open": true
-      },
-      "open": true
     },
-    "SmartDashboard": {
-      "Field": {
-        "open": true
-      },
-      "open": true
+    "NetworkTables": {
+        "LiveWindow": {
+            "Ungrouped": {
+                "PIDController[1]": {
+                    "open": true
+                },
+                "PIDController[2]": {
+                    "open": true
+                },
+                "open": true
+            },
+            "open": true
+        },
+        "SmartDashboard": {
+            "Field": {
+                "open": true
+            },
+            "open": true
+        }
     }
-  }
 }

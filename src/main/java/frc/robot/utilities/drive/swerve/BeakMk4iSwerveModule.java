@@ -31,16 +31,17 @@ public class BeakMk4iSwerveModule {
     /**
      * Construct a new Mk4i Swerve Module.
      * 
-     * @param config {@link SwerveModuleConfiguration} containing 
-     * details of the module.
+     * @param config {@link SwerveModuleConfiguration} containing
+     *               details of the module.
      */
     public BeakMk4iSwerveModule(SwerveModuleConfiguration config) {
         m_driveMotor = new BeakTalonFX(config.driveMotorID, config.CANBus);
         m_turningMotor = new BeakTalonFX(config.turnMotorID, config.CANBus);
         m_turningEncoder = new WPI_CANCoder(config.turnEncoderID, config.CANBus);
-        
+
         turnCPR = config.turnGearRatio * m_turningMotor.getPositionEncoderCPR();
-        driveEncoderDistancePerPulse = (config.wheelDiameter * Math.PI) / (config.driveGearRatio * m_driveMotor.getVelocityEncoderCPR());
+        driveEncoderDistancePerPulse = (config.wheelDiameter * Math.PI)
+                / (config.driveGearRatio * m_driveMotor.getVelocityEncoderCPR());
 
         m_feedforward = config.feedforward;
 
@@ -77,7 +78,7 @@ public class BeakMk4iSwerveModule {
         m_turningMotor.setBrake(true);
         m_turningMotor.setInverted(config.turnInverted);
 
-        // Initialize the encoder's position--MUST BE DONE AFTER 
+        // Initialize the encoder's position--MUST BE DONE AFTER
         // CONFIGURING TURNING ENCODER!
         resetTurningMotor();
 
@@ -98,7 +99,7 @@ public class BeakMk4iSwerveModule {
 
     public void configTurningEncoder(SwerveModuleConfiguration config) {
         m_turningEncoder.configMagnetOffset(Units.radiansToDegrees(config.angleOffset));
-        
+
         // Prevent huge CAN spikes
         m_turningEncoder.setStatusFramePeriod(CANCoderStatusFrame.SensorData, 101);
     }
@@ -112,14 +113,15 @@ public class BeakMk4iSwerveModule {
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-            m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10,
-            new Rotation2d(getTurningEncoderRadians()));
+                m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10,
+                new Rotation2d(getTurningEncoderRadians()));
     }
 
     /**
      * Set the desired state for the module, and run the motors.
      * 
-     * @param desiredState Desired {@link SwerveModuleState} containing the speed and angle.
+     * @param desiredState Desired {@link SwerveModuleState} containing the speed
+     *                     and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
         // Optimize the state to avoid spinning more than 90 degrees.
@@ -131,9 +133,9 @@ public class BeakMk4iSwerveModule {
 
         // TODO: why divide by 10?
         m_driveMotor.setVelocityNU(
-            optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
-            arbFeedforward,
-            0);
+                optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
+                arbFeedforward,
+                0);
 
         // Set the turning motor to the correct position.
         setAngle(optimizedState.angle.getDegrees());
@@ -147,12 +149,12 @@ public class BeakMk4iSwerveModule {
      */
     public void resetTurningMotor() {
         m_turningMotor.setEncoderPositionNU(
-            m_turningEncoder.getAbsolutePosition() / 360.0 * turnCPR
-        );
+                m_turningEncoder.getAbsolutePosition() / 360.0 * turnCPR);
     }
 
     /**
      * Get the angle of the wheel.
+     * 
      * @return Angle of the wheel in radians.
      */
     private double getTurningEncoderRadians() {
@@ -169,6 +171,7 @@ public class BeakMk4iSwerveModule {
 
     /**
      * Set the wheel's angle.
+     * 
      * @param newAngle Angle to turn the wheel to, in degrees.
      */
     public void setAngle(double newAngle) {
@@ -183,7 +186,8 @@ public class BeakMk4iSwerveModule {
 
         double angleDelta = newAngleDemand - currentAngle;
         // Ensuring it stays within [-180, 180]
-        // I think that because of this check it will never reach an angle above 540 degrees?
+        // I think that because of this check it will never reach an angle above 540
+        // degrees?
         if (angleDelta > 180.1) {
             newAngleDemand -= 360.0;
         } else if (angleDelta < -180.1) {

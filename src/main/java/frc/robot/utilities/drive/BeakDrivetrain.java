@@ -29,23 +29,37 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
     /**
      * Construct a new generic drivetrain.
      * 
-     * @param physics A {@link RobotPhysics} object containing the relevant information for your robot.
-     * @param feedForward        A {@link SimpleMotorFeedforward} calculated from
-     *                           SysID.
+     * @param physics A {@link RobotPhysics} object containing the relevant
+     *                information for your robot.
      */
     public BeakDrivetrain(
-            RobotPhysics physics,
-            SimpleMotorFeedforward feedForward) {
+            RobotPhysics physics) {
         m_maxVelocity = physics.maxVelocity;
         m_maxAngularVelocity = physics.maxAngularVelocity;
         m_trackWidth = physics.trackWidth;
         m_wheelBase = physics.wheelBase;
         m_wheelDiameter = physics.wheelDiameter;
         m_gearRatio = physics.driveGearRatio;
-        m_feedForward = feedForward;
+        m_feedForward = physics.feedforward;
     }
 
-    public void configMotors() {}
+    public void configMotors() {
+    }
+
+    public RobotPhysics getPhysics() {
+        return new RobotPhysics(
+                m_maxVelocity,
+                m_maxAngularVelocity,
+                m_trackWidth,
+                m_wheelBase,
+                m_wheelDiameter,
+                m_gearRatio,
+                m_feedForward);
+    }
+
+    public SimpleMotorFeedforward getFeedforward() {
+        return m_feedForward;
+    }
 
     /**
      * Method to drive the robot using joystick info.
@@ -56,14 +70,15 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
      * @param fieldRelative Whether or not the x and y speeds are relative to
      *                      the field, for holonomic drivetrains.
      */
-    public void drive(double x, double y, double rot, boolean fieldRelative) {}
+    public void drive(double x, double y, double rot, boolean fieldRelative) {
+    }
 
     /**
      * Method to drive the robot using joystick info.
      *
-     * @param x             Speed of the robot in the x direction (forward).
-     * @param y             Speed of the robot in the y direction (sideways).
-     * @param rot           Angular rate of the robot.
+     * @param x   Speed of the robot in the x direction (forward).
+     * @param y   Speed of the robot in the y direction (sideways).
+     * @param rot Angular rate of the robot.
      */
     public void drive(double x, double y, double rot) {
         drive(x, y, rot, false);
@@ -115,12 +130,16 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
     }
 
     /**
-     * Get the angle to a target position on the field.</p>
+     * Get the angle to a target position on the field.
+     * </p>
      * 
-     * Positions are relative to the bottom-left corner of the field (for Rapid React, the blue alliance HP station)
+     * Positions are relative to the bottom-left corner of the field (for Rapid
+     * React, the blue alliance HP station)
+     * 
      * @param x The X position of the target, in inches.
      * @param y The Y position of the target, in inches.
-     * @return A {@link Rotation2d} of the drivetrain's angle to the target position.
+     * @return A {@link Rotation2d} of the drivetrain's angle to the target
+     *         position.
      */
     public Rotation2d getAngleToTargetPosition(double x, double y) {
         double xDelta = Units.inchesToMeters(x) - getPoseMeters().getX();

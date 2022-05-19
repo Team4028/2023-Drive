@@ -42,20 +42,20 @@ public class SwerveModuleConfiguration {
      * @param allowedError  Allowed error of the turning motor, in NU.
      * @param CANBus        CAN Bus that the drivetrain lies on.
      * @param feedforward   {@link SimpleMotorFeedforward} for the drivetrain.
-     * @param config        {@link SdsModuleConfiguration} of the modules on your drivetrain.
+     * @param config        {@link SdsModuleConfiguration} of the modules on your
+     *                      drivetrain.
      */
     public SwerveModuleConfiguration(
-        int driveMotorID,
-        int turnMotorID,
-        int turnEncoderID,
-        double angleOffset,
-        double drive_kP,
-        double turn_kP,
-        double allowedError,
-        String CANBus,
-        SimpleMotorFeedforward feedforward,
-        SdsModuleConfiguration config
-    ) {
+            int driveMotorID,
+            int turnMotorID,
+            int turnEncoderID,
+            double angleOffset,
+            double drive_kP,
+            double turn_kP,
+            double allowedError,
+            String CANBus,
+            SimpleMotorFeedforward feedforward,
+            SdsModuleConfiguration config) {
         this.driveMotorID = driveMotorID;
         this.turnMotorID = turnMotorID;
         this.turnEncoderID = turnEncoderID;
@@ -73,7 +73,7 @@ public class SwerveModuleConfiguration {
 
         this.driveGearRatio = config.driveGearRatio;
         this.driveInverted = config.driveInverted;
-        
+
         this.turnGearRatio = config.turnGearRatio;
         this.turnInverted = config.turnInverted;
     }

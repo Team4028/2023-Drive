@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.REVPhysicsSim;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -18,10 +19,9 @@ import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.PIDConstants;
-import frc.robot.Constants.SubsystemConstants;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.drive.RobotPhysics;
 import frc.robot.utilities.motor.BeakSparkMAX;
 
 /** Add your docs here. */
@@ -30,13 +30,44 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
 
     private BeakSparkMAX m_FL, m_BL, m_FR, m_BR;
 
+    private static final double kP = 0.01;
+    private static final double kD = 0.02;
+
+    private static final int FL_ID = 1;
+    private static final int BL_ID = 2;
+    private static final int FR_ID = 3;
+    private static final int BR_ID = 4;
+
+    private static final double MAX_VELOCITY = Units.feetToMeters(15.5);
+
+    // distance from the right to left wheels on the robot
+    private static final double TRACK_WIDTH = 26;
+    // distance from the front to back wheels on the robot
+    private static final double WHEEL_BASE = 28;
+
+    private static final double WHEEL_DIAMETER = 6.258;
+    private static final double GEAR_RATIO = 7.5;
+
+    private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
+            0,
+            0,
+            0);
+
+    private static final RobotPhysics PHYSICS = new RobotPhysics(
+            MAX_VELOCITY,
+            0,
+            TRACK_WIDTH,
+            WHEEL_BASE,
+            WHEEL_DIAMETER,
+            GEAR_RATIO,
+            FEED_FORWARD);
+
     private static NEODrivetrain m_instance;
 
     public NEODrivetrain() {
         super(
-            DriveConstants.PHYSICS,
-            DriveConstants.FEED_FORWARD
-        );
+                PHYSICS,
+                PIDConstants.Theta.gains);
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {
@@ -45,10 +76,10 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
 
         m_odom = new DifferentialDriveOdometry(getGyroRotation2d());
 
-        m_FL = new BeakSparkMAX(SubsystemConstants.DRIVE_FL);
-        m_BL = new BeakSparkMAX(SubsystemConstants.DRIVE_BL);
-        m_FR = new BeakSparkMAX(SubsystemConstants.DRIVE_FR);
-        m_BR = new BeakSparkMAX(SubsystemConstants.DRIVE_BR);
+        m_FL = new BeakSparkMAX(FL_ID);
+        m_BL = new BeakSparkMAX(BL_ID);
+        m_FR = new BeakSparkMAX(FR_ID);
+        m_BR = new BeakSparkMAX(BR_ID);
 
         m_BL.follow(m_FL);
         m_BR.follow(m_FR);
@@ -63,13 +94,13 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
         }
 
         sim = new DifferentialDrivetrainSim(
-            DCMotor.getNEO(2),
-            7.51,
-            0.9,
-            Units.lbsToKilograms(60.),
-            Units.inchesToMeters(3.),
-            Units.inchesToMeters(DriveConstants.TRACK_WIDTH),
-            null);
+                DCMotor.getNEO(2),
+                7.51,
+                0.9,
+                Units.lbsToKilograms(60.),
+                Units.inchesToMeters(3.),
+                Units.inchesToMeters(TRACK_WIDTH),
+                null);
     }
 
     public void configMotors() {
@@ -81,10 +112,10 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
     public void configPID() {
         // TODO: get these from SysId
         double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getNEO(1).freeSpeedRadPerSec);
-        m_FL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FL.calculateFeedForward(1, maxVel), 0);
-        m_BL.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BL.calculateFeedForward(1, maxVel), 0);
-        m_FR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_FR.calculateFeedForward(1, maxVel), 0);
-        m_BR.setPIDF(PIDConstants.Drive.kP, 0., PIDConstants.Drive.kD, m_BR.calculateFeedForward(1, maxVel), 0);
+        m_FL.setPIDF(kP, 0., kD, m_FL.calculateFeedForward(1, maxVel), 0);
+        m_BL.setPIDF(kP, 0., kD, m_BL.calculateFeedForward(1, maxVel), 0);
+        m_FR.setPIDF(kP, 0., kD, m_FR.calculateFeedForward(1, maxVel), 0);
+        m_BR.setPIDF(kP, 0., kD, m_BR.calculateFeedForward(1, maxVel), 0);
     }
 
     public void configNeutralMode() {
@@ -101,7 +132,6 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
         m_BR.setInverted(false);
     }
 
-    
     public void drive(double x, double y, double rot) {
         double[] velocities = calcDesiredMotorVelocities(m_FL, x, rot);
 
@@ -124,7 +154,7 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
 
     public void resetOdometry(Pose2d pose) {
         super.resetOdometry(pose);
-        
+
         m_FL.resetEncoder();
         m_BL.resetEncoder();
         m_FR.resetEncoder();

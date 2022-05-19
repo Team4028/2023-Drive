@@ -6,7 +6,6 @@ package frc.robot.commands.auton;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
-import frc.robot.Constants.AutonConstants;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -17,7 +16,7 @@ public class RotateDrivetrainToTargetPosition extends ProfiledPIDCommand {
     public RotateDrivetrainToTargetPosition(double x, double y, BeakDifferentialDrivetrain drivetrain) {
         super(
                 // The ProfiledPIDController used by the command
-                AutonConstants.THETA_CONTROLLER,
+                drivetrain.getThetaController(),
                 // This should return the measurement
                 () -> drivetrain.getRotation2d().getRadians(),
                 // This should return the goal (can also be a constant)

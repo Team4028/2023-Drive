@@ -21,7 +21,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     public BeakTalonSRX(int port) {
         super(port);
     }
-    
+
     public void setSlot(int slot) {
         super.selectProfileSlot(slot, 0);
     }
@@ -172,13 +172,13 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     @Override
     public void setReverseLimitSwitchNormallyClosed(boolean normallyClosed) {
         super.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-            normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
+                normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
     }
 
     @Override
     public void setForwardLimitSwitchNormallyClosed(boolean normallyClosed) {
         super.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-            normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
+                normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
     }
 
     @Override
@@ -190,7 +190,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     public boolean getForwardLimitSwitch() {
         return super.isFwdLimitSwitchClosed() == 1;
     }
-    
+
     @Override
     public void setSupplyCurrentLimit(int amps) {
         super.configSupplyCurrentLimit(new SupplyCurrentLimitConfiguration(true, amps, amps + 5, 0.1));
@@ -200,7 +200,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     public void setStatorCurrentLimit(int amps) {
         throw new RuntimeException("CTRE Talon SRX does not support Stator current limiting.");
     }
-    
+
     @Override
     public void restoreFactoryDefault() {
         super.configFactoryDefault();
@@ -210,7 +210,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     public void setAllowedClosedLoopError(double error, int slot) {
         super.configAllowableClosedloopError(slot, error);
     }
-    
+
     @Override
     public void setVoltageCompensationSaturation(double saturation) {
         super.enableVoltageCompensation(saturation > 0.);

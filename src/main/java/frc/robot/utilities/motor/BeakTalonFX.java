@@ -178,13 +178,13 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     @Override
     public void setReverseLimitSwitchNormallyClosed(boolean normallyClosed) {
         super.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-            normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
+                normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
     }
 
     @Override
     public void setForwardLimitSwitchNormallyClosed(boolean normallyClosed) {
         super.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector,
-            normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
+                normallyClosed ? LimitSwitchNormal.NormallyClosed : LimitSwitchNormal.NormallyOpen);
     }
 
     @Override
@@ -204,7 +204,7 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
 
     @Override
     public void setStatorCurrentLimit(int amps) {
-        super.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, amps, amps + 5, 0.1));        
+        super.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true, amps, amps + 5, 0.1));
     }
 
     @Override
@@ -238,5 +238,5 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     @Override
     public void set(double percentOutput, double arbFeedforward) {
         super.set(ControlMode.PercentOutput, percentOutput, DemandType.ArbitraryFeedForward, arbFeedforward);
-    }    
+    }
 }

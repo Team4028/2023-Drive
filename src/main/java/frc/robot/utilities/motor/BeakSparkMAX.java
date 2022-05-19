@@ -166,12 +166,12 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public void setForwardLimitSwitchNormallyClosed(boolean normallyClosed) {
-        fwdLimitSwitch = super.getForwardLimitSwitch(normallyClosed ? Type.kNormallyClosed : Type.kNormallyOpen);        
+        fwdLimitSwitch = super.getForwardLimitSwitch(normallyClosed ? Type.kNormallyClosed : Type.kNormallyOpen);
     }
 
     @Override
     public boolean getReverseLimitSwitch() {
-       return revLimitSwitch.isPressed();
+        return revLimitSwitch.isPressed();
     }
 
     @Override
@@ -211,7 +211,7 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public void setMotionMagicCruiseVelocity(double velocity, int slot) {
-        pid.setSmartMotionMaxVelocity(velocity, slot); 
+        pid.setSmartMotionMaxVelocity(velocity, slot);
     }
 
     @Override

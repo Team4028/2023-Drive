@@ -4,13 +4,15 @@
 
 package frc.robot.utilities.drive;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import frc.robot.Robot;
@@ -26,18 +28,51 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
 
     protected double encoderDistancePerPulse;
 
+    protected ProfiledPIDController m_thetaController;
+
     /**
      * Construct a new differential drivetrain.
      * 
-     * @param physics A {@link RobotPhysics} object containing the relevant information for your robot.
-     * @param feedForward        A {@link SimpleMotorFeedforward} calculated from
-     *                           SysID.
+     * @param physics       A {@link RobotPhysics} object containing the relevant
+     *                      information for your robot.
+     * @param thetaPIDGains The PID gains for the theta controller.
      */
     public BeakDifferentialDrivetrain(
             RobotPhysics physics,
-            SimpleMotorFeedforward feedForward) {
-        super(physics, feedForward);
+            double[] thetaPIDGains) {
+        super(physics);
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(m_trackWidth));
+
+        final TrapezoidProfile.Constraints thetaConstraints = new TrapezoidProfile.Constraints(
+                physics.maxAngularVelocity, physics.maxAngularVelocity);
+
+        m_thetaController = new ProfiledPIDController(
+                thetaPIDGains[0],
+                thetaPIDGains[1],
+                thetaPIDGains[2],
+                thetaConstraints);
+
+        final TrajectoryConfig autonTrajectoryConfig = new TrajectoryConfig(
+                physics.maxVelocity,
+                physics.maxVelocity); // TODO: UNUSED
+    }
+
+    /**
+     * Get the drivetrain kinematics.
+     * 
+     * @return {@link DifferentialDriveKinematics} for this drivetrain.
+     */
+    public DifferentialDriveKinematics getKinematics() {
+        return m_kinematics;
+    }
+
+    /**
+     * Get the theta controller for auton usage.
+     * 
+     * @return Theta PID Controller.
+     */
+    public ProfiledPIDController getThetaController() {
+        return m_thetaController;
     }
 
     /**
@@ -60,28 +95,31 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     }
 
     /**
-     * Method to calculate needed motor velocities for the left and right side of the drivetrain.</p>
+     * Method to calculate needed motor velocities for the left and right side of
+     * the drivetrain.
+     * </p>
      * 
      * x and rot values should be from joysticks.
+     * 
      * @param motorController Any motor controller on the drivetrain.
-     * @param x Speed of the robot in the x direction (forward).
-     * @param rot Angular rate of the robot.
+     * @param x               Speed of the robot in the x direction (forward).
+     * @param rot             Angular rate of the robot.
      * @return {left velocity in NU, right velocity in NU}
      */
     public double[] calcDesiredMotorVelocities(
-        BeakMotorController motorController,
-        double x,
-        double rot
-    ) {
+            BeakMotorController motorController,
+            double x,
+            double rot) {
         DifferentialDriveWheelSpeeds speed = calcWheelSpeeds(x, rot);
 
         // Assumes all motor controllers are of the same type.
-        encoderDistancePerPulse = (Units.inchesToMeters(m_wheelDiameter) * Math.PI) / motorController.getVelocityEncoderCPR();
+        encoderDistancePerPulse = (Units.inchesToMeters(m_wheelDiameter) * Math.PI)
+                / motorController.getVelocityEncoderCPR();
 
         double rightVel = speed.rightMetersPerSecond / encoderDistancePerPulse;
         double leftVel = speed.leftMetersPerSecond / encoderDistancePerPulse;
 
-        double[] vels = {leftVel, rightVel};
+        double[] vels = { leftVel, rightVel };
 
         return vels;
     }
@@ -114,7 +152,8 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      * @param left  Volts to send to the left side of the drivetrain.
      * @param right Volts to send to the right side of the drivetrain.
      */
-    public void driveVolts(double left, double right) {}
+    public void driveVolts(double left, double right) {
+    }
 
     /**
      * Get the robot's pose.
@@ -130,9 +169,8 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     }
 
     public Pose2d updateOdometry(
-        BeakMotorController frontLeftMotorController,
-        BeakMotorController frontRightMotorController
-    ) {
+            BeakMotorController frontLeftMotorController,
+            BeakMotorController frontRightMotorController) {
         if (Robot.isSimulation()) {
             sim.setInputs(
                     frontRightMotorController.getOutputVoltage(),
@@ -144,9 +182,11 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
         Rotation2d rot = getGyroRotation2d();
 
         m_pose = m_odom.update(rot,
-                Util.NUtoMeters(frontLeftMotorController.getPositionNU(), frontLeftMotorController.getPositionEncoderCPR(), m_gearRatio,
+                Util.NUtoMeters(frontLeftMotorController.getPositionNU(),
+                        frontLeftMotorController.getPositionEncoderCPR(), m_gearRatio,
                         m_wheelDiameter),
-                Util.NUtoMeters(frontRightMotorController.getPositionNU(), frontRightMotorController.getPositionEncoderCPR(), m_gearRatio,
+                Util.NUtoMeters(frontRightMotorController.getPositionNU(),
+                        frontRightMotorController.getPositionEncoderCPR(), m_gearRatio,
                         m_wheelDiameter));
 
         return m_pose;

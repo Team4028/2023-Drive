@@ -39,7 +39,7 @@ public interface BeakMotorController extends MotorController {
     /**
      * Run the motor in velocity mode, in RPM.
      * 
-     * @param rpm RPM to run.
+     * @param rpm            RPM to run.
      * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
      */
     public void setVelocityRPM(double rpm, double arbFeedforward, int slot);
@@ -58,9 +58,9 @@ public interface BeakMotorController extends MotorController {
      * </p>
      * NU/100ms for Talons, RPM for SparkMAX.
      * 
-     * @param nu NU to run.
+     * @param nu             NU to run.
      * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
-     * @param slot PID slot to run.
+     * @param slot           PID slot to run.
      */
     public void setVelocityNU(double nu, double arbFeedforward, int slot);
 
@@ -69,14 +69,14 @@ public interface BeakMotorController extends MotorController {
      * </p>
      * NU/100ms for Talons, RPM for SparkMAX.
      * 
-     * @param nu NU to run.
+     * @param nu   NU to run.
      * @param slot PID slot to run.
      */
     default void setVelocityNU(double nu, int slot) {
         setVelocityNU(nu, 0, slot);
     }
 
-        /**
+    /**
      * Run the motor in velocity mode, in NU.
      * </p>
      * NU/100ms for Talons, RPM for SparkMAX.
@@ -90,9 +90,9 @@ public interface BeakMotorController extends MotorController {
     /**
      * Run the motor in position mode, in motor rotations.
      * 
-     * @param rotations Rotations to run.
+     * @param rotations      Rotations to run.
      * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
-     * @param slot PID slot to run.
+     * @param slot           PID slot to run.
      */
     public void setPositionMotorRotations(double rotations, double arbFeedforward, int slot);
 
@@ -100,13 +100,13 @@ public interface BeakMotorController extends MotorController {
      * Run the motor in position mode, in motor rotations.
      * 
      * @param rotations Rotations to run.
-     * @param slot PID slot to run.
+     * @param slot      PID slot to run.
      */
     default void setPositionMotorRotations(double rotations, int slot) {
         setPositionMotorRotations(rotations, 0, slot);
     }
 
-        /**
+    /**
      * Run the motor in position mode, in motor rotations.
      * 
      * @param rotations Rotations to run.
@@ -121,9 +121,9 @@ public interface BeakMotorController extends MotorController {
      * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
      * SparkMAX.
      * 
-     * @param nu NU to run.
+     * @param nu             NU to run.
      * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
-     * @param slot PID slot to run.
+     * @param slot           PID slot to run.
      */
     public void setPositionNU(double nu, double arbFeedforward, int slot);
 
@@ -133,14 +133,14 @@ public interface BeakMotorController extends MotorController {
      * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
      * SparkMAX.
      * 
-     * @param nu NU to run.
+     * @param nu   NU to run.
      * @param slot PID slot to run.
      */
     default void setPositionNU(double nu, int slot) {
         setPositionNU(nu, 0, slot);
     }
 
-        /**
+    /**
      * Run the motor in position mode, in NU.
      * </p>
      * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
@@ -181,9 +181,9 @@ public interface BeakMotorController extends MotorController {
      * </p>
      * Not currently supported by SparkMAX.
      * 
-     * @param rotations Rotations to run.
+     * @param rotations      Rotations to run.
      * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
-     * @param slot PID slot to run.
+     * @param slot           PID slot to run.
      */
     public void setMotionMagicMotorRotations(double rotations, double arbFeedforward, int slot);
 
@@ -193,12 +193,12 @@ public interface BeakMotorController extends MotorController {
      * Not currently supported by SparkMAX.
      * 
      * @param rotations Rotations to run.
-     * @param slot PID slot to run.
+     * @param slot      PID slot to run.
      */
     default void setMotionMagicMotorRotations(double rotations, int slot) {
         setMotionMagicMotorRotations(rotations, 0, slot);
     }
-    
+
     /**
      * Runs the motor in motion magic mode, in motor rotations.
      * </p>
@@ -216,9 +216,9 @@ public interface BeakMotorController extends MotorController {
      * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
      * SparkMAX.
      * 
-     * @param nu NU to run.
+     * @param nu             NU to run.
      * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
-     * @param slot PID slot to run.
+     * @param slot           PID slot to run.
      */
     public void setMotionMagicNU(double nu, double arbFeedforward, int slot);
 
@@ -228,13 +228,13 @@ public interface BeakMotorController extends MotorController {
      * 2048 NU per rotation for TalonFX, 4096 for TalonSRX, and usually 1 for
      * SparkMAX.
      * 
-     * @param nu NU to run.
+     * @param nu   NU to run.
      * @param slot PID slot to run.
      */
     default void setMotionMagicNU(double nu, int slot) {
         setMotionMagicNU(nu, 0, slot);
     }
-    
+
     /**
      * Runs the motor in motion magic mode, in NU.
      * </p>
@@ -408,44 +408,59 @@ public interface BeakMotorController extends MotorController {
 
     /**
      * Set the reverse limit switch's default state
-     * @param normallyClosed True if its normal state is "closed", false if its normal state is "open"
+     * 
+     * @param normallyClosed True if its normal state is "closed", false if its
+     *                       normal state is "open"
      */
     public void setReverseLimitSwitchNormallyClosed(boolean normallyClosed);
 
     /**
      * Set the forward limit switch's default state
-     * @param normallyClosed True if its normal state is "closed", false if its normal state is "open"
+     * 
+     * @param normallyClosed True if its normal state is "closed", false if its
+     *                       normal state is "open"
      */
     public void setForwardLimitSwitchNormallyClosed(boolean normallyClosed);
 
     /**
-     * Whether or not the limit switch is closed. This is independent of the polarity (normally-closed) option on 
-     * CTRE devices, but on Spark MAXes, it is dependent--i.e. returning true if the limit switch is not pressed,
+     * Whether or not the limit switch is closed. This is independent of the
+     * polarity (normally-closed) option on
+     * CTRE devices, but on Spark MAXes, it is dependent--i.e. returning true if the
+     * limit switch is not pressed,
      * when it's configured to be normally closed.
      */
     public boolean getReverseLimitSwitch();
 
     /**
-     * Whether or not the limit switch is closed. This is independent of the polarity (normally-closed) option on 
-     * CTRE devices, but on Spark MAXes, it is dependent--i.e. returning true if the limit switch is not pressed,
+     * Whether or not the limit switch is closed. This is independent of the
+     * polarity (normally-closed) option on
+     * CTRE devices, but on Spark MAXes, it is dependent--i.e. returning true if the
+     * limit switch is not pressed,
      * when it's configured to be normally closed.
      */
     public boolean getForwardLimitSwitch();
 
     /**
-     * Set the supply (PDH to controller) current limit.</p>
+     * Set the supply (PDH to controller) current limit.
+     * </p>
      * 
-     * For Talons, the "tripping" point is set to this plus 5, and the time to trip back to the limit is set to 0.1 seconds.
+     * For Talons, the "tripping" point is set to this plus 5, and the time to trip
+     * back to the limit is set to 0.1 seconds.
+     * 
      * @param amps The maximum amps to allow the motor controller to receive.
      */
     public void setSupplyCurrentLimit(int amps);
 
     /**
-     * Set the stator (controller to motor) current limit.</p>
+     * Set the stator (controller to motor) current limit.
+     * </p>
      * 
-     * Only supported on TalonFX.</p>
+     * Only supported on TalonFX.
+     * </p>
      * 
-     * The "tripping" point is set to this plus 5, and the time to trip back to the limit is set to 0.1 seconds.
+     * The "tripping" point is set to this plus 5, and the time to trip back to the
+     * limit is set to 0.1 seconds.
+     * 
      * @param amps The maximum amps to allow the motor controller to send.
      */
     public void setStatorCurrentLimit(int amps);
@@ -456,51 +471,62 @@ public interface BeakMotorController extends MotorController {
     public void restoreFactoryDefault();
 
     /**
-     * Set the deadband, in NU, where PID control will no longer attempt to respond to an error.
+     * Set the deadband, in NU, where PID control will no longer attempt to respond
+     * to an error.
+     * 
      * @param error Error deadband.
-     * @param slot Slot to set to.
+     * @param slot  Slot to set to.
      */
     public void setAllowedClosedLoopError(double error, int slot);
 
     /**
-     * Set the voltage compensation saturation for the motor controller.</p>
+     * Set the voltage compensation saturation for the motor controller.
+     * </p>
      * 
-     * See CTRE's docs for more info on voltage compensation.</p>
+     * See CTRE's docs for more info on voltage compensation.
+     * </p>
      * 
      * Note: due to the closed-source nature of the motor controller's
      * implementations (JNI), the exact way this works on Spark MAXes and
-     * Talons may be inconsistent. For more consistent behavior, use 
+     * Talons may be inconsistent. For more consistent behavior, use
      * <code>setVoltage</code> instead. This will directly account for
      * voltage drops, with a standardized compensation value on Talons,
-     * or directly on the motor controller with PID on the Spark MAX.</p> 
+     * or directly on the motor controller with PID on the Spark MAX.
+     * </p>
      * 
      * For any motor controller, set this to anything greater than 0 to enable it.
+     * 
      * @param saturation Saturation.
      */
     public void setVoltageCompensationSaturation(double saturation);
 
     /**
-     * Set the Motion Magic cruise velocity.</p>
+     * Set the Motion Magic cruise velocity.
+     * </p>
      * 
      * See CTRE's Motion Magic documentation, or REV's Smart Motion example
      * to see what this means.
+     * 
      * @param velocity Cruise velocity, in NU.
      */
     public void setMotionMagicCruiseVelocity(double velocity, int slot);
 
     /**
-     * Set the Motion Magic acceleration.</p>
+     * Set the Motion Magic acceleration.
+     * </p>
      * 
      * See CTRE's Motion Magic documentation, or REV's Smart Motion example
      * to see what this means.
+     * 
      * @param accel Acceleration, in NU per second.
      */
     public void setMotionMagicAcceleration(double accel, int slot);
 
     /**
-     * Set the motor controller's speed, in range [-1.0, 1.0], with an arbitrary feed forward.
+     * Set the motor controller's speed, in range [-1.0, 1.0], with an arbitrary
+     * feed forward.
      * 
-     * @param percentOutput Percent output to pass to the motor controller.
+     * @param percentOutput  Percent output to pass to the motor controller.
      * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
      */
     public void set(double percentOutput, double arbFeedforward);

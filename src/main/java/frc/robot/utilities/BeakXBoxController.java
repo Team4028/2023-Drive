@@ -14,7 +14,7 @@ public final class BeakXBoxController {
     public static final double THUMBSTICK_SENSITIVITY = 0.05;
     public static final double TRIGGER_DEADBAND = 0.01; // Jiggle room for the triggers
     public static final double TRIGGER_SENSITIVITY = 0.6; // If the trigger is beyond this limit, say it has been
-                                                            // pressed
+                                                          // pressed
 
     /* Button Mappings */
     public static final class Buttons {
