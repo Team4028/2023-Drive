@@ -12,20 +12,28 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 // TODO: Comprehensive documentation for all methods
 public class BeakLimelight extends SubsystemBase {
-    public static final double PIPELINE = 0;
-
     /* Height of the goal, in inches--based on the center of the reflective tape */
-    public static final double TARGET_HEIGHT = 104.; // Rapid React
+    public static double TARGET_HEIGHT = 0.; // Rapid React
+
+    public enum TargetHeight {
+        RAPID_REACT(104.);
+
+        public final double value;
+
+        TargetHeight(double value) {
+            this.value = value;
+        }
+    }
     
     /* Mounting height of the Limelight, in inches--center of the lens to the floor */
-    public static final double MOUNT_HEIGHT = 0.;
+    public static double MOUNT_HEIGHT = 0.;
 
-    public static final double HEIGHT_DELTA = TARGET_HEIGHT - MOUNT_HEIGHT;
+    public static double HEIGHT_DELTA;
 
     /* Mounting angle of the Limelight, in degrees, from perfect-vertical--see Limelight's docs
      * for a way to calculate a theoretical angle. You can also make guesses, and in either case,
      * ensure to tune further. */
-    public static final double MOUNT_ANGLE = 0.;
+    public static double MOUNT_ANGLE = 0.;
 
     protected NetworkTable nt = NetworkTableInstance.getDefault().getTable("limelight");
     protected NetworkTableEntry tx = entry("tx");
@@ -45,7 +53,44 @@ public class BeakLimelight extends SubsystemBase {
     public BeakLimelight() {
         setPipeline(0);
         setPictureInPicture(0);
-        setLedMode(1);
+        setLedMode(0);
+    }
+
+    /**
+     * Set the Limelight's mounting height.
+     * @param height Distance from the floor to the center of the lens, in inches.
+     */
+    public void setMountHeight(double height) {
+        MOUNT_HEIGHT = height;
+        HEIGHT_DELTA = TARGET_HEIGHT - height;
+    }
+
+    /**
+     * Set the target height, using a preset from a game's goal.
+     * @param height A {@link TargetHeight} enum containing the desired game.
+     */
+    public void setTargetHeight(TargetHeight height) {
+        TARGET_HEIGHT = height.value;
+        HEIGHT_DELTA = TARGET_HEIGHT - MOUNT_HEIGHT;
+    }
+
+    /**
+     * Set the target height, as a custom value.
+     * @param height Height of the goal (approx. center of reflective tape), in inches.
+     */
+    public void setTargetHeight(double height) {
+        TARGET_HEIGHT = height;
+        HEIGHT_DELTA = TARGET_HEIGHT - MOUNT_HEIGHT;
+    }
+
+    /**
+     * Set the Limelight's mounting angle.
+     * @param angle Angle in degrees, from perfectly vertical, of the Limelight. See Limelight's docs
+     * for a way to calculate a theoretical angle. You can also make guesses, and in either case,
+     * ensure to tune further.
+     */
+    public void setMountAngle(double angle) {
+        MOUNT_ANGLE = angle;
     }
 
     public double getX() {

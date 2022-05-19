@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -22,6 +23,7 @@ import frc.robot.Constants.PIDConstants;
 import frc.robot.Constants.SubsystemConstants;
 import frc.robot.sim.CTREPhysicsSim;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.drive.RobotPhysics;
 import frc.robot.utilities.motor.BeakTalonFX;
 
 /** Add your docs here. */
@@ -29,6 +31,29 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
     private Field2d field = new Field2d();
 
     private BeakTalonFX m_FL, m_BL, m_FR, m_BR;
+
+    private static final double MAX_VELOCITY = Units.feetToMeters(17.2);
+
+    // distance from the right to left wheels on the robot
+    private static final double TRACK_WIDTH = 26;
+    // distance from the front to back wheels on the robot
+    private static final double WHEEL_BASE = 28;
+
+    private static final double WHEEL_DIAMETER = 6.258;
+    private static final double GEAR_RATIO = 7.5;
+
+    private static final RobotPhysics PHYSICS = new RobotPhysics(
+            MAX_VELOCITY,
+            0,
+            TRACK_WIDTH,
+            WHEEL_BASE,
+            WHEEL_DIAMETER,
+            GEAR_RATIO);
+
+    private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
+            0,
+            0,
+            0);
 
     private static FalconDrivetrain m_instance;
 
@@ -38,9 +63,8 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
     public FalconDrivetrain(String canBus) {
         super(
-            DriveConstants.PHYSICS,
-            DriveConstants.FEED_FORWARD
-        );
+                PHYSICS,
+                FEED_FORWARD);
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {
@@ -110,7 +134,6 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
         m_BR.setInverted(false);
     }
 
-    
     public void drive(double x, double y, double rot) {
         double[] velocities = calcDesiredMotorVelocities(m_FL, x, rot);
 
@@ -129,7 +152,7 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
     public void resetOdometry(Pose2d pose) {
         super.resetOdometry(pose);
-        
+
         m_FL.resetEncoder();
         m_BL.resetEncoder();
         m_FR.resetEncoder();
