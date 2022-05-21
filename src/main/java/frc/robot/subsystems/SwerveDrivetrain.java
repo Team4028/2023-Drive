@@ -5,18 +5,23 @@
 package frc.robot.subsystems;
 
 import frc.robot.utilities.drive.RobotPhysics;
-import frc.robot.utilities.drive.swerve.BeakMk4iSwerveDrivetrain;
+import frc.robot.utilities.drive.swerve.BeakSwerveDrivetrain;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
+import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration.ModuleType;
+
+import com.ctre.phoenix.sensors.WPI_Pigeon2;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 
 /** Add your docs here. */
-public class SwerveDrivetrain extends BeakMk4iSwerveDrivetrain {
+public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final double DRIVE_kP = 0.01;
     private static final double TURN_kP = 0.2;
 
+    private static final int PIGEON2_ID = 1;
     private static final String CAN_BUS = "";
 
     private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
@@ -65,6 +70,8 @@ public class SwerveDrivetrain extends BeakMk4iSwerveDrivetrain {
 
     private static final double ALLOWED_CLOSED_LOOP_ERROR = 40.0;
 
+    private final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(PIGEON2_ID, CAN_BUS);
+
     private static SwerveModuleConfiguration m_frontLeftConfig = new SwerveModuleConfiguration(
             FL_DRIVE_ID,
             FL_TURN_ID,
@@ -75,7 +82,8 @@ public class SwerveDrivetrain extends BeakMk4iSwerveDrivetrain {
             ALLOWED_CLOSED_LOOP_ERROR,
             CAN_BUS,
             FEED_FORWARD,
-            CONFIGURATION);
+            CONFIGURATION,
+            ModuleType.MK4i);
 
     private static SwerveModuleConfiguration m_frontRightConfig = new SwerveModuleConfiguration(
             FR_DRIVE_ID,
@@ -87,7 +95,8 @@ public class SwerveDrivetrain extends BeakMk4iSwerveDrivetrain {
             ALLOWED_CLOSED_LOOP_ERROR,
             CAN_BUS,
             FEED_FORWARD,
-            CONFIGURATION);
+            CONFIGURATION,
+            ModuleType.MK4i);
 
     private static SwerveModuleConfiguration m_backLeftConfig = new SwerveModuleConfiguration(
             BL_DRIVE_ID,
@@ -99,7 +108,8 @@ public class SwerveDrivetrain extends BeakMk4iSwerveDrivetrain {
             ALLOWED_CLOSED_LOOP_ERROR,
             CAN_BUS,
             FEED_FORWARD,
-            CONFIGURATION);
+            CONFIGURATION,
+            ModuleType.MK4i);
 
     private static SwerveModuleConfiguration m_backRightConfig = new SwerveModuleConfiguration(
             BR_DRIVE_ID,
@@ -111,7 +121,8 @@ public class SwerveDrivetrain extends BeakMk4iSwerveDrivetrain {
             ALLOWED_CLOSED_LOOP_ERROR,
             CAN_BUS,
             FEED_FORWARD,
-            CONFIGURATION);
+            CONFIGURATION,
+            ModuleType.MK4i);
 
     public SwerveDrivetrain() {
         super(
@@ -120,6 +131,6 @@ public class SwerveDrivetrain extends BeakMk4iSwerveDrivetrain {
                 m_backLeftConfig,
                 m_backRightConfig,
                 PHYSICS,
-                1);
+                m_gyro);
     }
 }

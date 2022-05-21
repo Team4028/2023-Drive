@@ -8,6 +8,13 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
 /** Add your docs here. */
 public class SwerveModuleConfiguration {
+    public enum ModuleType {
+        MK2,
+        MK3,
+        MK4,
+        MK4i
+    }
+
     public int driveMotorID;
     public int turnMotorID;
     public int turnEncoderID;
@@ -29,6 +36,8 @@ public class SwerveModuleConfiguration {
     public String CANBus;
 
     public SimpleMotorFeedforward feedforward;
+
+    public ModuleType moduleType;
 
     /**
      * Generate a new Swerve Module configuration.
@@ -55,7 +64,8 @@ public class SwerveModuleConfiguration {
             double allowedError,
             String CANBus,
             SimpleMotorFeedforward feedforward,
-            SdsModuleConfiguration config) {
+            SdsModuleConfiguration config,
+            ModuleType moduleType) {
         this.driveMotorID = driveMotorID;
         this.turnMotorID = turnMotorID;
         this.turnEncoderID = turnEncoderID;
@@ -76,5 +86,7 @@ public class SwerveModuleConfiguration {
 
         this.turnGearRatio = config.turnGearRatio;
         this.turnInverted = config.turnInverted;
+
+        this.moduleType = moduleType;
     }
 }

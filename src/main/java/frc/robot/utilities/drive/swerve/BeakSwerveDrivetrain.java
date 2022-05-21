@@ -4,23 +4,22 @@
 
 package frc.robot.utilities.drive.swerve;
 
-import com.ctre.phoenix.sensors.WPI_Pigeon2;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
 
 /** Add your docs here. */
-public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
-    BeakMk4iSwerveModule m_FL;
-    BeakMk4iSwerveModule m_FR;
-    BeakMk4iSwerveModule m_BL;
-    BeakMk4iSwerveModule m_BR;
+public class BeakSwerveDrivetrain extends BeakDrivetrain {
+    BeakSwerveModule m_FL;
+    BeakSwerveModule m_FR;
+    BeakSwerveModule m_BL;
+    BeakSwerveModule m_BR;
 
     protected SwerveDriveOdometry m_odom;
     protected SwerveDriveKinematics m_kinematics;
@@ -28,7 +27,7 @@ public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
     protected RobotPhysics m_physics;
 
     /**
-     * Create a new Mk4i Swerve Drivetrain.
+     * Create a new Swerve Drivetrain.
      * 
      * @param frontLeftConfig  {@link SwerveModuleConfiguration} for the front left
      *                         module.
@@ -42,23 +41,23 @@ public class BeakMk4iSwerveDrivetrain extends BeakDrivetrain {
      *                         details.
      * @param pigeonID         ID of the Pigeon2 IMU.
      */
-    public BeakMk4iSwerveDrivetrain(
+    public BeakSwerveDrivetrain(
             SwerveModuleConfiguration frontLeftConfig,
             SwerveModuleConfiguration frontRightConfig,
             SwerveModuleConfiguration backLeftConfig,
             SwerveModuleConfiguration backRightConfig,
             RobotPhysics physics,
-            int pigeonID) {
+            Gyro gyro) {
         super(physics);
 
         m_physics = physics;
 
-        m_FL = new BeakMk4iSwerveModule(frontLeftConfig);
-        m_FR = new BeakMk4iSwerveModule(frontRightConfig);
-        m_BL = new BeakMk4iSwerveModule(backLeftConfig);
-        m_BR = new BeakMk4iSwerveModule(backRightConfig);
+        m_FL = BeakSwerveModule.fromSwerveModuleConfig(frontLeftConfig);
+        m_FR = BeakSwerveModule.fromSwerveModuleConfig(frontRightConfig);
+        m_BL = BeakSwerveModule.fromSwerveModuleConfig(backLeftConfig);
+        m_BR = BeakSwerveModule.fromSwerveModuleConfig(backRightConfig);
 
-        m_gyro = new WPI_Pigeon2(pigeonID);
+        m_gyro = gyro;
 
         m_kinematics = new SwerveDriveKinematics(
                 new Translation2d(physics.wheelBase / 2, physics.trackWidth / 2),

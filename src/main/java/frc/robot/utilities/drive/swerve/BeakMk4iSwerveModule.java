@@ -14,9 +14,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import frc.robot.utilities.motor.BeakTalonFX;
 
-// TODO: allow passing some config options.
 /** Add your docs here. */
-public class BeakMk4iSwerveModule {
+public class BeakMk4iSwerveModule extends BeakSwerveModule {
     private double turnCPR;
 
     // Calculated from Drive CPR.
@@ -157,7 +156,7 @@ public class BeakMk4iSwerveModule {
      * 
      * @return Angle of the wheel in radians.
      */
-    private double getTurningEncoderRadians() {
+    public double getTurningEncoderRadians() {
         return m_turningMotor.getPositionNU() * 2.0 * Math.PI / turnCPR;
     }
 
