@@ -239,4 +239,9 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     public void set(double percentOutput, double arbFeedforward) {
         super.set(ControlMode.PercentOutput, percentOutput, DemandType.ArbitraryFeedForward, arbFeedforward);
     }
+
+    @Override
+    public void setStatusPeriod(int value, int period) {
+        super.setStatusFramePeriod(value, period);
+    }
 }

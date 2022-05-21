@@ -33,6 +33,11 @@ public class SwerveModuleConfiguration {
 
     public double allowedError;
 
+    public int turnCurrentLimit;
+
+    public int driveSupplyCurrentLimit;
+    public int driveStatorCurrentLimit;
+
     public String CANBus;
 
     public SimpleMotorFeedforward feedforward;
@@ -42,17 +47,21 @@ public class SwerveModuleConfiguration {
     /**
      * Generate a new Swerve Module configuration.
      * 
-     * @param driveMotorID  CAN ID of the drive motor.
-     * @param turnMotorID   CAN ID of the turning motor.
-     * @param turnEncoderID CAN ID of the CANCoder.
-     * @param angleOffset   Offset of the CANCoder, in radians.
-     * @param drive_kP      Proportional gain to use for the drive motor.
-     * @param turn_kP       Proportional gain to use for the turning motor.
-     * @param allowedError  Allowed error of the turning motor, in NU.
-     * @param CANBus        CAN Bus that the drivetrain lies on.
-     * @param feedforward   {@link SimpleMotorFeedforward} for the drivetrain.
-     * @param config        {@link SdsModuleConfiguration} of the modules on your
-     *                      drivetrain.
+     * @param driveMotorID      CAN ID of the drive motor.
+     * @param turnMotorID       CAN ID of the turning motor.
+     * @param turnEncoderID     CAN ID of the CANCoder.
+     * @param angleOffset       Offset of the CANCoder, in radians.
+     * @param drive_kP          Proportional gain to use for the drive motor.
+     * @param turn_kP           Proportional gain to use for the turning motor.
+     * @param allowedError      Allowed error of the turning motor, in NU.
+     * @param turnCurrentLimit  Current limit of the turning motor.
+     * @param driveSupplyLimit  Supply current limit of the drive motor.
+     * @param driveStatorLimit  Stator current limit of the drive motor (if on Falcons).
+     * @param CANBus            CAN Bus that the drivetrain lies on.
+     * @param feedforward       {@link SimpleMotorFeedforward} for the drivetrain.
+     * @param config            {@link SdsModuleConfiguration} of the modules on your
+     *                          drivetrain.
+     * @param ModuleType        The type of the module, i.e. MK2, MK3, etc.
      */
     public SwerveModuleConfiguration(
             int driveMotorID,
@@ -62,6 +71,9 @@ public class SwerveModuleConfiguration {
             double drive_kP,
             double turn_kP,
             double allowedError,
+            int turnCurrentLimit,
+            int driveSupplyLimit,
+            int driveStatorLimit,
             String CANBus,
             SimpleMotorFeedforward feedforward,
             SdsModuleConfiguration config,
@@ -74,6 +86,10 @@ public class SwerveModuleConfiguration {
         this.turn_kP = turn_kP;
 
         this.allowedError = allowedError;
+
+        this.turnCurrentLimit = turnCurrentLimit;
+        this.driveSupplyCurrentLimit = driveSupplyLimit;
+        this.driveStatorCurrentLimit = driveStatorLimit;
 
         this.CANBus = CANBus;
 

@@ -186,7 +186,7 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
 
     @Override
     public void setStatorCurrentLimit(int amps) {
-        throw new RuntimeException("REV Spark MAX does not support Stator current limiting.");
+        System.err.println("REV Spark MAX does not support stator current limiting.");
     }
 
     @Override
@@ -217,5 +217,10 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     @Override
     public void set(double percentOutput, double arbFeedforward) {
         pid.setReference(percentOutput, ControlType.kDutyCycle, 0, arbFeedforward);
+    }
+
+    @Override
+    public void setStatusPeriod(int value, int period) {
+        super.setPeriodicFramePeriod(PeriodicFrame.fromId(value), period);
     }
 }

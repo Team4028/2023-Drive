@@ -15,7 +15,6 @@ import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-// TODO: Set slots
 /** Add your docs here. */
 public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     public BeakTalonSRX(int port) {
@@ -232,5 +231,10 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     @Override
     public void set(double percentOutput, double arbFeedforward) {
         super.set(ControlMode.PercentOutput, percentOutput, DemandType.ArbitraryFeedForward, arbFeedforward);
+    }
+    
+    @Override
+    public void setStatusPeriod(int value, int period) {
+        super.setStatusFramePeriod(value, period);
     }
 }

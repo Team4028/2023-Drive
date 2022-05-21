@@ -29,7 +29,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             0,
             0);
 
-    private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK4_L2;
+    private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK4I_L2;
 
     private static final double MAX_VELOCITY = Units.feetToMeters(16.3);
 
@@ -48,6 +48,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             FEED_FORWARD);
 
     // TODO: get offsets
+    // TODO: organize this
     private static final int FL_DRIVE_ID = 2;
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
@@ -70,6 +71,10 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     private static final double ALLOWED_CLOSED_LOOP_ERROR = 40.0;
 
+    private static final int TURN_CURRENT_LIMIT = 20;
+    private static final int DRIVE_SUPPLY_LIMIT = 60;
+    private static final int DRIVE_STATOR_LIMIT = 80;
+
     private final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(PIGEON2_ID, CAN_BUS);
 
     private static SwerveModuleConfiguration m_frontLeftConfig = new SwerveModuleConfiguration(
@@ -80,6 +85,9 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             DRIVE_kP,
             TURN_kP,
             ALLOWED_CLOSED_LOOP_ERROR,
+            TURN_CURRENT_LIMIT,
+            DRIVE_SUPPLY_LIMIT,
+            DRIVE_STATOR_LIMIT,
             CAN_BUS,
             FEED_FORWARD,
             CONFIGURATION,
@@ -93,6 +101,9 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             DRIVE_kP,
             TURN_kP,
             ALLOWED_CLOSED_LOOP_ERROR,
+            TURN_CURRENT_LIMIT,
+            DRIVE_SUPPLY_LIMIT,
+            DRIVE_STATOR_LIMIT,
             CAN_BUS,
             FEED_FORWARD,
             CONFIGURATION,
@@ -106,6 +117,9 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             DRIVE_kP,
             TURN_kP,
             ALLOWED_CLOSED_LOOP_ERROR,
+            TURN_CURRENT_LIMIT,
+            DRIVE_SUPPLY_LIMIT,
+            DRIVE_STATOR_LIMIT,
             CAN_BUS,
             FEED_FORWARD,
             CONFIGURATION,
@@ -119,6 +133,9 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             DRIVE_kP,
             TURN_kP,
             ALLOWED_CLOSED_LOOP_ERROR,
+            TURN_CURRENT_LIMIT,
+            DRIVE_SUPPLY_LIMIT,
+            DRIVE_STATOR_LIMIT,
             CAN_BUS,
             FEED_FORWARD,
             CONFIGURATION,

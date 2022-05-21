@@ -530,4 +530,22 @@ public interface BeakMotorController extends MotorController {
      * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
      */
     public void set(double percentOutput, double arbFeedforward);
+
+    /**
+     * Set a status frame period of the motor controller.</p>
+     * 
+     * Values are dependent upon the individual motor controller.
+     * Pass a corresponding value for your motor controller (by appending .value to the enum), i.e.:</p>
+     * 
+     * <pre>
+     * <code>
+     * controller.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General.value, 11); // TalonFX
+     * sparkController.setStatusFramePeriod(PeriodicFrame.kStatus0.value, 1); // SparkMAX
+     * </code>
+     * </pre>
+     * 
+     * @param value Value of the status frame, from an enum.
+     * @param period Period of the status frame, in ms.
+     */
+    public void setStatusPeriod(int value, int period);
 }
