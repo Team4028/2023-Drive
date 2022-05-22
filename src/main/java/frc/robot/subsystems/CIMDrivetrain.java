@@ -38,7 +38,7 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
     private static final int FR_ID = 3;
     private static final int BR_ID = 4;
 
-    private static final double MAX_VELOCITY = Units.feetToMeters(14.4);
+    private static final double MAX_VELOCITY = Units.feetToMeters(17.8);
 
     // distance from the right to left wheels on the robot
     private static final double TRACK_WIDTH = 26;
@@ -88,9 +88,9 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
         configMotors();
 
         if (Robot.isSimulation()) {
-            DCMotor cim = DCMotor.getCIM(1);
             double accel = 0.5;
-            double maxVel = Units.radiansPerSecondToRotationsPerMinute(cim.freeSpeedRadPerSec) * 4096 / 600;
+            double maxVel = 44788.395;
+
             CTREPhysicsSim.getInstance().addTalonSRX(m_FL, accel, maxVel);
             CTREPhysicsSim.getInstance().addTalonSRX(m_FR, accel, maxVel);
             CTREPhysicsSim.getInstance().addTalonSRX(m_BL, accel, maxVel);
@@ -115,7 +115,7 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
 
     public void configPID() {
         // TODO: get these from SysId
-        double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getCIM(1).freeSpeedRadPerSec) * 4096 / 600;
+        double maxVel = 44788.395;
 
         m_FL.setPIDF(kP, 0., kD, m_FL.calculateFeedForward(1, maxVel), 0);
         m_BL.setPIDF(kP, 0., kD, m_BL.calculateFeedForward(1, maxVel), 0);

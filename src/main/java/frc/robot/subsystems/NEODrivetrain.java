@@ -38,7 +38,7 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
     private static final int FR_ID = 3;
     private static final int BR_ID = 4;
 
-    private static final double MAX_VELOCITY = Units.feetToMeters(15.5);
+    private static final double MAX_VELOCITY = Units.feetToMeters(20.155);
 
     // distance from the right to left wheels on the robot
     private static final double TRACK_WIDTH = 26;
@@ -87,10 +87,14 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
         configMotors();
 
         if (Robot.isSimulation()) {
-            REVPhysicsSim.getInstance().addSparkMax(m_FL, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_BL, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_FR, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_BR, DCMotor.getNEO(1));
+            // Theoretical value (given 2 neos)
+            float stallTorque = 2.6f;
+            float maxVel = 7380.63f;
+
+            REVPhysicsSim.getInstance().addSparkMax(m_FL, stallTorque, maxVel);
+            REVPhysicsSim.getInstance().addSparkMax(m_BL, stallTorque, maxVel);
+            REVPhysicsSim.getInstance().addSparkMax(m_FR, stallTorque, maxVel);
+            REVPhysicsSim.getInstance().addSparkMax(m_BR, stallTorque, maxVel);
         }
 
         sim = new DifferentialDrivetrainSim(
@@ -111,7 +115,8 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
 
     public void configPID() {
         // TODO: get these from SysId
-        double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getNEO(1).freeSpeedRadPerSec);
+        double maxVel = 7380.63;
+
         m_FL.setPIDF(kP, 0., kD, m_FL.calculateFeedForward(1, maxVel), 0);
         m_BL.setPIDF(kP, 0., kD, m_BL.calculateFeedForward(1, maxVel), 0);
         m_FR.setPIDF(kP, 0., kD, m_FR.calculateFeedForward(1, maxVel), 0);

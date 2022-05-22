@@ -40,7 +40,7 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
     private static final int BR_ID = 5;
     private static final int BR2_ID = 6;
 
-    private static final double MAX_VELOCITY = Units.feetToMeters(15.5);
+    private static final double MAX_VELOCITY = Units.feetToMeters(20.155);
 
     // distance from the right to left wheels on the robot
     private static final double TRACK_WIDTH = 26;
@@ -93,17 +93,21 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
         configMotors();
 
         if (Robot.isSimulation()) {
-            REVPhysicsSim.getInstance().addSparkMax(m_FL, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_BL, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_BL2, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_FR, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_BR, DCMotor.getNEO(1));
-            REVPhysicsSim.getInstance().addSparkMax(m_BR2, DCMotor.getNEO(1));
+            // Theoretical value (given 3 neos)
+            float stallTorque = 2.6f;
+            float maxVel = 7380.63f;
+
+            REVPhysicsSim.getInstance().addSparkMax(m_FL, stallTorque, maxVel);
+            REVPhysicsSim.getInstance().addSparkMax(m_BL, stallTorque, maxVel);
+            REVPhysicsSim.getInstance().addSparkMax(m_BL2, stallTorque, maxVel);
+            REVPhysicsSim.getInstance().addSparkMax(m_FR, stallTorque, maxVel);
+            REVPhysicsSim.getInstance().addSparkMax(m_BR, stallTorque, maxVel);
+            REVPhysicsSim.getInstance().addSparkMax(m_BR2, stallTorque, maxVel);
         }
 
         sim = new DifferentialDrivetrainSim(
                 DCMotor.getNEO(3),
-                7.51,
+                7.5,
                 0.9,
                 Units.lbsToKilograms(60.),
                 Units.inchesToMeters(3.),
@@ -119,7 +123,8 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
 
     public void configPID() {
         // TODO: get these from SysId
-        double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getNEO(1).freeSpeedRadPerSec);
+        double maxVel = 7380.63;
+
         m_FL.setPIDF(kP, 0., kD, m_FL.calculateFeedForward(1, maxVel), 0);
         m_BL.setPIDF(kP, 0., kD, m_BL.calculateFeedForward(1, maxVel), 0);
         m_BL2.setPIDF(kP, 0., kD, m_BL2.calculateFeedForward(1, maxVel), 0);
@@ -171,12 +176,12 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
     public void resetOdometry(Pose2d pose) {
         super.resetOdometry(pose);
 
-        m_FL.resetEncoder();
-        m_BL.resetEncoder();
-        m_BL2.resetEncoder();
-        m_FR.resetEncoder();
-        m_BR.resetEncoder();
-        m_BR2.resetEncoder();
+        // m_FL.resetEncoder();
+        // m_BL.resetEncoder();
+        // m_BL2.resetEncoder();
+        // m_FR.resetEncoder();
+        // m_BR.resetEncoder();
+        // m_BR2.resetEncoder();
     }
 
     public static SixNEODrivetrain getInstance() {
@@ -190,7 +195,7 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
     public void periodic() {
         updateOdometry(m_FL, m_FR);
 
-        field.setRobotPose(m_pose);
+        field.setRobotPose(sim.getPose());
         SmartDashboard.putData(field);
     }
 }

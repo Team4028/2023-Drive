@@ -40,7 +40,7 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
     private static final String CAN_BUS = "";
 
-    private static final double MAX_VELOCITY = Units.feetToMeters(17.2);
+    private static final double MAX_VELOCITY = Units.feetToMeters(21.0);
 
     // distance from the right to left wheels on the robot
     private static final double TRACK_WIDTH = 26;
@@ -91,9 +91,11 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
         configMotors();
 
         if (Robot.isSimulation()) {
-            DCMotor falcon = DCMotor.getFalcon500(1);
             double accel = 0.5;
-            double maxVel = Units.radiansPerSecondToRotationsPerMinute(falcon.freeSpeedRadPerSec) * 2048 / 600;
+
+            // Theoretical value (from 2 Falcons)
+            double maxVel = 26638.923;
+
             CTREPhysicsSim.getInstance().addTalonFX(m_FL, accel, maxVel);
             CTREPhysicsSim.getInstance().addTalonFX(m_FR, accel, maxVel);
             CTREPhysicsSim.getInstance().addTalonFX(m_BL, accel, maxVel);
@@ -118,8 +120,7 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
     public void configPID() {
         // TODO: get these from SysId
-        double maxVel = Units.radiansPerSecondToRotationsPerMinute(DCMotor.getFalcon500(1).freeSpeedRadPerSec) * 2048
-                / 600;
+        double maxVel = 26638.923;
 
         m_FL.setPIDF(kP, 0., kD, m_FL.calculateFeedForward(1, maxVel), 0);
         m_BL.setPIDF(kP, 0., kD, m_BL.calculateFeedForward(1, maxVel), 0);

@@ -30,6 +30,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             0);
 
     private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK4I_L2;
+    private static final ModuleType MODULE_TYPE = ModuleType.MK4i;
 
     private static final double MAX_VELOCITY = Units.feetToMeters(16.3);
 
@@ -91,7 +92,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             CAN_BUS,
             FEED_FORWARD,
             CONFIGURATION,
-            ModuleType.MK4i);
+            MODULE_TYPE);
 
     private static SwerveModuleConfiguration m_frontRightConfig = new SwerveModuleConfiguration(
             FR_DRIVE_ID,
@@ -107,7 +108,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             CAN_BUS,
             FEED_FORWARD,
             CONFIGURATION,
-            ModuleType.MK4i);
+            MODULE_TYPE);
 
     private static SwerveModuleConfiguration m_backLeftConfig = new SwerveModuleConfiguration(
             BL_DRIVE_ID,
@@ -123,7 +124,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             CAN_BUS,
             FEED_FORWARD,
             CONFIGURATION,
-            ModuleType.MK4i);
+            MODULE_TYPE);
 
     private static SwerveModuleConfiguration m_backRightConfig = new SwerveModuleConfiguration(
             BR_DRIVE_ID,
@@ -139,7 +140,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             CAN_BUS,
             FEED_FORWARD,
             CONFIGURATION,
-            ModuleType.MK4i);
+            MODULE_TYPE);
 
     public SwerveDrivetrain() {
         super(

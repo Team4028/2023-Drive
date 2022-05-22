@@ -78,8 +78,7 @@ public class BeakLimelight extends SubsystemBase {
      * @param height A {@link TargetHeight} enum containing the desired game.
      */
     public void setTargetHeight(TargetHeight height) {
-        TARGET_HEIGHT = height.value;
-        HEIGHT_DELTA = TARGET_HEIGHT - MOUNT_HEIGHT;
+        setTargetHeight(height.value);
     }
 
     /**
@@ -108,10 +107,6 @@ public class BeakLimelight extends SubsystemBase {
 
     public double getX() {
         return tx.getDouble(0);
-    }
-
-    public double getXForRot() {
-        return tx.getDouble(0.0);
     }
 
     /**
