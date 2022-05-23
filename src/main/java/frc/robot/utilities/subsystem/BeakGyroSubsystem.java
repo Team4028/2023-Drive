@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-/** Add your docs here. */
+/** A subsystem containing a gyro, with simulation support. */
 public class BeakGyroSubsystem extends SubsystemBase {
     protected Gyro m_gyro;
     protected AnalogGyroSim m_gyroSim;

@@ -4,7 +4,7 @@
 
 package frc.robot.utilities.drive.swerve;
 
-/** Add your docs here. */
+/** Preset configurations for SDS Swerve Modules. */
 public final class SdsModuleConfigurations {
     public static final SdsModuleConfiguration MK3_STANDARD = new SdsModuleConfiguration(
             0.1016,

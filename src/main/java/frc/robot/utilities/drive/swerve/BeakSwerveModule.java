@@ -11,7 +11,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.utilities.encoder.BeakAbsoluteEncoder;
 import frc.robot.utilities.motor.BeakMotorController;
 
-/** Add your docs here. */
+/** Base class for any non-differential swerve module. */
 public class BeakSwerveModule {
     protected double turnCPR;
 

@@ -6,7 +6,7 @@ package frc.robot.utilities.drive.swerve;
 
 import java.util.Objects;
 
-/** Add your docs here. */
+/** Configuration of an SDS Swerve Module. */
 public class SdsModuleConfiguration {
     public final double wheelDiameter;
     public final double driveGearRatio;

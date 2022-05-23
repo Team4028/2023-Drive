@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.interfaces.Gyro;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
 
-/** Add your docs here. */
+/** Generic Swerve Drivetrain subsystem. */
 public class BeakSwerveDrivetrain extends BeakDrivetrain {
     BeakSwerveModule m_FL;
     BeakSwerveModule m_FR;

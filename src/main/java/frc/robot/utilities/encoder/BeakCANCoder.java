@@ -7,7 +7,7 @@ package frc.robot.utilities.encoder;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
 
-/** Add your docs here. */
+/** CANCoder, as a {@link BeakAbsoluteEncoder}. */
 public class BeakCANCoder extends WPI_CANCoder implements BeakAbsoluteEncoder {
     public BeakCANCoder(int deviceNumber) {
         this(deviceNumber, "");

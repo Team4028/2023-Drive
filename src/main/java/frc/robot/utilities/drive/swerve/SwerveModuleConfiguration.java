@@ -6,7 +6,7 @@ package frc.robot.utilities.drive.swerve;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 
-/** Add your docs here. */
+/** Class containing general configuration for a {@link BeakSwerveModule}. */
 public class SwerveModuleConfiguration {
     public enum ModuleType {
         MK2,

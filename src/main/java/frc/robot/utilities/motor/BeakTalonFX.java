@@ -16,7 +16,7 @@ import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-/** Add your docs here. */
+/** Common motor controller interface for TalonFX/Falcon 500. */
 public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     public BeakTalonFX(int port, String canBus) {
         super(port, canBus);

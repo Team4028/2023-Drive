@@ -281,7 +281,7 @@ public final class BeakXBoxController {
         }
 
         /**
-         * Get the adjusted thumbstick position (Magnitude <= 1)
+         * Get the adjusted thumbstick position (Magnitude at most 1)
          * 
          * @return True thumbstick position
          */
@@ -294,7 +294,7 @@ public final class BeakXBoxController {
         }
 
         /**
-         * Get the adjusted thumbstick position (Magnitude <= 1)
+         * Get the adjusted thumbstick position (Magnitude at most 1)
          * 
          * @return True thumbstick position
          */

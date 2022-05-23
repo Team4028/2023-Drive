@@ -15,7 +15,7 @@ import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-/** Add your docs here. */
+/** Common motor controller interface for Talon SRX. */
 public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     public BeakTalonSRX(int port) {
         super(port);

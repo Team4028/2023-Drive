@@ -24,6 +24,8 @@ public final class Util {
      * drivetrain to follow a path.
      * 
      * @param traj Trajectory to follow.
+     * @param drivetrain
+     * @return A {@link SequentialCommandGroup} to run the trajectory, and stop the drivetrain.
      */
     public static final SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj,
             BeakDifferentialDrivetrain drivetrain) {
@@ -50,7 +52,7 @@ public final class Util {
      * @param gearRatio     Motor rotations per gearbox shaft rotation.
      * @param wheelDiameter Diameter of the wheel, in inches.
      * 
-     * @return Wheel travel in meters.
+     * @return <p>Wheel travel in meters.
      *         </p>
      * 
      *         Example:
@@ -63,11 +65,11 @@ public final class Util {
      * }
      * </pre>
      * 
-     * - 2 rotations of the motor (8192NU travel / 4096NU CPR)
+     * <p>- 2 rotations of the motor (8192NU travel / 4096NU CPR)
      * </p>
-     * - ~.186 rotations of the wheel (2 motor rotations / 10.75 gear ratio)
+     * <p>- ~.186 rotations of the wheel (2 motor rotations / 10.75 gear ratio)
      * </p>
-     * - ~2.34 in travel (.186 shaft rotations * (PI * 4 in))
+     * <p>- ~2.34 in travel (.186 shaft rotations * (PI * 4 in))
      */
     public static double NUtoMeters(double nu, double cpr, double gearRatio, double wheelDiameter) {
         double motorRotations = (double) nu / cpr; // How many rotations of the motor in this amount of NU.

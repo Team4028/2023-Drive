@@ -4,7 +4,7 @@
 
 package frc.robot.utilities.encoder;
 
-/** Add your docs here. */
+/** Generic external absolute encoder. */
 public interface BeakAbsoluteEncoder {
     /**
      * Get the encoder's position. Depending on the configuration,

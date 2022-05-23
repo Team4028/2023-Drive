@@ -19,7 +19,7 @@ import frc.robot.Robot;
 import frc.robot.utilities.Util;
 import frc.robot.utilities.motor.BeakMotorController;
 
-/** Add your docs here. */
+/** Generic Differential (Tank) Drivetrain subsystem. */
 public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     public DifferentialDriveKinematics m_kinematics;
     public DifferentialDriveOdometry m_odom;

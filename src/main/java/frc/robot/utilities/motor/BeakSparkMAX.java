@@ -10,7 +10,7 @@ import com.revrobotics.SparkMaxLimitSwitch;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkMaxLimitSwitch.Type;
 
-/** Add your docs here. */
+/** Common motor controller interface for REV Spark MAX. */
 public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     private RelativeEncoder encoder;
     private SparkMaxPIDController pid;

@@ -10,7 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import frc.robot.utilities.subsystem.BeakGyroSubsystem;
 
-/** Add your docs here. */
+/** Base drivetrain class. */
 public class BeakDrivetrain extends BeakGyroSubsystem {
     public Pose2d m_pose;
 

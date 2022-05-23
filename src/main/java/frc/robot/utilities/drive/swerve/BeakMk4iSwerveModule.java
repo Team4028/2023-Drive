@@ -9,7 +9,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import frc.robot.utilities.encoder.BeakCANCoder;
 import frc.robot.utilities.motor.BeakTalonFX;
 
-/** Add your docs here. */
+/** SDS MK4i Swerve Module. */
 public class BeakMk4iSwerveModule extends BeakSwerveModule {
     /**
      * Construct a new Mk4i Swerve Module.

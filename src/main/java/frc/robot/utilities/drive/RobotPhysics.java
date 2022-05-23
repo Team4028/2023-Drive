@@ -7,7 +7,7 @@ package frc.robot.utilities.drive;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 
-/** Add your docs here. */
+/** Class containing various physical parameters of a robot. */
 public class RobotPhysics {
     public double maxVelocity;
     public double maxAngularVelocity;
