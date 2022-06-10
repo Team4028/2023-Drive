@@ -139,11 +139,14 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      * @return Current wheel speeds of the robot.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds(BeakMotorController frontLeft, BeakMotorController frontRight) {
+        frontLeft.setDistancePerPulse(Units.inchesToMeters(m_wheelDiameter), m_gearRatio);
+        frontRight.setDistancePerPulse(Units.inchesToMeters(m_wheelDiameter), m_gearRatio);
+
+        System.out.println(frontRight.getRate());
+
         return new DifferentialDriveWheelSpeeds(
-                Util.NUtoMeters(frontLeft.getVelocityNU(), frontLeft.getVelocityEncoderCPR(), m_gearRatio,
-                        m_wheelDiameter),
-                Util.NUtoMeters(frontRight.getVelocityNU(), frontRight.getVelocityEncoderCPR(), m_gearRatio,
-                        m_wheelDiameter));
+            frontLeft.getRate(),
+            frontRight.getRate());
     }
 
     /**
@@ -171,6 +174,9 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     public Pose2d updateOdometry(
             BeakMotorController frontLeftMotorController,
             BeakMotorController frontRightMotorController) {
+        frontLeftMotorController.setDistancePerPulse(Units.inchesToMeters(m_wheelDiameter), m_gearRatio);
+        frontRightMotorController.setDistancePerPulse(Units.inchesToMeters(m_wheelDiameter), m_gearRatio);
+
         if (Robot.isSimulation()) {
             sim.setInputs(
                     frontRightMotorController.getOutputVoltage(),
@@ -182,12 +188,8 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
         Rotation2d rot = getGyroRotation2d();
 
         m_pose = m_odom.update(rot,
-                Util.NUtoMeters(frontLeftMotorController.getPositionNU(),
-                        frontLeftMotorController.getPositionEncoderCPR(), m_gearRatio,
-                        m_wheelDiameter),
-                Util.NUtoMeters(frontRightMotorController.getPositionNU(),
-                        frontRightMotorController.getPositionEncoderCPR(), m_gearRatio,
-                        m_wheelDiameter));
+                frontLeftMotorController.getDistance(),
+                frontRightMotorController.getDistance());
 
         return m_pose;
     }
