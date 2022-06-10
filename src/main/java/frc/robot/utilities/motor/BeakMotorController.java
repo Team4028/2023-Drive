@@ -548,4 +548,56 @@ public interface BeakMotorController extends MotorController {
      * @param period Period of the status frame, in ms.
      */
     public void setStatusPeriod(int value, int period);
+
+    /**
+     * Set the encoder "distance per pulse". This can essentially be described as the circumference of the wheel divided by the 
+     * CPR of the encoder. For example, with a 4 inch (.1 meter) wheel, on a 1:1 TalonFX:
+     * 
+     * <pre>
+     * <code>
+     * talon.setDistancePerPulse((.1 * Math.PI) / 2048);
+     * </code>
+     * </pre>
+     * 
+     * @param dpr The calculated Distance per Pulse.
+     */
+    public void setDistancePerPulse(double dpr);
+
+    public double getDistancePerPulse();
+
+    /**
+     * Set the encoder distance per pulse to meters per second.
+     * 
+     * @param wheelDiameter The diameter of the driven wheel, in meters.
+     * @param encoderGearRatio The gear ratio between the encoder and the wheel
+     * (1 if the encoder is mounted directly on the wheel)
+     */
+    default void setDistancePerPulse(double wheelDiameter, double encoderGearRatio) {
+        setDistancePerPulse((wheelDiameter * Math.PI) / encoderGearRatio);
+    }
+
+    /**
+     * Get the traveled distance of the encoder, scaled from the distance per pulse.
+     * @return Traveled motor distance, in whatever units were passed in setDistancePerPulse
+     */
+    default double getDistance() {
+        // double posDistancePerPulse = getDistancePerPulse() / getPositionEncoderCPR();
+        // return getPositionNU() / posDistancePerPulse;
+        return getPositionMotorRotations() / getDistancePerPulse();
+
+    }
+
+    /**
+     * Get the current velocity of the encoder, scaled from the distance per pulse.
+     * @return Current motor velocity, in whatever units were passed in setDistancePerPulse
+     */
+    default double getRate() {
+        return getVelocityRPM() / getDistancePerPulse();
+    }
+
+    /**
+     * Run the motor at the specified speed, scaled from the distance per pulse.
+     * @param velocity Target motor velocity, in whatever units were passed in setDistancePerPulse
+     */
+    default void setRate(double velocity) {} // UNUSED FOR NOW
 }

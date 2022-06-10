@@ -18,6 +18,8 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     private SparkMaxLimitSwitch revLimitSwitch;
     private SparkMaxLimitSwitch fwdLimitSwitch;
 
+    private double m_distancePerPulse;
+
     public BeakSparkMAX(int port) {
         super(port, MotorType.kBrushless);
 
@@ -222,5 +224,15 @@ public class BeakSparkMAX extends CANSparkMax implements BeakMotorController {
     @Override
     public void setStatusPeriod(int value, int period) {
         super.setPeriodicFramePeriod(PeriodicFrame.fromId(value), period);
+    }
+
+    @Override
+    public void setDistancePerPulse(double dpr) {
+        m_distancePerPulse = dpr;
+    }
+
+    @Override
+    public double getDistancePerPulse() {
+        return m_distancePerPulse;
     }
 }

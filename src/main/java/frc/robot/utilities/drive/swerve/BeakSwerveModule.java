@@ -117,6 +117,7 @@ public class BeakSwerveModule {
         double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
 
         // TODO: why divide by 10?
+        // So actually it's because of the 100ms thing with Talons I think...
         m_driveMotor.setVelocityNU(
                 optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
                 arbFeedforward,

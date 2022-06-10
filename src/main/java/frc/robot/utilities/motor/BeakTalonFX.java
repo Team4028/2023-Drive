@@ -18,6 +18,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 /** Common motor controller interface for TalonFX/Falcon 500. */
 public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
+    private double m_distancePerPulse;
+
     public BeakTalonFX(int port, String canBus) {
         super(port, canBus);
         super.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen);
@@ -243,5 +245,15 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     @Override
     public void setStatusPeriod(int value, int period) {
         super.setStatusFramePeriod(value, period);
+    }
+
+    @Override
+    public void setDistancePerPulse(double dpr) {
+        m_distancePerPulse = dpr;
+    }
+
+    @Override
+    public double getDistancePerPulse() {
+        return m_distancePerPulse;
     }
 }

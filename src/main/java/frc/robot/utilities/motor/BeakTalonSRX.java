@@ -17,6 +17,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 /** Common motor controller interface for Talon SRX. */
 public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
+    private double m_distancePerPulse;
+
     public BeakTalonSRX(int port) {
         super(port);
     }
@@ -236,5 +238,15 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     @Override
     public void setStatusPeriod(int value, int period) {
         super.setStatusFramePeriod(value, period);
+    }
+    
+    @Override
+    public void setDistancePerPulse(double dpr) {
+        m_distancePerPulse = dpr;
+    }
+
+    @Override
+    public double getDistancePerPulse() {
+        return m_distancePerPulse;
     }
 }
