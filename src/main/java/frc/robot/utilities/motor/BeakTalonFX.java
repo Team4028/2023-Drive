@@ -256,14 +256,4 @@ public class BeakTalonFX extends WPI_TalonFX implements BeakMotorController {
     public double getDistancePerPulse() {
         return m_distancePerPulse;
     }
-    
-    @Override
-    public double getRate() {
-        return getVelocityNU() * (getDistancePerPulse() / getVelocityEncoderCPR()) * 10;
-    }
-
-    @Override
-    public void setRate(double velocity) {
-        setVelocityNU(velocity / 10. / (getDistancePerPulse() / getVelocityEncoderCPR()));
-    }
 }

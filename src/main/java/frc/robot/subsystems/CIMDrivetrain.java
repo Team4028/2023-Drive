@@ -105,6 +105,9 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
             Units.inchesToMeters(3.),
             Units.inchesToMeters(TRACK_WIDTH),
             null);
+        
+        m_FL.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
+        m_FR.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
     }
 
     public void configMotors() {
@@ -139,10 +142,10 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
 
     
     public void drive(double x, double y, double rot) {
-        double[] velocities = calcDesiredMotorVelocities(m_FL, x, rot);
+        DifferentialDriveWheelSpeeds speeds = calcWheelSpeeds(x, rot);
 
-        m_FL.setVelocityNU(velocities[0]);
-        m_FR.setVelocityNU(velocities[1]);
+        m_FL.setRate(speeds.leftMetersPerSecond);
+        m_FR.setRate(speeds.rightMetersPerSecond);
     }
 
     public void driveVolts(double left, double right) {

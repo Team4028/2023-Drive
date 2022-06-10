@@ -70,7 +70,11 @@ public final class Util {
      * <p>- ~.186 rotations of the wheel (2 motor rotations / 10.75 gear ratio)
      * </p>
      * <p>- ~2.34 in travel (.186 shaft rotations * (PI * 4 in))
+     * 
+     * @deprecated Due to the addition of <code>setDistancePerPulse</code> on {@link BeakMotorController},
+     * this function is no longer needed.
      */
+    @Deprecated(forRemoval = true)
     public static double NUtoMeters(double nu, double cpr, double gearRatio, double wheelDiameter) {
         double motorRotations = (double) nu / cpr; // How many rotations of the motor in this amount of NU.
         double wheelRotations = motorRotations / gearRatio; // How many rotations of the gearbox (wheel).

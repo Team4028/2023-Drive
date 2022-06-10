@@ -150,10 +150,6 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
         m_FL.setRate(speeds.leftMetersPerSecond);
         m_FR.setRate(speeds.rightMetersPerSecond);
-        // double[] velocities = calcDesiredMotorVelocities(m_FL, x, rot);
-
-        // m_FL.setVelocityNU(velocities[0]);
-        // m_FR.setVelocityNU(velocities[1]);
     }
 
     public void driveVolts(double left, double right) {

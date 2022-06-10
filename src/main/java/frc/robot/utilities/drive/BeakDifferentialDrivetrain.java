@@ -16,7 +16,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import frc.robot.Robot;
-import frc.robot.utilities.Util;
 import frc.robot.utilities.motor.BeakMotorController;
 
 /** Generic Differential (Tank) Drivetrain subsystem. */
@@ -105,7 +104,11 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      * @param x               Speed of the robot in the x direction (forward).
      * @param rot             Angular rate of the robot.
      * @return {left velocity in NU, right velocity in NU}
+     * 
+     * @deprecated Due to the addition of <code>setRate</code> on {@link BeakMotorController},
+     * this function is no longer needed. Please use <code>calcWheelSpeeds()</code> and <code>setRate()</code>.
      */
+    @Deprecated(forRemoval = true)
     public double[] calcDesiredMotorVelocities(
             BeakMotorController motorController,
             double x,
@@ -139,9 +142,6 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      * @return Current wheel speeds of the robot.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds(BeakMotorController frontLeft, BeakMotorController frontRight) {
-        frontLeft.setDistancePerPulse(Units.inchesToMeters(m_wheelDiameter), m_gearRatio);
-        frontRight.setDistancePerPulse(Units.inchesToMeters(m_wheelDiameter), m_gearRatio);
-
         System.out.println(frontRight.getRate());
 
         return new DifferentialDriveWheelSpeeds(
@@ -174,9 +174,6 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     public Pose2d updateOdometry(
             BeakMotorController frontLeftMotorController,
             BeakMotorController frontRightMotorController) {
-        frontLeftMotorController.setDistancePerPulse(Units.inchesToMeters(m_wheelDiameter), m_gearRatio);
-        frontRightMotorController.setDistancePerPulse(Units.inchesToMeters(m_wheelDiameter), m_gearRatio);
-
         if (Robot.isSimulation()) {
             sim.setInputs(
                     frontRightMotorController.getOutputVoltage(),
