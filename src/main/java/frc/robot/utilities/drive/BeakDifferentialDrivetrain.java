@@ -142,8 +142,6 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      * @return Current wheel speeds of the robot.
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds(BeakMotorController frontLeft, BeakMotorController frontRight) {
-        System.out.println(frontRight.getRate());
-
         return new DifferentialDriveWheelSpeeds(
             frontLeft.getRate(),
             frontRight.getRate());
