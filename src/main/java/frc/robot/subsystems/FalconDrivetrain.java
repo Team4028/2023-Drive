@@ -23,9 +23,10 @@ import frc.robot.sim.CTREPhysicsSim;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
 import frc.robot.utilities.motor.BeakTalonFX;
+import frc.robot.utilities.subsystem.BeakSubsystem;
 
 /** Add your docs here. */
-public class FalconDrivetrain extends BeakDifferentialDrivetrain {
+public class FalconDrivetrain extends BeakDifferentialDrivetrain implements BeakSubsystem {
     private Field2d field = new Field2d();
 
     private BeakTalonFX m_FL, m_BL, m_FR, m_BR;
@@ -183,5 +184,11 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain {
 
         field.setRobotPose(m_pose);
         SmartDashboard.putData(field);
+    }
+
+    @Override
+    public void logConfigData() {
+        Robot.getCurrentLogger().logConfig("Drivetrain Feed-Forward: " + m_FL.getF(0));
+        Robot.getCurrentLogger().logConfig("Drivetrain Distance Per Pulse: " + m_FL.getDistancePerPulse());
     }
 }

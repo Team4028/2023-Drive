@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.controller.PIDController;
+import frc.robot.utilities.log.BeakLogger;
 
 /** Add your docs here. */
 public class Constants {
