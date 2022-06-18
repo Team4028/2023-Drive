@@ -112,8 +112,8 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain implements Beak
                 Units.inchesToMeters(TRACK_WIDTH),
                 null);
         
-        m_FL.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
-        m_FR.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
+        m_FL.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
+        m_FR.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
     }
 
     public void configMotors() {

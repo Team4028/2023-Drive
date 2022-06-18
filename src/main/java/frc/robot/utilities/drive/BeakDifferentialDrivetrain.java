@@ -14,8 +14,9 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-import frc.robot.Robot;
+
 import frc.robot.utilities.motor.BeakMotorController;
 
 /** Generic Differential (Tank) Drivetrain subsystem. */
@@ -172,7 +173,7 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     public Pose2d updateOdometry(
             BeakMotorController frontLeftMotorController,
             BeakMotorController frontRightMotorController) {
-        if (Robot.isSimulation()) {
+        if (TimedRobot.isSimulation()) {
             sim.setInputs(
                     frontRightMotorController.getOutputVoltage(),
                     frontLeftMotorController.getOutputVoltage());

@@ -106,10 +106,10 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
                 Units.inchesToMeters(TRACK_WIDTH),
                 null);
         
-        m_FL.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
-        m_BL.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
-        m_FR.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
-        m_BR.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
+        m_FL.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
+        m_BL.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
+        m_FR.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
+        m_BR.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
 
     }
 

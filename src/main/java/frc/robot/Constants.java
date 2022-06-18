@@ -25,7 +25,7 @@ public class Constants {
         }
 
         public static final class DriveController {
-            public static final double kP = 0.1;
+            public static final double kP = 5.;
         }
     }
 

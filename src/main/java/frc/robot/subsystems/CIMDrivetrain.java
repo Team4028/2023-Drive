@@ -106,8 +106,8 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
             Units.inchesToMeters(TRACK_WIDTH),
             null);
         
-        m_FL.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
-        m_FR.setDistancePerPulse(m_wheelDiameter, m_gearRatio);
+        m_FL.setDistancePerPulse(m_wheelDiameter, /*m_gearRatio*/1);
+        m_FR.setDistancePerPulse(m_wheelDiameter, /*m_gearRatio*/1);
     }
 
     public void configMotors() {

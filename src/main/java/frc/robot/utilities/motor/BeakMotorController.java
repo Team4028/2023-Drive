@@ -582,7 +582,7 @@ public interface BeakMotorController extends MotorController {
      * @return Traveled motor distance, in whatever units were passed in setDistancePerPulse
      */
     default double getDistance() {
-        return getPositionNU() * (getDistancePerPulse() / getPositionEncoderCPR());
+        return getPositionNU() * (getDistancePerPulse() / getPositionEncoderCPR()) / 10.;
     }
 
     /**
@@ -590,7 +590,7 @@ public interface BeakMotorController extends MotorController {
      * @return Current motor velocity, in whatever units were passed in setDistancePerPulse
      */
     default double getRate() {
-        return getVelocityNU() * (getDistancePerPulse() / getVelocityEncoderCPR()) * 10;
+        return getVelocityNU() * (getDistancePerPulse() / getVelocityEncoderCPR());
     }
 
     /**
@@ -598,6 +598,6 @@ public interface BeakMotorController extends MotorController {
      * @param velocity Target motor velocity, in whatever units were passed in setDistancePerPulse
      */
     default void setRate(double velocity) {
-        setVelocityNU(velocity / 10. / (getDistancePerPulse() / getVelocityEncoderCPR()));
-    } // UNUSED FOR NOW
+        setVelocityNU(velocity / (getDistancePerPulse() / getVelocityEncoderCPR()));
+    }
 }
