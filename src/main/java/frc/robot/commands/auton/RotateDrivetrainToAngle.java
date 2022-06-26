@@ -7,7 +7,7 @@ package frc.robot.commands.auton;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
-import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.drive.BeakDrivetrain;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -17,10 +17,10 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     private Rotation2d initialRotation;
     private Rotation2d goal;
 
-    private BeakDifferentialDrivetrain drivetrain;
+    private BeakDrivetrain drivetrain;
 
     /** Creates a new RotateDrivetrainByAngle. */
-    public RotateDrivetrainToAngle(Rotation2d goal, BeakDifferentialDrivetrain drivetrain, boolean relative) {
+    public RotateDrivetrainToAngle(Rotation2d goal, BeakDrivetrain drivetrain, boolean relative) {
         super(
                 // The ProfiledPIDController used by the command
                 drivetrain.getThetaController(),

@@ -5,15 +5,14 @@
 package frc.robot.commands.auton;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import frc.robot.utilities.Util;
-import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.Trajectories;
 
 public class TestPath extends BeakAutonCommand {
     /** Creates a new TestPath. */
-    public TestPath(BeakDifferentialDrivetrain drivetrain) {
+    public TestPath(BeakDrivetrain drivetrain) {
         super.addCommands(
-                Util.getTrajectoryCommand(Trajectories.TestPath(drivetrain), drivetrain),
+                drivetrain.getTrajectoryCommand(Trajectories.TestPath(drivetrain)),
                 new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), drivetrain, false));
         super.setInitialPose(Trajectories.TestPath(drivetrain));
     }

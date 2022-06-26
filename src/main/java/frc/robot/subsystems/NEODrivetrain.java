@@ -33,6 +33,9 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
     private static final double kP = 0.01;
     private static final double kD = 0.02;
 
+    private static final double AUTON_kP = 0.2;
+    private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
+
     private static final int FL_ID = 1;
     private static final int BL_ID = 2;
     private static final int FR_ID = 3;
@@ -67,7 +70,8 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
     public NEODrivetrain() {
         super(
                 PHYSICS,
-                PIDConstants.Theta.gains);
+                PIDConstants.Theta.gains,
+                AUTON_DRIVE_GAINS);
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {
@@ -105,11 +109,11 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
                 Units.inchesToMeters(3.),
                 Units.inchesToMeters(TRACK_WIDTH),
                 null);
-        
-        m_FL.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
-        m_BL.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
-        m_FR.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
-        m_BR.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
+
+        m_FL.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
+        m_BL.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
+        m_FR.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
+        m_BR.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
 
     }
 

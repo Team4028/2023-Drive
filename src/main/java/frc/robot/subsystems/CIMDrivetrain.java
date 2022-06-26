@@ -33,6 +33,9 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
     private static final double kP = 0.01;
     private static final double kD = 0.02;
 
+    private static final double AUTON_kP = 5.;
+    private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
+
     private static final int FL_ID = 1;
     private static final int BL_ID = 2;
     private static final int FR_ID = 3;
@@ -52,7 +55,7 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
             0,
             0,
             0);
-    
+
     private static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
             0,
@@ -66,9 +69,9 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
 
     public CIMDrivetrain() {
         super(
-            PHYSICS,
-            PIDConstants.Theta.gains
-        );
+                PHYSICS,
+                PIDConstants.Theta.gains,
+                AUTON_DRIVE_GAINS);
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {
@@ -98,16 +101,16 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
         }
 
         sim = new DifferentialDrivetrainSim(
-            DCMotor.getCIM(2),
-            7.51,
-            0.9,
-            Units.lbsToKilograms(60.),
-            Units.inchesToMeters(3.),
-            Units.inchesToMeters(TRACK_WIDTH),
-            null);
-        
-        m_FL.setDistancePerPulse(m_wheelDiameter, /*m_gearRatio*/1);
-        m_FR.setDistancePerPulse(m_wheelDiameter, /*m_gearRatio*/1);
+                DCMotor.getCIM(2),
+                7.51,
+                0.9,
+                Units.lbsToKilograms(60.),
+                Units.inchesToMeters(3.),
+                Units.inchesToMeters(TRACK_WIDTH),
+                null);
+
+        m_FL.setDistancePerPulse(m_wheelDiameter, /* m_gearRatio */1);
+        m_FR.setDistancePerPulse(m_wheelDiameter, /* m_gearRatio */1);
     }
 
     public void configMotors() {
@@ -140,7 +143,6 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
         m_BR.setInverted(false);
     }
 
-    
     public void drive(double x, double y, double rot) {
         DifferentialDriveWheelSpeeds speeds = calcWheelSpeeds(x, rot);
 
@@ -159,7 +161,7 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
 
     public void resetOdometry(Pose2d pose) {
         super.resetOdometry(pose);
-        
+
         m_FL.resetEncoder();
         m_BL.resetEncoder();
         m_FR.resetEncoder();

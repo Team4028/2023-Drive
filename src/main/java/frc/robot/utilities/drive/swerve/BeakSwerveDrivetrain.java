@@ -47,8 +47,12 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
             SwerveModuleConfiguration backLeftConfig,
             SwerveModuleConfiguration backRightConfig,
             RobotPhysics physics,
-            Gyro gyro) {
-        super(physics);
+            Gyro gyro,
+            double[] thetaPIDGains,
+            double[] drivePIDGains) {
+        super(physics,
+                thetaPIDGains,
+                drivePIDGains);
 
         m_physics = physics;
 

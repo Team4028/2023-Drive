@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Robot;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
@@ -32,6 +33,9 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
 
     private static final double kP = 0.01;
     private static final double kD = 0.02;
+
+    private static final double AUTON_kP = 0.1;
+    private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
 
     private static final int FL_ID = 1;
     private static final int BL_ID = 2;
@@ -69,7 +73,8 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
     public SixNEODrivetrain() {
         super(
                 PHYSICS,
-                PIDConstants.Theta.gains);
+                PIDConstants.Theta.gains,
+                AUTON_DRIVE_GAINS);
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {
@@ -114,12 +119,12 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
                 Units.inchesToMeters(TRACK_WIDTH),
                 null);
 
-        m_FL.setDistancePerPulse(m_wheelDiameter,  1);//m_gearRatio);
-        m_BL.setDistancePerPulse(m_wheelDiameter,  1);//m_gearRatio);
-        m_BL2.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
-        m_FR.setDistancePerPulse(m_wheelDiameter,  1);//m_gearRatio);
-        m_BR.setDistancePerPulse(m_wheelDiameter,  1);//m_gearRatio);
-        m_BR2.setDistancePerPulse(m_wheelDiameter, 1);//m_gearRatio);
+        m_FL.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
+        m_BL.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
+        m_BL2.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
+        m_FR.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
+        m_BR.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
+        m_BR2.setDistancePerPulse(m_wheelDiameter, 1);// m_gearRatio);
     }
 
     public void configMotors() {
@@ -184,12 +189,12 @@ public class SixNEODrivetrain extends BeakDifferentialDrivetrain {
     public void resetOdometry(Pose2d pose) {
         super.resetOdometry(pose);
 
-        // m_FL.resetEncoder();
-        // m_BL.resetEncoder();
-        // m_BL2.resetEncoder();
-        // m_FR.resetEncoder();
-        // m_BR.resetEncoder();
-        // m_BR2.resetEncoder();
+        m_FL.resetEncoder();
+        m_BL.resetEncoder();
+        m_BL2.resetEncoder();
+        m_FR.resetEncoder();
+        m_BR.resetEncoder();
+        m_BR2.resetEncoder();
     }
 
     public static SixNEODrivetrain getInstance() {

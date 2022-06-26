@@ -4,10 +4,15 @@
 
 package frc.robot.utilities.drive;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utilities.subsystem.BeakGyroSubsystem;
 
 /** Base drivetrain class. */
@@ -26,6 +31,9 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
 
     protected SimpleMotorFeedforward m_feedForward;
 
+    protected ProfiledPIDController m_thetaController;
+    protected PIDController m_driveController;
+
     /**
      * Construct a new generic drivetrain.
      * 
@@ -33,7 +41,9 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
      *                information for your robot.
      */
     public BeakDrivetrain(
-            RobotPhysics physics) {
+            RobotPhysics physics,
+            double[] thetaPIDGains,
+            double[] drivePIDGains) {
         m_maxVelocity = physics.maxVelocity;
         m_maxAngularVelocity = physics.maxAngularVelocity;
         m_trackWidth = physics.trackWidth;
@@ -41,6 +51,20 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
         m_wheelDiameter = physics.wheelDiameter;
         m_gearRatio = physics.driveGearRatio;
         m_feedForward = physics.feedforward;
+
+        final TrapezoidProfile.Constraints thetaConstraints = new TrapezoidProfile.Constraints(
+                physics.maxAngularVelocity, physics.maxAngularVelocity);
+
+        m_thetaController = new ProfiledPIDController(
+                thetaPIDGains[0],
+                thetaPIDGains[1],
+                thetaPIDGains[2],
+                thetaConstraints);
+
+        m_driveController = new PIDController(
+                drivePIDGains[0],
+                drivePIDGains[1],
+                drivePIDGains[2]);
     }
 
     public void configMotors() {
@@ -56,9 +80,39 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
                 m_gearRatio,
                 m_feedForward);
     }
+    
+    /**
+     * Get the theta controller for auton usage.
+     * 
+     * @return Theta PID Controller.
+     */
+    public ProfiledPIDController getThetaController() {
+        return m_thetaController;
+    }
+
+    /**
+     * Get the drive controller for auton usage.
+     *
+     * @return Auton Drive PID Controller.
+     */
+    public PIDController getDriveController() {
+        return m_driveController;
+    }
 
     public SimpleMotorFeedforward getFeedforward() {
         return m_feedForward;
+    }
+
+    /**
+     * Gets a command to control the
+     * drivetrain to follow a path.
+     * 
+     * @param traj Trajectory to follow.
+     * @return A {@link SequentialCommandGroup} to run the trajectory, and stop the
+     *         drivetrain.
+     */
+    public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
+        return null;
     }
 
     /**

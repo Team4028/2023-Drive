@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.io.IOException;
-
 import com.revrobotics.REVPhysicsSim;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -31,7 +29,7 @@ public class Robot extends TimedRobot {
     private static BeakLogger m_disabledLogger;
     private static BeakLogger m_testLogger;
 
-    private String m_logFileFolder = "testLogs";
+    // private String m_logFileFolder = "testLogs";
     private Command m_autonCommand;
     private RobotContainer m_robotContainer;
 
@@ -48,18 +46,18 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         m_robotContainer = RobotContainer.getInstance();
 
-        try {
-            m_autonLogger = new BeakLogger(m_logFileFolder, "auton");
-            m_teleopLogger = new BeakLogger(m_logFileFolder, "teleop");
-            m_disabledLogger = new BeakLogger(m_logFileFolder, "disabled");
-            m_testLogger = new BeakLogger(m_logFileFolder, "test");
-        } catch (IOException error) {
-            System.err.println("Failed to open log file(s): " + error.getMessage());
-        }
+        // try {
+        //     m_autonLogger = new BeakLogger(m_logFileFolder, "auton");
+        //     m_teleopLogger = new BeakLogger(m_logFileFolder, "teleop");
+        //     m_disabledLogger = new BeakLogger(m_logFileFolder, "disabled");
+        //     m_testLogger = new BeakLogger(m_logFileFolder, "test");
+        // } catch (IOException error) {
+        //     System.err.println("Failed to open log file(s): " + error.getMessage());
+        // }
 
         m_currentLogger = m_disabledLogger;
 
-        m_robotContainer.logAllConfigs();
+        // m_robotContainer.logAllConfigs();
         LiveWindow.disableAllTelemetry();
     }
 

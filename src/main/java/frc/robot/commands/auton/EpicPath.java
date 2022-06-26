@@ -4,16 +4,15 @@
 
 package frc.robot.commands.auton;
 
-import frc.robot.utilities.Util;
-import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
+import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.Trajectories;
 
 public class EpicPath extends BeakAutonCommand {
     /** Creates a new TestPath. */
-    public EpicPath(BeakDifferentialDrivetrain drivetrain) {
+    public EpicPath(BeakDrivetrain drivetrain) {
         super.addCommands(
-                Util.getTrajectoryCommand(Trajectories.Ball1(drivetrain), drivetrain),
-                Util.getTrajectoryCommand(Trajectories.Ball2(drivetrain), drivetrain),
+                drivetrain.getTrajectoryCommand(Trajectories.Ball1(drivetrain)),
+                drivetrain.getTrajectoryCommand(Trajectories.Ball2(drivetrain)),
                 new RotateDrivetrainToTargetPosition(324, 162, drivetrain));
         super.setInitialPose(Trajectories.Ball1(drivetrain));
     }

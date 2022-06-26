@@ -4,13 +4,11 @@
 
 package frc.robot.utilities;
 
-import com.pathplanner.lib.PathPlannerTrajectory;
-
 import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.AutonConstants;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
 
 /** Useful utility functions for drive. */
@@ -26,8 +24,11 @@ public final class Util {
      * @param traj Trajectory to follow.
      * @param drivetrain
      * @return A {@link SequentialCommandGroup} to run the trajectory, and stop the drivetrain.
+     * 
+     * @deprecated Drivetrains now implement this independently.
      */
-    public static final SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj,
+    @Deprecated(forRemoval = true)
+    public static final SequentialCommandGroup getTrajectoryCommand(Trajectory traj,
             BeakDifferentialDrivetrain drivetrain) {
         return new RamseteCommand(
                 traj,
@@ -36,8 +37,8 @@ public final class Util {
                 drivetrain.getFeedforward(),
                 drivetrain.getKinematics(),
                 drivetrain::getWheelSpeeds,
-                AutonConstants.DRIVE_CONTROLLER,
-                AutonConstants.DRIVE_CONTROLLER,
+                drivetrain.getDriveController(),
+                drivetrain.getDriveController(),
                 drivetrain::driveVolts,
                 drivetrain).andThen(() -> drivetrain.drive(0, 0, 0));
     }

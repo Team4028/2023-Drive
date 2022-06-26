@@ -4,19 +4,19 @@
 
 package frc.robot.utilities.drive;
 
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
-
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utilities.motor.BeakMotorController;
 
 /** Generic Differential (Tank) Drivetrain subsystem. */
@@ -28,33 +28,26 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
 
     protected double encoderDistancePerPulse;
 
-    protected ProfiledPIDController m_thetaController;
-
     /**
      * Construct a new differential drivetrain.
      * 
      * @param physics       A {@link RobotPhysics} object containing the relevant
      *                      information for your robot.
      * @param thetaPIDGains The PID gains for the theta controller.
+     * @param drivePIDGains The PID gains for the auton drive controller.
      */
     public BeakDifferentialDrivetrain(
             RobotPhysics physics,
-            double[] thetaPIDGains) {
-        super(physics);
+            double[] thetaPIDGains,
+            double[] drivePIDGains) {
+        super(physics,
+                thetaPIDGains,
+                drivePIDGains);
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(m_trackWidth));
 
-        final TrapezoidProfile.Constraints thetaConstraints = new TrapezoidProfile.Constraints(
-                physics.maxAngularVelocity, physics.maxAngularVelocity);
-
-        m_thetaController = new ProfiledPIDController(
-                thetaPIDGains[0],
-                thetaPIDGains[1],
-                thetaPIDGains[2],
-                thetaConstraints);
-
-        final TrajectoryConfig autonTrajectoryConfig = new TrajectoryConfig(
-                physics.maxVelocity,
-                physics.maxVelocity); // TODO: UNUSED
+        // TrajectoryConfig autonTrajectoryConfig = new TrajectoryConfig(
+        //         physics.maxVelocity,
+        //         physics.maxVelocity); // TODO: UNUSED
     }
 
     /**
@@ -67,12 +60,25 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     }
 
     /**
-     * Get the theta controller for auton usage.
+     * Gets a command to control the
+     * drivetrain to follow a path.
      * 
-     * @return Theta PID Controller.
+     * @param traj Trajectory to follow.
+     * @return A {@link SequentialCommandGroup} to run the trajectory, and stop the
+     *         drivetrain.
      */
-    public ProfiledPIDController getThetaController() {
-        return m_thetaController;
+    public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
+        return new RamseteCommand(
+                traj,
+                this::getPoseMeters,
+                new RamseteController(),
+                m_feedForward,
+                m_kinematics,
+                this::getWheelSpeeds,
+                m_driveController,
+                m_driveController,
+                this::driveVolts,
+                this).andThen(() -> drive(0, 0, 0));
     }
 
     /**
@@ -106,8 +112,10 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      * @param rot             Angular rate of the robot.
      * @return {left velocity in NU, right velocity in NU}
      * 
-     * @deprecated Due to the addition of <code>setRate</code> on {@link BeakMotorController},
-     * this function is no longer needed. Please use <code>calcWheelSpeeds()</code> and <code>setRate()</code>.
+     * @deprecated Due to the addition of <code>setRate</code> on
+     *             {@link BeakMotorController},
+     *             this function is no longer needed. Please use
+     *             <code>calcWheelSpeeds()</code> and <code>setRate()</code>.
      */
     @Deprecated(forRemoval = true)
     public double[] calcDesiredMotorVelocities(
@@ -144,8 +152,8 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      */
     public DifferentialDriveWheelSpeeds getWheelSpeeds(BeakMotorController frontLeft, BeakMotorController frontRight) {
         return new DifferentialDriveWheelSpeeds(
-            frontLeft.getRate(),
-            frontRight.getRate());
+                frontLeft.getRate(),
+                frontRight.getRate());
     }
 
     /**
