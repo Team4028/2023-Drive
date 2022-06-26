@@ -10,7 +10,10 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
 
@@ -68,6 +71,19 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
                 new Translation2d(physics.wheelBase / 2, -physics.trackWidth / 2),
                 new Translation2d(-physics.wheelBase / 2, physics.trackWidth / 2),
                 new Translation2d(-physics.wheelBase / 2, -physics.trackWidth / 2));
+    }
+
+    public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
+        return new SwerveControllerCommand(
+                traj,
+                this::getPoseMeters,
+                m_kinematics,
+                m_driveController,
+                m_driveController,
+                m_thetaController,
+                this::setModuleStates,
+                this)
+                        .andThen(() -> drive(0, 0, 0));
     }
 
     public Pose2d updateOdometry() {
