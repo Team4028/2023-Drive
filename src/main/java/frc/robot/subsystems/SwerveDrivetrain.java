@@ -9,6 +9,7 @@ import frc.robot.utilities.drive.RobotPhysics;
 import frc.robot.utilities.drive.swerve.BeakSwerveDrivetrain;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
+import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
 import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration.ModuleType;
 
@@ -22,7 +23,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final double DRIVE_kP = 0.01;
     private static final double TURN_kP = 0.2;
 
-    private static final double AUTON_kP = 5.;
+    private static final double AUTON_kP = 9.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
 
     private static final int PIGEON2_ID = 1;
@@ -82,12 +83,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     private final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(PIGEON2_ID, CAN_BUS);
 
-    private static SwerveModuleConfiguration m_frontLeftConfig = new SwerveModuleConfiguration(
-            FL_DRIVE_ID,
-            FL_TURN_ID,
-            FL_ENCODER_ID,
-            FL_OFFSET,
-            DRIVE_kP,
+    private static final SwerveDrivetrainConfiguration DRIVE_CONFIG = new SwerveDrivetrainConfiguration(DRIVE_kP,
             TURN_kP,
             ALLOWED_CLOSED_LOOP_ERROR,
             TURN_CURRENT_LIMIT,
@@ -97,54 +93,34 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             FEED_FORWARD,
             CONFIGURATION,
             MODULE_TYPE);
+
+    private static SwerveModuleConfiguration m_frontLeftConfig = new SwerveModuleConfiguration(
+            FL_DRIVE_ID,
+            FL_TURN_ID,
+            FL_ENCODER_ID,
+            FL_OFFSET,
+            DRIVE_CONFIG);
 
     private static SwerveModuleConfiguration m_frontRightConfig = new SwerveModuleConfiguration(
             FR_DRIVE_ID,
             FR_TURN_ID,
             FR_ENCODER_ID,
             FR_OFFSET,
-            DRIVE_kP,
-            TURN_kP,
-            ALLOWED_CLOSED_LOOP_ERROR,
-            TURN_CURRENT_LIMIT,
-            DRIVE_SUPPLY_LIMIT,
-            DRIVE_STATOR_LIMIT,
-            CAN_BUS,
-            FEED_FORWARD,
-            CONFIGURATION,
-            MODULE_TYPE);
+            DRIVE_CONFIG);
 
     private static SwerveModuleConfiguration m_backLeftConfig = new SwerveModuleConfiguration(
             BL_DRIVE_ID,
             BL_TURN_ID,
             BL_ENCODER_ID,
             BL_OFFSET,
-            DRIVE_kP,
-            TURN_kP,
-            ALLOWED_CLOSED_LOOP_ERROR,
-            TURN_CURRENT_LIMIT,
-            DRIVE_SUPPLY_LIMIT,
-            DRIVE_STATOR_LIMIT,
-            CAN_BUS,
-            FEED_FORWARD,
-            CONFIGURATION,
-            MODULE_TYPE);
+            DRIVE_CONFIG);
 
     private static SwerveModuleConfiguration m_backRightConfig = new SwerveModuleConfiguration(
             BR_DRIVE_ID,
             BR_TURN_ID,
             BR_ENCODER_ID,
             BR_OFFSET,
-            DRIVE_kP,
-            TURN_kP,
-            ALLOWED_CLOSED_LOOP_ERROR,
-            TURN_CURRENT_LIMIT,
-            DRIVE_SUPPLY_LIMIT,
-            DRIVE_STATOR_LIMIT,
-            CAN_BUS,
-            FEED_FORWARD,
-            CONFIGURATION,
-            MODULE_TYPE);
+            DRIVE_CONFIG);
 
     public SwerveDrivetrain() {
         super(

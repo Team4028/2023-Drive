@@ -47,62 +47,44 @@ public class SwerveModuleConfiguration {
     /**
      * Generate a new Swerve Module configuration.
      * 
-     * @param driveMotorID      CAN ID of the drive motor.
-     * @param turnMotorID       CAN ID of the turning motor.
-     * @param turnEncoderID     CAN ID of the CANCoder.
-     * @param angleOffset       Offset of the CANCoder, in radians.
-     * @param drive_kP          Proportional gain to use for the drive motor.
-     * @param turn_kP           Proportional gain to use for the turning motor.
-     * @param allowedError      Allowed error of the turning motor, in NU.
-     * @param turnCurrentLimit  Current limit of the turning motor.
-     * @param driveSupplyLimit  Supply current limit of the drive motor.
-     * @param driveStatorLimit  Stator current limit of the drive motor (if on Falcons).
-     * @param CANBus            CAN Bus that the drivetrain lies on.
-     * @param feedforward       {@link SimpleMotorFeedforward} for the drivetrain.
-     * @param config            {@link SdsModuleConfiguration} of the modules on your
-     *                          drivetrain.
-     * @param ModuleType        The type of the module, i.e. MK2, MK3, etc.
+     * @param driveMotorID  CAN ID of the drive motor.
+     * @param turnMotorID   CAN ID of the turning motor.
+     * @param turnEncoderID CAN ID of the CANCoder.
+     * @param angleOffset   Offset of the CANCoder, in radians.
+     * @param driveConfig   {@link SwerveDrivetrainConfiguration} for the drivetrain
+     *                      this module lies on.
      */
     public SwerveModuleConfiguration(
             int driveMotorID,
             int turnMotorID,
             int turnEncoderID,
             double angleOffset,
-            double drive_kP,
-            double turn_kP,
-            double allowedError,
-            int turnCurrentLimit,
-            int driveSupplyLimit,
-            int driveStatorLimit,
-            String CANBus,
-            SimpleMotorFeedforward feedforward,
-            SdsModuleConfiguration config,
-            ModuleType moduleType) {
+            SwerveDrivetrainConfiguration driveConfig) {
         this.driveMotorID = driveMotorID;
         this.turnMotorID = turnMotorID;
         this.turnEncoderID = turnEncoderID;
         this.angleOffset = angleOffset;
-        this.drive_kP = drive_kP;
-        this.turn_kP = turn_kP;
+        this.drive_kP = driveConfig.drive_kP;
+        this.turn_kP = driveConfig.turn_kP;
 
-        this.allowedError = allowedError;
+        this.allowedError = driveConfig.allowedClosedLoopError;
 
-        this.turnCurrentLimit = turnCurrentLimit;
-        this.driveSupplyCurrentLimit = driveSupplyLimit;
-        this.driveStatorCurrentLimit = driveStatorLimit;
+        this.turnCurrentLimit = driveConfig.turnCurrentLimit;
+        this.driveSupplyCurrentLimit = driveConfig.driveSupplyLimit;
+        this.driveStatorCurrentLimit = driveConfig.driveStatorLimit;
 
-        this.CANBus = CANBus;
+        this.CANBus = driveConfig.CANBus;
 
-        this.feedforward = feedforward;
+        this.feedforward = driveConfig.feedforward;
 
-        this.wheelDiameter = config.wheelDiameter;
+        this.wheelDiameter = driveConfig.moduleConfiguration.wheelDiameter;
 
-        this.driveGearRatio = config.driveGearRatio;
-        this.driveInverted = config.driveInverted;
+        this.driveGearRatio = driveConfig.moduleConfiguration.driveGearRatio;
+        this.driveInverted = driveConfig.moduleConfiguration.driveInverted;
 
-        this.turnGearRatio = config.turnGearRatio;
-        this.turnInverted = config.turnInverted;
+        this.turnGearRatio = driveConfig.moduleConfiguration.turnGearRatio;
+        this.turnInverted = driveConfig.moduleConfiguration.turnInverted;
 
-        this.moduleType = moduleType;
+        this.moduleType = driveConfig.moduleType;
     }
 }
