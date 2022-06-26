@@ -5,7 +5,6 @@
 package frc.robot.utilities.drive.swerve;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration.ModuleType;
 
 /** Constants that are common among all swerve modules in a drivetrain. */
 public class SwerveDrivetrainConfiguration {
@@ -22,7 +21,6 @@ public class SwerveDrivetrainConfiguration {
     public final SimpleMotorFeedforward feedforward;
 
     public final SdsModuleConfiguration moduleConfiguration;
-    public final ModuleType moduleType;
 
     /**
      * Create a new Swerve Drivetrain Configuration.
@@ -40,8 +38,6 @@ public class SwerveDrivetrainConfiguration {
      *                               drivetrain.
      * @param moduleConfiguration    {@link SdsModuleConfiguration} of the modules
      *                               on the drivetrain.
-     * @param moduleType             The type of the modules on the drivetrain, i.e.
-     *                               MK2, MK3, etc.
      */
     public SwerveDrivetrainConfiguration(
             double drive_kP,
@@ -52,8 +48,7 @@ public class SwerveDrivetrainConfiguration {
             int driveStatorLimit,
             String CANBus,
             SimpleMotorFeedforward feedforward,
-            SdsModuleConfiguration moduleConfiguration,
-            ModuleType moduleType) {
+            SdsModuleConfiguration moduleConfiguration) {
         this.drive_kP = drive_kP;
         this.turn_kP = turn_kP;
         this.allowedClosedLoopError = allowedClosedLoopError;
@@ -63,6 +58,5 @@ public class SwerveDrivetrainConfiguration {
         this.CANBus = CANBus;
         this.feedforward = feedforward;
         this.moduleConfiguration = moduleConfiguration;
-        this.moduleType = moduleType;
     }
 }

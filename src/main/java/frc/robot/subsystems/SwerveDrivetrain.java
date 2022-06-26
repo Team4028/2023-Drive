@@ -11,7 +11,6 @@ import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
 import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
-import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration.ModuleType;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
@@ -35,7 +34,6 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             0);
 
     private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK4I_L2;
-    private static final ModuleType MODULE_TYPE = ModuleType.MK4i;
 
     private static final double MAX_VELOCITY = Units.feetToMeters(16.3);
 
@@ -91,8 +89,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             DRIVE_STATOR_LIMIT,
             CAN_BUS,
             FEED_FORWARD,
-            CONFIGURATION,
-            MODULE_TYPE);
+            CONFIGURATION);
 
     private static SwerveModuleConfiguration m_frontLeftConfig = new SwerveModuleConfiguration(
             FL_DRIVE_ID,

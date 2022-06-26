@@ -8,6 +8,13 @@ import java.util.Objects;
 
 /** Configuration of an SDS Swerve Module. */
 public class SdsModuleConfiguration {
+    public enum ModuleType {
+        MK2,
+        MK3,
+        MK4,
+        MK4i
+    }
+
     public final double wheelDiameter;
     public final double driveGearRatio;
     public final boolean driveInverted;
@@ -15,30 +22,39 @@ public class SdsModuleConfiguration {
     public final double turnGearRatio;
     public final boolean turnInverted;
 
+    public final ModuleType moduleType;
+
     /**
      * Creates a new module configuration.
      *
      * @param wheelDiameter  The diameter of the module's wheel in meters.
      * @param driveGearRatio The overall drive reduction of the module. Multiplying
-     *                       motor rotations by this value
-     *                       should result in wheel rotations.
+     *                       motor rotations by this value should result in wheel
+     *                       rotations.
      * @param driveInverted  Whether the drive motor should be inverted. If there is
-     *                       an odd number of gea reductions
-     *                       this is typically true.
+     *                       an odd number of gear reductions this is typically
+     *                       true.
      * @param turnGearRatio  The overall steer reduction of the module. Multiplying
-     *                       motor rotations by this value
-     *                       should result in rotations of the steering pulley.
+     *                       motor rotations by this value should result in
+     *                       rotations of the steering pulley.
      * @param turnInverted   Whether the steer motor should be inverted. If there is
-     *                       an odd number of gear reductions
-     *                       this is typically true.
+     *                       an odd number of gear reductions this is typically
+     *                       true.
+     * @param moduleType     The type of the module (i.e. MK2, MK3, MK4, MK4i)
      */
-    public SdsModuleConfiguration(double wheelDiameter, double driveReduction, boolean driveInverted,
-            double steerReduction, boolean steerInverted) {
+    public SdsModuleConfiguration(
+            double wheelDiameter,
+            double driveReduction,
+            boolean driveInverted,
+            double steerReduction,
+            boolean steerInverted,
+            ModuleType moduleType) {
         this.wheelDiameter = wheelDiameter;
         this.driveGearRatio = driveReduction;
         this.driveInverted = driveInverted;
         this.turnGearRatio = steerReduction;
         this.turnInverted = steerInverted;
+        this.moduleType = moduleType;
     }
 
     /**

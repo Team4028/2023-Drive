@@ -5,16 +5,10 @@
 package frc.robot.utilities.drive.swerve;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import frc.robot.utilities.drive.swerve.SdsModuleConfiguration.ModuleType;
 
 /** Class containing general configuration for a {@link BeakSwerveModule}. */
 public class SwerveModuleConfiguration {
-    public enum ModuleType {
-        MK2,
-        MK3,
-        MK4,
-        MK4i
-    }
-
     public int driveMotorID;
     public int turnMotorID;
     public int turnEncoderID;
@@ -85,6 +79,6 @@ public class SwerveModuleConfiguration {
         this.turnGearRatio = driveConfig.moduleConfiguration.turnGearRatio;
         this.turnInverted = driveConfig.moduleConfiguration.turnInverted;
 
-        this.moduleType = driveConfig.moduleType;
+        this.moduleType = driveConfig.moduleConfiguration.moduleType;
     }
 }

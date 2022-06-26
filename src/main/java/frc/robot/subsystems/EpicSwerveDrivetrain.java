@@ -9,7 +9,6 @@ import frc.robot.utilities.drive.RobotPhysics;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
-import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration.ModuleType;
 import frc.robot.utilities.drive.swerve.epic.BeakEpicSwerveDrivetrain;
 import frc.robot.utilities.drive.swerve.epic.EpicSwerveModuleConfiguration;
 
@@ -36,7 +35,6 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             0);
 
     private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK4I_L2;
-    private static final ModuleType MODULE_TYPE = ModuleType.MK4i;
 
     private static final double MAX_VELOCITY = Units.feetToMeters(16.3);
 
@@ -96,8 +94,7 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             DRIVE_STATOR_LIMIT,
             CAN_BUS,
             FEED_FORWARD,
-            CONFIGURATION,
-            MODULE_TYPE);
+            CONFIGURATION);
 
     private static EpicSwerveModuleConfiguration m_frontLeftConfig = new EpicSwerveModuleConfiguration(
             FL_DRIVE_ID,
