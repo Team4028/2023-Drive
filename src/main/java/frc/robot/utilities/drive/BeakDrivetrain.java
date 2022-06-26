@@ -37,8 +37,10 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
     /**
      * Construct a new generic drivetrain.
      * 
-     * @param physics A {@link RobotPhysics} object containing the relevant
-     *                information for your robot.
+     * @param physics       A {@link RobotPhysics} object containing the relevant
+     *                      information for your robot.
+     * @param thetaPIDGains The PID gains for the theta controller.
+     * @param drivePIDGains The PID gains for the auton drive controller.
      */
     public BeakDrivetrain(
             RobotPhysics physics,
@@ -80,7 +82,7 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
                 m_gearRatio,
                 m_feedForward);
     }
-    
+
     /**
      * Get the theta controller for auton usage.
      * 

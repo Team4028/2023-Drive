@@ -2,11 +2,12 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.utilities.drive.swerve;
+package frc.robot.utilities.drive.swerve.epic;
 
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -20,12 +21,7 @@ import frc.robot.utilities.drive.RobotPhysics;
 
 /** Generic Swerve Drivetrain subsystem. */
 public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
-    BeakSwerveModule m_FL;
-    BeakSwerveModule m_FR;
-    BeakSwerveModule m_BL;
-    BeakSwerveModule m_BR;
-
-    List<BeakSwerveModule> m_modules;
+    List<BeakEpicSwerveModule> m_modules;
     int m_numModules;
 
     protected SwerveDriveOdometry m_odom;
@@ -41,18 +37,14 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
      * @param gyro          The gyroscope used by this drivetrain.
      * @param thetaPIDGains The PID gains for the theta controller.
      * @param drivePIDGains The PID gains for the auton drive controller.
-     * @param kinematics    Kinematics for the drivetrain, containing the correct
-     *                      locations of each module.
-     * @param configs       Configurations for all swerve modules. TODO: put
-     *                      Translation2d of module in SwerveModuleConfiguration
+     * @param configs       Configurations for all swerve modules.
      */
     public BeakEpicSwerveDrivetrain(
             RobotPhysics physics,
             Gyro gyro,
             double[] thetaPIDGains,
             double[] drivePIDGains,
-            SwerveDriveKinematics kinematics,
-            SwerveModuleConfiguration... configs) {
+            EpicSwerveModuleConfiguration... configs) {
         super(physics,
                 thetaPIDGains,
                 drivePIDGains);
@@ -60,13 +52,16 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
         m_physics = physics;
 
         m_numModules = configs.length;
-        for (SwerveModuleConfiguration config : configs) {
-            m_modules.add(BeakSwerveModule.fromSwerveModuleConfig(config));
+        Translation2d[] moduleLocations = {};
+
+        for (int i = 0; i < m_numModules; i++) {
+            m_modules.add(BeakEpicSwerveModule.fromSwerveModuleConfig(configs[i]));
+            moduleLocations[i] = configs[i].moduleLocation;
         }
 
         m_gyro = gyro;
 
-        m_kinematics = kinematics;
+        m_kinematics = new SwerveDriveKinematics(moduleLocations);
     }
 
     public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
@@ -143,7 +138,7 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
      * Reset all drive and turning encoders to zero.
      */
     public void resetEncoders() {
-        for (BeakSwerveModule module : m_modules) {
+        for (BeakEpicSwerveModule module : m_modules) {
             module.resetEncoders();
         }
     }
@@ -152,7 +147,7 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
      * Re-zero all turning encoders to match the CANCoder.
      */
     public void resetTurningMotors() {
-        for (BeakSwerveModule module : m_modules) {
+        for (BeakEpicSwerveModule module : m_modules) {
             module.resetTurningMotor();
         }
     }
