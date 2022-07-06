@@ -40,7 +40,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     @Override
     public void setVelocityNU(double nu, double arbFeedforward, int slot) {
         setSlot(slot);
-        super.set(ControlMode.Velocity, nu, DemandType.ArbitraryFeedForward, arbFeedforward);
+        super.set(ControlMode.Velocity, nu, DemandType.ArbitraryFeedForward, arbFeedforward / 12.);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     @Override
     public void setPositionNU(double nu, double arbFeedforward, int slot) {
         setSlot(slot);
-        super.set(ControlMode.Position, nu, DemandType.ArbitraryFeedForward, slot);
+        super.set(ControlMode.Position, nu, DemandType.ArbitraryFeedForward, arbFeedforward / 12.);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
     @Override
     public void setMotionMagicNU(double nu, double arbFeedforward, int slot) {
         setSlot(slot);
-        super.set(ControlMode.MotionMagic, nu, DemandType.ArbitraryFeedForward, arbFeedforward);
+        super.set(ControlMode.MotionMagic, nu, DemandType.ArbitraryFeedForward, arbFeedforward / 12.);
     }
 
     @Override
@@ -232,7 +232,7 @@ public class BeakTalonSRX extends WPI_TalonSRX implements BeakMotorController {
 
     @Override
     public void set(double percentOutput, double arbFeedforward) {
-        super.set(ControlMode.PercentOutput, percentOutput, DemandType.ArbitraryFeedForward, arbFeedforward);
+        super.set(ControlMode.PercentOutput, percentOutput, DemandType.ArbitraryFeedForward, arbFeedforward / 12.);
     }
     
     @Override

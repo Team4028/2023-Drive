@@ -52,9 +52,9 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
     private static final double GEAR_RATIO = 7.5;
 
     private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
-            0,
-            0,
-            0);
+            1.1161,
+            .17294,
+            0.087223);
 
     private static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
@@ -146,8 +146,8 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
     public void drive(double x, double y, double rot) {
         DifferentialDriveWheelSpeeds speeds = calcWheelSpeeds(x, rot);
 
-        m_FL.setRate(speeds.leftMetersPerSecond);
-        m_FR.setRate(speeds.rightMetersPerSecond);
+        m_FL.setRate(speeds.leftMetersPerSecond, m_feedForward.calculate(speeds.leftMetersPerSecond), 0);
+        m_FR.setRate(speeds.rightMetersPerSecond, m_feedForward.calculate(speeds.rightMetersPerSecond), 0);
     }
 
     public void driveVolts(double left, double right) {

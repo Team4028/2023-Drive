@@ -52,9 +52,9 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
     private static final double GEAR_RATIO = 7.5;
 
     private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
-            0,
-            0,
-            0);
+            1.1161,
+            .17294,
+            0.087223);
 
     private static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
@@ -125,12 +125,12 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
 
     public void configPID() {
         // TODO: get these from SysId
-        double maxVel = 7380.63;
+        // double maxVel = 7380.63;
 
-        m_FL.setPIDF(kP, 0., kD, m_FL.calculateFeedForward(1, maxVel), 0);
-        m_BL.setPIDF(kP, 0., kD, m_BL.calculateFeedForward(1, maxVel), 0);
-        m_FR.setPIDF(kP, 0., kD, m_FR.calculateFeedForward(1, maxVel), 0);
-        m_BR.setPIDF(kP, 0., kD, m_BR.calculateFeedForward(1, maxVel), 0);
+        m_FL.setPIDF(kP, 0., kD, 0., 0);
+        m_BL.setPIDF(kP, 0., kD, 0., 0);
+        m_FR.setPIDF(kP, 0., kD, 0., 0);
+        m_BR.setPIDF(kP, 0., kD, 0., 0);
     }
 
     public void configNeutralMode() {
@@ -150,10 +150,10 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
     public void drive(double x, double y, double rot) {
         DifferentialDriveWheelSpeeds speeds = calcWheelSpeeds(x, rot);
 
-        m_FL.setRate(speeds.leftMetersPerSecond);
-        m_BL.setRate(speeds.leftMetersPerSecond);
-        m_FR.setRate(speeds.rightMetersPerSecond);
-        m_BR.setRate(speeds.rightMetersPerSecond);
+        m_FL.setRate(speeds.leftMetersPerSecond, m_feedForward.calculate(speeds.leftMetersPerSecond));
+        m_BL.setRate(speeds.leftMetersPerSecond, m_feedForward.calculate(speeds.leftMetersPerSecond));
+        m_FR.setRate(speeds.rightMetersPerSecond, m_feedForward.calculate(speeds.rightMetersPerSecond));
+        m_BR.setRate(speeds.rightMetersPerSecond, m_feedForward.calculate(speeds.rightMetersPerSecond));
     }
 
     public void driveVolts(double left, double right) {

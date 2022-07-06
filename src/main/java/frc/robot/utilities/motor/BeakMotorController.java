@@ -41,7 +41,7 @@ public interface BeakMotorController extends MotorController {
      * Run the motor in velocity mode, in RPM.
      * 
      * @param rpm            RPM to run.
-     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller, in volts.
      */
     public void setVelocityRPM(double rpm, double arbFeedforward, int slot);
 
@@ -60,7 +60,7 @@ public interface BeakMotorController extends MotorController {
      * NU/100ms for Talons, RPM for SparkMAX.
      * 
      * @param nu             NU to run.
-     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller, in volts.
      * @param slot           PID slot to run.
      */
     public void setVelocityNU(double nu, double arbFeedforward, int slot);
@@ -92,7 +92,7 @@ public interface BeakMotorController extends MotorController {
      * Run the motor in position mode, in motor rotations.
      * 
      * @param rotations      Rotations to run.
-     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller, in volts.
      * @param slot           PID slot to run.
      */
     public void setPositionMotorRotations(double rotations, double arbFeedforward, int slot);
@@ -123,7 +123,7 @@ public interface BeakMotorController extends MotorController {
      * SparkMAX.
      * 
      * @param nu             NU to run.
-     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller, in volts.
      * @param slot           PID slot to run.
      */
     public void setPositionNU(double nu, double arbFeedforward, int slot);
@@ -183,7 +183,7 @@ public interface BeakMotorController extends MotorController {
      * Not currently supported by SparkMAX.
      * 
      * @param rotations      Rotations to run.
-     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller, in volts.
      * @param slot           PID slot to run.
      */
     public void setMotionMagicMotorRotations(double rotations, double arbFeedforward, int slot);
@@ -218,7 +218,7 @@ public interface BeakMotorController extends MotorController {
      * SparkMAX.
      * 
      * @param nu             NU to run.
-     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller, in volts.
      * @param slot           PID slot to run.
      */
     public void setMotionMagicNU(double nu, double arbFeedforward, int slot);
@@ -528,7 +528,7 @@ public interface BeakMotorController extends MotorController {
      * feed forward.
      * 
      * @param percentOutput  Percent output to pass to the motor controller.
-     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller.
+     * @param arbFeedforward Arbitrary feed-forward to pass to the motor controller, in volts.
      */
     public void set(double percentOutput, double arbFeedforward);
 
@@ -598,6 +598,25 @@ public interface BeakMotorController extends MotorController {
      * @param velocity Target motor velocity, in whatever units were passed in setDistancePerPulse
      */
     default void setRate(double velocity) {
-        setVelocityNU(velocity / (getDistancePerPulse() / getVelocityEncoderCPR()));
+        setRate(velocity, 0, 0);
+    }
+
+    /**
+     * Run the motor at the specified speed, scaled from the distance per pulse.
+     * @param velocity Target motor velocity, in whatever units were passed in setDistancePerPulse
+     * @param arbFeedforward Arbitrary feed forward to pass to the motor controller, in volts.
+     */
+    default void setRate(double velocity, double arbFeedforward) {
+        setRate(velocity, arbFeedforward, 0);
+    }
+
+    /**
+     * Run the motor at the specified speed, scaled from the distance per pulse.
+     * @param velocity Target motor velocity, in whatever units were passed in setDistancePerPulse
+     * @param arbFeedforward Arbitrary feed forward to pass to the motor controller, in volts.
+     * @param slot The PID slot to use.
+     */
+    default void setRate(double velocity, double arbFeedforward, int slot) {
+        setVelocityNU(velocity / (getDistancePerPulse() / getVelocityEncoderCPR()), arbFeedforward, slot);
     }
 }
