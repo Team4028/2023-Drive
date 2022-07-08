@@ -10,9 +10,9 @@ import frc.robot.utilities.drive.swerve.SdsModuleConfiguration.ModuleType;
 public final class SdsModuleConfigurations {
     public static final SdsModuleConfiguration MK2_L2 = new SdsModuleConfiguration(
             0.1016,
-            (16.0 / 14.0) * (24.0 / 20.0) * (15.0 / 60.0),
+            (16.0 / 40.0) * (24.0 / 20.0) * (15.0 / 60.0),
             true,
-            (15.0 / 32.0) * (10.0 / 60.0), // TODO
+            (1.0 / 18.0), // TODO
             false,
             ModuleType.MK2);
     public static final SdsModuleConfiguration MK3_STANDARD = new SdsModuleConfiguration(
