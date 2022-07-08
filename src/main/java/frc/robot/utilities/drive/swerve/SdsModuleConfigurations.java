@@ -12,7 +12,7 @@ public final class SdsModuleConfigurations {
             0.1016,
             (16.0 / 14.0) * (24.0 / 20.0) * (15.0 / 60.0),
             true,
-            0, // TODO
+            (15.0 / 32.0) * (10.0 / 60.0), // TODO
             false,
             ModuleType.MK2);
     public static final SdsModuleConfiguration MK3_STANDARD = new SdsModuleConfiguration(

@@ -4,6 +4,7 @@
 
 package frc.robot.utilities.encoder;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotController;
 
@@ -20,7 +21,8 @@ public class BeakAnalogInput extends AnalogInput implements BeakAbsoluteEncoder 
 
     @Override
     public void setAbsoluteOffset(double degrees) {
-        offset = Math.toRadians(degrees);
+        System.out.println("Offset: " + degrees);
+        offset = Units.degreesToRadians(degrees);
     }
 
     @Override
@@ -34,6 +36,7 @@ public class BeakAnalogInput extends AnalogInput implements BeakAbsoluteEncoder 
 
     @Override
     public double getPosition() {
+        // System.out.println("abs Position: " + getAbsolutePosition());
         return getAbsolutePosition() + offset;
     }
 

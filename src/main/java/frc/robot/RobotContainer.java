@@ -18,6 +18,7 @@ import frc.robot.commands.auton.RotateDrivetrainToTargetPosition;
 import frc.robot.commands.auton.TestPath;
 import frc.robot.subsystems.CIMDrivetrain;
 import frc.robot.subsystems.FalconDrivetrain;
+import frc.robot.subsystems.Mk2SwerveDrivetrain;
 import frc.robot.subsystems.NEODrivetrain;
 import frc.robot.subsystems.SixNEODrivetrain;
 import frc.robot.utilities.BeakXBoxController;
@@ -29,8 +30,9 @@ public class RobotContainer {
 
     // private NEODrivetrain m_drive = NEODrivetrain.getInstance();
     // private SixNEODrivetrain m_drive = SixNEODrivetrain.getInstance();
-    private CIMDrivetrain m_drive = CIMDrivetrain.getInstance();
+    // private CIMDrivetrain m_drive = CIMDrivetrain.getInstance();
     // private FalconDrivetrain m_drive = FalconDrivetrain.getInstance();
+    private Mk2SwerveDrivetrain m_drive = Mk2SwerveDrivetrain.getInstance();
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
 
     private static RobotContainer _instance = new RobotContainer();
@@ -48,11 +50,12 @@ public class RobotContainer {
         m_drive.setDefaultCommand(
                 new RunCommand(() -> m_drive.drive(
                         speedScaledDriverLeftY(),
-                        0.,
-                        speedScaledDriverRightX()),
+                        speedScaledDriverLeftX(),
+                        speedScaledDriverRightX(),
+                        false),
                         m_drive));
 
-        m_driverController.start.whenPressed(m_drive::resetGyro);
+        m_driverController.start.whenPressed(m_drive::zero);
         m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, true));
         m_driverController.b.whenPressed(new RotateDrivetrainToTargetPosition(324, 162, m_drive).withTimeout(2.0));
     }
@@ -65,6 +68,12 @@ public class RobotContainer {
 
     public double speedScaledDriverRightX() {
         return -Util.speedScale(m_driverController.getRightXAxis(),
+                DriveConstants.SPEED_SCALE,
+                m_driverController.getRightTrigger());
+    }
+
+    public double speedScaledDriverLeftX() {
+        return Util.speedScale(m_driverController.getLeftXAxis(),
                 DriveConstants.SPEED_SCALE,
                 m_driverController.getRightTrigger());
     }

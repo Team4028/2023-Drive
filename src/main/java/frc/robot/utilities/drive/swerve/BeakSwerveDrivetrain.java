@@ -19,10 +19,10 @@ import frc.robot.utilities.drive.RobotPhysics;
 
 /** Generic Swerve Drivetrain subsystem. */
 public class BeakSwerveDrivetrain extends BeakDrivetrain {
-    BeakSwerveModule m_FL;
-    BeakSwerveModule m_FR;
-    BeakSwerveModule m_BL;
-    BeakSwerveModule m_BR;
+    protected BeakSwerveModule m_FL;
+    protected BeakSwerveModule m_FR;
+    protected BeakSwerveModule m_BL;
+    protected BeakSwerveModule m_BR;
 
     protected SwerveDriveOdometry m_odom;
     protected SwerveDriveKinematics m_kinematics;
@@ -71,6 +71,9 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
                 new Translation2d(physics.wheelBase / 2, -physics.trackWidth / 2),
                 new Translation2d(-physics.wheelBase / 2, physics.trackWidth / 2),
                 new Translation2d(-physics.wheelBase / 2, -physics.trackWidth / 2));
+        
+        m_odom = new SwerveDriveOdometry(m_kinematics,
+        getGyroRotation2d());
     }
 
     public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {

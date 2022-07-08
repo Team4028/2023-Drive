@@ -17,11 +17,14 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
-    private static final double DRIVE_kP = 0.01;
-    private static final double TURN_kP = 0.2;
+    private static Mk2SwerveDrivetrain m_instance;
+
+    private static final double DRIVE_kP = 0.0001;
+    private static final double TURN_kP = 0.25;
 
     private static final double AUTON_kP = 9.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
@@ -53,27 +56,27 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     // TODO: get offsets
     // TODO: organize this
-    private static final int FL_DRIVE_ID = 2;
-    private static final int FL_TURN_ID = 1;
+    private static final int FL_DRIVE_ID = 4;
+    private static final int FL_TURN_ID = 3;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
-    private static final double FL_OFFSET = -Math.toRadians(0.);
+    private static final double FL_OFFSET = -Units.degreesToRadians(19.4);//244.9 + 180.); //324.4 + 180.0);
 
-    private static final int FR_DRIVE_ID = 4;
-    private static final int FR_TURN_ID = 3;
+    private static final int FR_DRIVE_ID = 2;
+    private static final int FR_TURN_ID = 1;
     private static final int FR_ENCODER_ID = 2; // SHOULD BE 10
-    private static final double FR_OFFSET = -Math.toRadians(0.);
+    private static final double FR_OFFSET = Units.degreesToRadians(272.5);//317.9 + 180.); //219.6 + 180.0);
 
-    private static final int BL_DRIVE_ID = 6;
-    private static final int BL_TURN_ID = 5;
+    private static final int BL_DRIVE_ID = 5;
+    private static final int BL_TURN_ID = 6;
     private static final int BL_ENCODER_ID = 0; // SHOULD BE 11
-    private static final double BL_OFFSET = -Math.toRadians(0.);
+    private static final double BL_OFFSET = -Units.degreesToRadians(96.7);//87.7 + 180.); //135.4 + 180.0);
 
-    private static final int BR_DRIVE_ID = 8;
-    private static final int BR_TURN_ID = 7;
+    private static final int BR_DRIVE_ID = 7;
+    private static final int BR_TURN_ID = 8;
     private static final int BR_ENCODER_ID = 3; // SHOULD BE 12
-    private static final double BR_OFFSET = -Math.toRadians(0.);
+    private static final double BR_OFFSET = Units.degreesToRadians(140. - 98.);//345.65 + 180.);
 
-    private static final double ALLOWED_CLOSED_LOOP_ERROR = 40.0;
+    private static final double ALLOWED_CLOSED_LOOP_ERROR = 0.005;
 
     private static final int TURN_CURRENT_LIMIT = 20;
     private static final int DRIVE_SUPPLY_LIMIT = 60;
@@ -129,5 +132,25 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
                 m_gyro,
                 PIDConstants.Theta.gains,
                 AUTON_DRIVE_GAINS);
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_FL.getTurningEncoderRadians()));
+        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_FR.getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_BR.getTurningEncoderRadians()));
+
+        SmartDashboard.putNumber("FL getangle", m_FL.getState().angle.getDegrees());
+        SmartDashboard.putNumber("FR getangle", m_FR.getState().angle.getDegrees());
+        SmartDashboard.putNumber("BL getangle", m_BL.getState().angle.getDegrees());
+        SmartDashboard.putNumber("BR getangle", m_BR.getState().angle.getDegrees());
+    }
+
+    public static Mk2SwerveDrivetrain getInstance() {
+        if (m_instance == null) {
+            m_instance = new Mk2SwerveDrivetrain();
+        }
+        return m_instance;
     }
 }
