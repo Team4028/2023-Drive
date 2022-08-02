@@ -81,7 +81,7 @@ public class BeakSwerveModule {
         m_turningMotor.setAllowedClosedLoopError(config.allowedError, 0);
 
         m_turningMotor.setP(config.turn_kP, 0);
-        m_turningMotor.setD(2.5, 0);
+        m_turningMotor.setD(10., 0);
     }
 
     public void configTurningEncoder(SwerveModuleConfiguration config) {
@@ -112,7 +112,6 @@ public class BeakSwerveModule {
      */
     public void setDesiredState(SwerveModuleState desiredState) {
         // Optimize the state to avoid spinning more than 90 degrees.
-        System.out.println("getAngle(): " + getState().angle);
         SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, getState().angle);
 
         // // Calculate Arb Feed Forward for drive motor
@@ -174,7 +173,7 @@ public class BeakSwerveModule {
      * @param newAngle Angle to turn the wheel to, in degrees.
      */
     public void setAngle(double newAngle) {
-        System.out.println("target: " + newAngle);
+        // System.out.println("target: " + newAngle);
         // Get current wheel angle in degrees
         double currentAngle = Units.radiansToDegrees(getTurningEncoderRadians());
 
@@ -194,7 +193,7 @@ public class BeakSwerveModule {
             newAngleDemand += 360.0;
         }
 
-        System.out.println("pos: " + newAngleDemand / 360.0 / turnCPR);
+        // System.out.println("pos: " + newAngleDemand / 360.0 / turnCPR);
         m_turningMotor.setPositionNU(newAngleDemand / 360.0 / turnCPR);
     }
 

@@ -52,7 +52,7 @@ public class RobotContainer {
                         speedScaledDriverLeftY(),
                         speedScaledDriverLeftX(),
                         speedScaledDriverRightX(),
-                        false),
+                        true),
                         m_drive));
 
         m_driverController.start.whenPressed(m_drive::zero);

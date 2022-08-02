@@ -24,7 +24,7 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static Mk2SwerveDrivetrain m_instance;
 
     private static final double DRIVE_kP = 0.0001;
-    private static final double TURN_kP = 0.25;
+    private static final double TURN_kP = 0.6;
 
     private static final double AUTON_kP = 9.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
@@ -76,7 +76,7 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final int BR_ENCODER_ID = 3; // SHOULD BE 12
     private static final double BR_OFFSET = Units.degreesToRadians(140. - 98.);//345.65 + 180.);
 
-    private static final double ALLOWED_CLOSED_LOOP_ERROR = 0.005;
+    private static final double ALLOWED_CLOSED_LOOP_ERROR = 0.0001;
 
     private static final int TURN_CURRENT_LIMIT = 20;
     private static final int DRIVE_SUPPLY_LIMIT = 60;
@@ -141,10 +141,10 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
         SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getTurningEncoderRadians()));
         SmartDashboard.putNumber("BR angle", Math.toDegrees(m_BR.getTurningEncoderRadians()));
 
-        SmartDashboard.putNumber("FL getangle", m_FL.getState().angle.getDegrees());
-        SmartDashboard.putNumber("FR getangle", m_FR.getState().angle.getDegrees());
-        SmartDashboard.putNumber("BL getangle", m_BL.getState().angle.getDegrees());
-        SmartDashboard.putNumber("BR getangle", m_BR.getState().angle.getDegrees());
+        // SmartDashboard.putNumber("FL getangle", m_FL.getState().angle.getDegrees());
+        // SmartDashboard.putNumber("FR getangle", m_FR.getState().angle.getDegrees());
+        // SmartDashboard.putNumber("BL getangle", m_BL.getState().angle.getDegrees());
+        // SmartDashboard.putNumber("BR getangle", m_BR.getState().angle.getDegrees());
     }
 
     public static Mk2SwerveDrivetrain getInstance() {
