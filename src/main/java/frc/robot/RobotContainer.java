@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,6 +36,10 @@ public class RobotContainer {
     private Mk2SwerveDrivetrain m_drive = Mk2SwerveDrivetrain.getInstance();
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
 
+    private SlewRateLimiter m_xLimiter = new SlewRateLimiter(4.0);
+    private SlewRateLimiter m_yLimiter = new SlewRateLimiter(4.0);
+    private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(4.0);
+    
     private static RobotContainer _instance = new RobotContainer();
 
     public RobotContainer() {
@@ -61,21 +66,21 @@ public class RobotContainer {
     }
 
     public double speedScaledDriverLeftY() {
-        return Util.speedScale(m_driverController.getLeftYAxis(),
+        return m_yLimiter.calculate(Util.speedScale(m_driverController.getLeftYAxis(),
                 DriveConstants.SPEED_SCALE,
-                m_driverController.getRightTrigger());
+                m_driverController.getRightTrigger()));
     }
 
     public double speedScaledDriverRightX() {
-        return -Util.speedScale(m_driverController.getRightXAxis(),
+        return -m_rotLimiter.calculate(Util.speedScale(m_driverController.getRightXAxis(),
                 DriveConstants.SPEED_SCALE,
-                m_driverController.getRightTrigger());
+                m_driverController.getRightTrigger()));
     }
 
     public double speedScaledDriverLeftX() {
-        return Util.speedScale(m_driverController.getLeftXAxis(),
+        return -m_xLimiter.calculate(Util.speedScale(m_driverController.getLeftXAxis(),
                 DriveConstants.SPEED_SCALE,
-                m_driverController.getRightTrigger());
+                m_driverController.getRightTrigger()));
     }
 
     private void initAutonChooser() {

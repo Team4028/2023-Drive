@@ -100,7 +100,7 @@ public class BeakSwerveModule {
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-                m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10,
+                m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse, // TODO
                 new Rotation2d(getTurningEncoderRadians()));
     }
 

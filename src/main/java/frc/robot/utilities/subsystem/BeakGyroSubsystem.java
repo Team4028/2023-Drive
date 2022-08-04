@@ -24,7 +24,7 @@ public class BeakGyroSubsystem extends SubsystemBase {
         if (TimedRobot.isSimulation()) {
             return Rotation2d.fromDegrees(m_gyroSim.getAngle());
         } else {
-            return m_gyro.getRotation2d();
+            return new Rotation2d(0).minus(m_gyro.getRotation2d()); // TODO: add to config
         }
     }
 

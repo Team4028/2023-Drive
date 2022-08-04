@@ -17,14 +17,16 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static Mk2SwerveDrivetrain m_instance;
+    private Field2d m_field = new Field2d();
 
     private static final double DRIVE_kP = 0.0001;
-    private static final double TURN_kP = 0.6;
+    private static final double TURN_kP = 0.45;
 
     private static final double AUTON_kP = 9.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
@@ -47,7 +49,7 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     private static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
-            0,
+            0., // TEMP
             TRACK_WIDTH,
             WHEEL_BASE,
             Units.metersToInches(CONFIGURATION.wheelDiameter),
@@ -136,6 +138,8 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     @Override
     public void periodic() {
+        updateOdometry();
+
         SmartDashboard.putNumber("FL angle", Math.toDegrees(m_FL.getTurningEncoderRadians()));
         SmartDashboard.putNumber("FR angle", Math.toDegrees(m_FR.getTurningEncoderRadians()));
         SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getTurningEncoderRadians()));
@@ -145,6 +149,11 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
         // SmartDashboard.putNumber("FR getangle", m_FR.getState().angle.getDegrees());
         // SmartDashboard.putNumber("BL getangle", m_BL.getState().angle.getDegrees());
         // SmartDashboard.putNumber("BR getangle", m_BR.getState().angle.getDegrees());
+
+        m_field.setRobotPose(getPoseMeters());
+        SmartDashboard.putData(m_field);
+
+        SmartDashboard.putNumber("Heading", getRotation2d().getDegrees());
     }
 
     public static Mk2SwerveDrivetrain getInstance() {

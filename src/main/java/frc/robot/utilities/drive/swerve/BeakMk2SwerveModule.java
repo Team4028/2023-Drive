@@ -6,6 +6,7 @@ package frc.robot.utilities.drive.swerve;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utilities.encoder.BeakAnalogInput;
 import frc.robot.utilities.motor.BeakSparkMAX;
@@ -27,7 +28,7 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         m_turningMotor = new BeakSparkMAX(config.turnMotorID);
         m_turningEncoder = new BeakAnalogInput(config.turnEncoderID);
 
-        m_turningPIDController = new PIDController(config.turn_kP, 0., 0.1);
+        m_turningPIDController = new PIDController(config.turn_kP, 0., 0.001);
         bruh = config.driveMotorID;
 
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
@@ -70,21 +71,19 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         // double arbFeedforward =
         // m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
 
-        // // TODO: why divide by 10?
-        // // So actually it's because of the 100ms thing with Talons I think...
         // m_driveMotor.setVelocityNU(
         // optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
         // arbFeedforward,
         // 0);
-        m_driveMotor.set(optimizedState.speedMetersPerSecond / 12.0);
+        m_driveMotor.set(optimizedState.speedMetersPerSecond / Units.feetToMeters(12.0));
 
         double turnOutput = m_turningPIDController.calculate(getTurningEncoderRadians(), desiredState.angle.getRadians());
-        SmartDashboard.putNumber("bruh " +  bruh, turnOutput);
+        SmartDashboard.putNumber("bruh " +  bruh, optimizedState.speedMetersPerSecond / Units.feetToMeters(12.0));
 
         // Calculate the turning motor output from the turning PID controller.
         m_turningMotor.set(turnOutput);
 
         // Set the turning motor to the correct position.
-        setAngle(optimizedState.angle.getDegrees());
+        // setAngle(optimizedState.angle.getDegrees());
     }
 }
