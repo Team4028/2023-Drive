@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
         m_currentLogger = m_disabledLogger;
 
         // m_robotContainer.logAllConfigs();
-        LiveWindow.disableAllTelemetry();
+        // LiveWindow.disableAllTelemetry();
     }
 
     @Override

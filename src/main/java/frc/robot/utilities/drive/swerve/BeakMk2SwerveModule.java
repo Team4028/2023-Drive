@@ -14,7 +14,6 @@ import frc.robot.utilities.motor.BeakSparkMAX;
 /** SDS Mk2 Swerve Module. */
 public class BeakMk2SwerveModule extends BeakSwerveModule {
     PIDController m_turningPIDController;
-    int bruh;
 
     /**
      * Construct a new Mk2 Swerve Module.
@@ -29,7 +28,6 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         m_turningEncoder = new BeakAnalogInput(config.turnEncoderID);
 
         m_turningPIDController = new PIDController(config.turn_kP, 0., 0.001);
-        bruh = config.driveMotorID;
 
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -78,7 +76,6 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         m_driveMotor.set(optimizedState.speedMetersPerSecond / Units.feetToMeters(12.0));
 
         double turnOutput = m_turningPIDController.calculate(getTurningEncoderRadians(), desiredState.angle.getRadians());
-        SmartDashboard.putNumber("bruh " +  bruh, optimizedState.speedMetersPerSecond / Units.feetToMeters(12.0));
 
         // Calculate the turning motor output from the turning PID controller.
         m_turningMotor.set(turnOutput);

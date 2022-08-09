@@ -12,8 +12,8 @@ public class Constants {
 
     public static final class PIDConstants {
         public static final class Theta {
-            public static final double kP = 4.5;
-            public static final double kD = 0.15;
+            public static final double kP = 0.4;
+            public static final double kD = 0.05;
             public static final double[] gains = { kP, 0, kD };
         }
     }

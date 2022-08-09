@@ -34,7 +34,7 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
                     drivetrain.drive(
                             0.,
                             0.,
-                            output + setpoint.velocity);
+                            (output + setpoint.velocity) / drivetrain.getPhysics().maxAngularVelocity);
                 });
         this.drivetrain = drivetrain;
         this.goal = goal;
@@ -43,7 +43,7 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
         // Configure additional PID options by calling `getController` here.
         addRequirements(drivetrain);
         getController().enableContinuousInput(-Math.PI, Math.PI);
-        getController().setTolerance(Units.degreesToRadians(0.5));
+        getController().setTolerance(Units.degreesToRadians(2.0));
     }
 
     public double getGoal() {

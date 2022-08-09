@@ -49,10 +49,6 @@ public class RobotPhysics {
     }
 
     protected double calcTheoreticalAngularVelocity() {
-        double bruh = maxVelocity / Math.hypot(Units.inchesToMeters(trackWidth) / 2.0, Units.inchesToMeters(wheelBase) / 2.0);
-        System.out.println("angular velocity: " + bruh);
-        System.out.println("ANGULAR VELOCITY 2: " + Units.feetToMeters(16.3) /
-        Math.hypot(Units.inchesToMeters(21.75) / 2.0, Units.inchesToMeters(23.75) / 2.0));
-        return bruh;
+        return maxVelocity / Math.hypot(Units.inchesToMeters(trackWidth) / 2.0, Units.inchesToMeters(wheelBase) / 2.0);
     }
 }

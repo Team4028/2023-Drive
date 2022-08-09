@@ -39,7 +39,7 @@ public class BeakSwerveModule {
     protected void setup(SwerveModuleConfiguration config) {
         turnCPR = config.turnGearRatio * m_turningMotor.getPositionEncoderCPR();
         driveEncoderDistancePerPulse = (config.wheelDiameter * Math.PI)
-                / (config.driveGearRatio * m_driveMotor.getVelocityEncoderCPR());
+                * config.driveGearRatio / m_driveMotor.getVelocityEncoderCPR();
 
         m_feedforward = config.feedforward;
 
@@ -100,7 +100,7 @@ public class BeakSwerveModule {
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-                m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse, // TODO
+                m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
                 new Rotation2d(getTurningEncoderRadians()));
     }
 
@@ -118,8 +118,6 @@ public class BeakSwerveModule {
         // // TODO: calc from SysId
         // double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
 
-        // // TODO: why divide by 10?
-        // // So actually it's because of the 100ms thing with Talons I think...
         // m_driveMotor.setVelocityNU(
         //         optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
         //         arbFeedforward,
@@ -137,7 +135,6 @@ public class BeakSwerveModule {
      * angle from the CANCoder.
      */
     public void resetTurningMotor() {
-        System.out.println("Bruh: " + m_turningEncoder.getPosition());
         m_turningMotor.setEncoderPositionNU(
                 m_turningEncoder.getPosition() / 360.0 * turnCPR);
     }

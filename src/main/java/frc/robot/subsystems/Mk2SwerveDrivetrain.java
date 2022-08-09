@@ -28,7 +28,7 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final double DRIVE_kP = 0.0001;
     private static final double TURN_kP = 0.45;
 
-    private static final double AUTON_kP = 9.;
+    private static final double AUTON_kP = 1.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
 
     private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
@@ -81,7 +81,7 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final double ALLOWED_CLOSED_LOOP_ERROR = 0.0001;
 
     private static final int TURN_CURRENT_LIMIT = 20;
-    private static final int DRIVE_SUPPLY_LIMIT = 60;
+    private static final int DRIVE_SUPPLY_LIMIT = 30;
     private static final int DRIVE_STATOR_LIMIT = 80;
 
     private final static AHRS m_gyro = new AHRS(SPI.Port.kMXP);
