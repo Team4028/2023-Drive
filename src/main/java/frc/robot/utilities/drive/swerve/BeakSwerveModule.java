@@ -15,6 +15,7 @@ import frc.robot.utilities.motor.BeakMotorController;
 /** Base class for any non-differential swerve module. */
 public class BeakSwerveModule {
     protected double turnCPR;
+    protected int bruh;
 
     // Calculated from Drive CPR.
     protected double driveEncoderDistancePerPulse;
@@ -37,6 +38,7 @@ public class BeakSwerveModule {
      * Call this function in a subclass AFTER setting up motors and encoders
      */
     protected void setup(SwerveModuleConfiguration config) {
+        bruh = config.driveMotorID;
         turnCPR = config.turnGearRatio * m_turningMotor.getPositionEncoderCPR();
         driveEncoderDistancePerPulse = (config.wheelDiameter * Math.PI)
                 * config.driveGearRatio / m_driveMotor.getVelocityEncoderCPR();
@@ -101,6 +103,7 @@ public class BeakSwerveModule {
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
+                // new Rotation2d(m_turningMotor.getPositionNU()));
                 new Rotation2d(getTurningEncoderRadians()));
     }
 
@@ -122,7 +125,7 @@ public class BeakSwerveModule {
         //         optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
         //         arbFeedforward,
         //         0);
-        m_driveMotor.set(optimizedState.speedMetersPerSecond / 12.0);
+        m_driveMotor.set(optimizedState.speedMetersPerSecond / Units.feetToMeters(16.3));
 
         // Set the turning motor to the correct position.
         setAngle(optimizedState.angle.getDegrees());
@@ -145,7 +148,7 @@ public class BeakSwerveModule {
      * @return Angle of the wheel in radians.
      */
     public double getTurningEncoderRadians() {
-        double angle = m_turningEncoder.getPosition();
+        double angle = Units.degreesToRadians(m_turningEncoder.getPosition());
         angle %= 2.0 * Math.PI;
         if (angle < 0.0) {
             angle += 2.0 * Math.PI;
@@ -170,7 +173,6 @@ public class BeakSwerveModule {
      * @param newAngle Angle to turn the wheel to, in degrees.
      */
     public void setAngle(double newAngle) {
-        // System.out.println("target: " + newAngle);
         // Get current wheel angle in degrees
         double currentAngle = Units.radiansToDegrees(getTurningEncoderRadians());
 
@@ -181,8 +183,8 @@ public class BeakSwerveModule {
         double newAngleDemand = newAngle + currentAngle - remainder;
 
         double angleDelta = newAngleDemand - currentAngle;
-        // Ensuring it stays within [-180, 180]
-        // I think that because of this check it will never reach an angle above 540
+        // // Ensuring it stays within [-180, 180]
+        // // I think that because of this check it will never reach an angle above 540
         // degrees?
         if (angleDelta > 180.1) {
             newAngleDemand -= 360.0;
@@ -191,7 +193,8 @@ public class BeakSwerveModule {
         }
 
         // System.out.println("pos: " + newAngleDemand / 360.0 / turnCPR);
-        m_turningMotor.setPositionNU(newAngleDemand / 360.0 / turnCPR);
+        SmartDashboard.putNumber("bruh " + bruh, newAngleDemand);// / 360.0 / turnCPR);
+        m_turningMotor.setPositionNU(newAngleDemand / 360.0 * turnCPR);
     }
 
     public static BeakSwerveModule fromSwerveModuleConfig(SwerveModuleConfiguration config) {

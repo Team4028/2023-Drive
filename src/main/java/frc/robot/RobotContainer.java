@@ -22,6 +22,7 @@ import frc.robot.subsystems.FalconDrivetrain;
 import frc.robot.subsystems.Mk2SwerveDrivetrain;
 import frc.robot.subsystems.NEODrivetrain;
 import frc.robot.subsystems.SixNEODrivetrain;
+import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utilities.BeakXBoxController;
 import frc.robot.utilities.Util;
 
@@ -33,7 +34,8 @@ public class RobotContainer {
     // private SixNEODrivetrain m_drive = SixNEODrivetrain.getInstance();
     // private CIMDrivetrain m_drive = CIMDrivetrain.getInstance();
     // private FalconDrivetrain m_drive = FalconDrivetrain.getInstance();
-    private Mk2SwerveDrivetrain m_drive = Mk2SwerveDrivetrain.getInstance();
+    // private Mk2SwerveDrivetrain m_drive = Mk2SwerveDrivetrain.getInstance();
+    private SwerveDrivetrain m_drive = SwerveDrivetrain.getInstance();
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
 
     private SlewRateLimiter m_xLimiter = new SlewRateLimiter(4.0);
