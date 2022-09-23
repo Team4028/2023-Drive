@@ -42,4 +42,9 @@ public class BeakCANCoder extends WPI_CANCoder implements BeakAbsoluteEncoder {
         super.configFactoryDefault();
     }
 
+    @Override
+    public double getAbsoluteOffset() {
+        return super.configGetMagnetOffset();
+    }
+
 }

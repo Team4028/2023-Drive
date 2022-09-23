@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /** Add your docs here. */
 public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final double DRIVE_kP = 0.01;
-    private static final double TURN_kP = 0.1;
+    private static final double TURN_kP = 0.4;
 
     private static final double AUTON_kP = 9.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
@@ -59,22 +59,22 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final int FL_DRIVE_ID = 2;
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
-    private static final double FL_OFFSET = -Math.toRadians(139.8 - 90.);
+    private static final double FL_OFFSET = -Math.toRadians(139.8);
 
     private static final int FR_DRIVE_ID = 4;
     private static final int FR_TURN_ID = 3;
     private static final int FR_ENCODER_ID = 2; // SHOULD BE 10
-    private static final double FR_OFFSET = -Math.toRadians(322.5 + 180.);
+    private static final double FR_OFFSET = -Math.toRadians(322.5);
 
     private static final int BL_DRIVE_ID = 6;
     private static final int BL_TURN_ID = 5;
     private static final int BL_ENCODER_ID = 3; // SHOULD BE 11
-    private static final double BL_OFFSET = -Math.toRadians(106.3 + 180.);
+    private static final double BL_OFFSET = -Math.toRadians(106.3);
 
     private static final int BR_DRIVE_ID = 8;
     private static final int BR_TURN_ID = 7;
     private static final int BR_ENCODER_ID = 4; // SHOULD BE 12
-    private static final double BR_OFFSET = -Math.toRadians(53.7);
+    private static final double BR_OFFSET = -Math.toRadians(53.7 + 180.);
 
     private static final double ALLOWED_CLOSED_LOOP_ERROR = 40.0;
 
@@ -83,6 +83,9 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final int DRIVE_STATOR_LIMIT = 80;
 
     private final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(PIGEON2_ID, CAN_BUS);
+
+    private int updateCycles = 0;
+    private int updatePeriod = 10;
 
     private static final SwerveDrivetrainConfiguration DRIVE_CONFIG = new SwerveDrivetrainConfiguration(DRIVE_kP,
             TURN_kP,
@@ -145,9 +148,9 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     public void periodic() {
         super.periodic();
 
-        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_FL.getTurningEncoderRadians()));
-        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_FR.getTurningEncoderRadians()));
-        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getTurningEncoderRadians()));
-        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_BR.getTurningEncoderRadians()));
+        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_FL.getAbsoluteTurningEncoderRadians()));
+        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_FR.getAbsoluteTurningEncoderRadians()));
+        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getAbsoluteTurningEncoderRadians()));
+        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_BR.getAbsoluteTurningEncoderRadians()));
     }
 }

@@ -31,7 +31,6 @@ public class BeakMk4iSwerveModule extends BeakSwerveModule {
 
         m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
-
         super.setup(config);
     }
 

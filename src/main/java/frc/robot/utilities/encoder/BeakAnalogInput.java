@@ -51,4 +51,9 @@ public class BeakAnalogInput extends AnalogInput implements BeakAbsoluteEncoder 
         return (1.0 - super.getVoltage() / RobotController.getVoltage5V()) * 2.0 * Math.PI;
     }
 
+    @Override
+    public double getAbsoluteOffset() {
+        return offset;
+    }
+
 }

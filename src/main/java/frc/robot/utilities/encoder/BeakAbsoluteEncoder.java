@@ -43,6 +43,13 @@ public interface BeakAbsoluteEncoder {
     public void setAbsoluteOffset(double degrees);
 
     /**
+     * Get the zero point of the absolute position.
+     *
+     * @return Zero point
+     */
+    public double getAbsoluteOffset();
+
+    /**
      * Set the period in which updated data is sent to the CAN bus or motor.
      * 
      * @param period Period in ms.
