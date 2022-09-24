@@ -74,13 +74,13 @@ public class RobotContainer {
     }
 
     public double speedScaledDriverRightX() {
-        return -m_rotLimiter.calculate(Util.speedScale(m_driverController.getRightXAxis(),
+        return m_rotLimiter.calculate(-Util.speedScale(m_driverController.getRightXAxis(),
                 DriveConstants.SPEED_SCALE,
                 m_driverController.getRightTrigger()));
     }
 
     public double speedScaledDriverLeftX() {
-        return -m_xLimiter.calculate(Util.speedScale(m_driverController.getLeftXAxis(),
+        return m_xLimiter.calculate(-Util.speedScale(m_driverController.getLeftXAxis(),
                 DriveConstants.SPEED_SCALE,
                 m_driverController.getRightTrigger()));
     }

@@ -16,6 +16,7 @@ import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
@@ -23,7 +24,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final double DRIVE_kP = 0.01;
     private static final double TURN_kP = 0.4;
 
-    private static final double AUTON_kP = 9.;
+    private static final double AUTON_kP = 3.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
 
     private static final int PIGEON2_ID = 1;
@@ -54,12 +55,14 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     
     private static SwerveDrivetrain m_instance;
 
+    private Field2d m_field = new Field2d();
+
     // TODO: get offsets
     // TODO: organize this
     private static final int FL_DRIVE_ID = 2;
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
-    private static final double FL_OFFSET = -Math.toRadians(139.8);
+    private static final double FL_OFFSET = -Units.degreesToRadians(139.8); // TODO: what
 
     private static final int FR_DRIVE_ID = 4;
     private static final int FR_TURN_ID = 3;
@@ -146,11 +149,16 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     @Override
     public void periodic() {
-        super.periodic();
+        updateOdometry();
 
         SmartDashboard.putNumber("FL angle", Math.toDegrees(m_FL.getAbsoluteTurningEncoderRadians()));
         SmartDashboard.putNumber("FR angle", Math.toDegrees(m_FR.getAbsoluteTurningEncoderRadians()));
         SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getAbsoluteTurningEncoderRadians()));
         SmartDashboard.putNumber("BR angle", Math.toDegrees(m_BR.getAbsoluteTurningEncoderRadians()));
+
+        m_field.setRobotPose(getPoseMeters());
+        SmartDashboard.putData(m_field);
+
+        SmartDashboard.putNumber("Heading", getRotation2d().getDegrees());
     }
 }

@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
+    protected boolean m_gyroInverted = true;
     private static Mk2SwerveDrivetrain m_instance;
     private Field2d m_field = new Field2d();
 

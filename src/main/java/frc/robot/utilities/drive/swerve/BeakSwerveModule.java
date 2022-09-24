@@ -116,8 +116,10 @@ public class BeakSwerveModule {
     public void setDesiredState(SwerveModuleState desiredState) {
         SmartDashboard.putNumber("state " + bruh, m_turningMotor.getPositionNU());//desiredState.angle.getDegrees());
         // Optimize the state to avoid spinning more than 90 degrees.
-        SwerveModuleState optimizedState = desiredState;// SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
+        SwerveModuleState optimizedState = desiredState; //SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
 
+        // TODO: Fix optimization
+        
         // // Calculate Arb Feed Forward for drive motor
         // // TODO: calc from SysId
         // double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
@@ -191,29 +193,39 @@ public class BeakSwerveModule {
      * @param newAngle Angle to turn the wheel to, in degrees.
      */
     public void setAngle(double newAngle) {
-        // Get current wheel angle in degrees
-        double currentAngle = Units.radiansToDegrees(getTurningEncoderRadians());
+        // // Get current wheel angle in degrees
+        // double currentAngle = Units.radiansToDegrees(getTurningEncoderRadians());
 
-        double remainder = Math.IEEEremainder(currentAngle, 360.0);
+        // double remainder = Math.IEEEremainder(currentAngle, 360.0);
 
-        // Make sure the new angle isn't too far off from the current
-        // TODO: sussy, check if the reported wheel angles make sense
-        double newAngleDemand = newAngle + currentAngle - remainder;
+        // // Make sure the new angle isn't too far off from the current
+        // // TODO: sussy, check if the reported wheel angles make sense
+        // double newAngleDemand = newAngle + currentAngle - remainder;
 
-        double angleDelta = newAngleDemand - currentAngle;
-        // Ensuring it stays within [-180, 180]
-        // I think that because of this check it will never reach an angle above 540
-        // degrees?
-        if (angleDelta > 180.1) {
+        // double angleDelta = newAngleDemand - currentAngle;
+        // // Ensuring it stays within [-180, 180]
+        // // I think that because of this check it will never reach an angle above 540
+        // // degrees?
+        // if (angleDelta > 180.1) {
+        //     newAngleDemand -= 360.0;
+        // } else if (angleDelta < -180.1) {
+        //     newAngleDemand += 360.0;
+        // }
+        double currentSensorPosition = m_turningMotor.getPositionNU() * 360.0
+                / turnCPR;
+        double remainder = Math.IEEEremainder(currentSensorPosition, 360.0);
+        double newAngleDemand = newAngle + currentSensorPosition - remainder;
+
+        if (newAngleDemand - currentSensorPosition > 180.1) {
             newAngleDemand -= 360.0;
-        } else if (angleDelta < -180.1) {
+        } else if (newAngleDemand - currentSensorPosition < -180.1) {
             newAngleDemand += 360.0;
         }
 
         // // System.out.println("pos: " + newAngleDemand / 360.0 / turnCPR);
 
         SmartDashboard.putNumber("bruh " + bruh, newAngle / 360.0 * turnCPR);
-        m_turningMotor.setPositionNU(newAngle / 360.0 * turnCPR);
+        m_turningMotor.setPositionNU(newAngleDemand / 360.0 * turnCPR);
     }
 
     public static BeakSwerveModule fromSwerveModuleConfig(SwerveModuleConfiguration config) {

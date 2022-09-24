@@ -15,6 +15,8 @@ public class BeakGyroSubsystem extends SubsystemBase {
     protected Gyro m_gyro;
     protected AnalogGyroSim m_gyroSim;
 
+    protected boolean m_gyroInverted = false;
+
     /**
      * Gets the gyro's reported angle.
      * 
@@ -24,7 +26,8 @@ public class BeakGyroSubsystem extends SubsystemBase {
         if (TimedRobot.isSimulation()) {
             return Rotation2d.fromDegrees(m_gyroSim.getAngle());
         } else {
-            return new Rotation2d(0).minus(m_gyro.getRotation2d()); // TODO: add to config
+            return m_gyroInverted ? new Rotation2d(0).minus(m_gyro.getRotation2d())
+                : m_gyro.getRotation2d(); // TODO: add to config
         }
     }
 

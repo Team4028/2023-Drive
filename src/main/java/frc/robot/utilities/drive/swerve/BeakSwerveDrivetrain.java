@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
@@ -120,6 +121,8 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, m_odom.getPoseMeters().getRotation())
                         : new ChassisSpeeds(x, y, rot));
 
+        SwerveDriveKinematics.desaturateWheelSpeeds(states, m_physics.maxVelocity);
+
         setModuleStates(states);
     }
 
@@ -132,6 +135,11 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, m_physics.maxVelocity);
+
+        SmartDashboard.putNumber("FL desired speed", desiredStates[0].angle.getDegrees());
+        SmartDashboard.putNumber("FR desired speed", desiredStates[1].angle.getDegrees());
+        SmartDashboard.putNumber("BL desired speed", desiredStates[2].angle.getDegrees());
+        SmartDashboard.putNumber("BR desired speed", desiredStates[3].angle.getDegrees());
 
         m_FL.setDesiredState(desiredStates[0]);
         m_FR.setDesiredState(desiredStates[1]);
