@@ -132,6 +132,7 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
         super(
                 PHYSICS,
                 m_gyro,
+                false,
                 PIDConstants.Theta.gains,
                 AUTON_DRIVE_GAINS,
                 m_frontLeftConfig,

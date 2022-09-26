@@ -45,7 +45,9 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
     public BeakDrivetrain(
             RobotPhysics physics,
             double[] thetaPIDGains,
-            double[] drivePIDGains) {
+            double[] drivePIDGains,
+            boolean gyroInverted) {
+        super(gyroInverted);
         m_maxVelocity = physics.maxVelocity;
         m_maxAngularVelocity = physics.maxAngularVelocity;
         m_trackWidth = physics.trackWidth;

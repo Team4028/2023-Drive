@@ -17,6 +17,14 @@ public class BeakGyroSubsystem extends SubsystemBase {
 
     protected boolean m_gyroInverted = false;
 
+    public BeakGyroSubsystem(boolean gyroInverted) {
+        m_gyroInverted = gyroInverted;
+    }
+
+    public BeakGyroSubsystem() {
+        this(false);
+    }
+
     /**
      * Gets the gyro's reported angle.
      * 

@@ -76,7 +76,8 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain implements Beak
         super(
                 PHYSICS,
                 PIDConstants.Theta.gains,
-                AUTON_DRIVE_GAINS);
+                AUTON_DRIVE_GAINS,
+                false);
 
         m_gyro = new AHRS(SPI.Port.kMXP);
         if (Robot.isSimulation()) {

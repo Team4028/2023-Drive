@@ -39,10 +39,12 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     public BeakDifferentialDrivetrain(
             RobotPhysics physics,
             double[] thetaPIDGains,
-            double[] drivePIDGains) {
+            double[] drivePIDGains,
+            boolean gyroInverted) {
         super(physics,
                 thetaPIDGains,
-                drivePIDGains);
+                drivePIDGains,
+                gyroInverted);
         m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(m_trackWidth));
 
         // TrajectoryConfig autonTrajectoryConfig = new TrajectoryConfig(

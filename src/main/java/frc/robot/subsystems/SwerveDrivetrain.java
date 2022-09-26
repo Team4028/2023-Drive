@@ -86,10 +86,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final int DRIVE_STATOR_LIMIT = 80;
 
     private final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(PIGEON2_ID, CAN_BUS);
-
-    private int updateCycles = 0;
-    private int updatePeriod = 10;
-
+    
     private static final SwerveDrivetrainConfiguration DRIVE_CONFIG = new SwerveDrivetrainConfiguration(DRIVE_kP,
             TURN_kP,
             ALLOWED_CLOSED_LOOP_ERROR,
@@ -136,6 +133,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
                 m_backRightConfig,
                 PHYSICS,
                 m_gyro,
+                false,
                 PIDConstants.Theta.gains,
                 AUTON_DRIVE_GAINS);
     }

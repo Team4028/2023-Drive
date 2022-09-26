@@ -42,12 +42,14 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
     public BeakEpicSwerveDrivetrain(
             RobotPhysics physics,
             Gyro gyro,
+            boolean gyroInverted,
             double[] thetaPIDGains,
             double[] drivePIDGains,
             EpicSwerveModuleConfiguration... configs) {
         super(physics,
                 thetaPIDGains,
-                drivePIDGains);
+                drivePIDGains,
+                gyroInverted);
 
         m_physics = physics;
 
