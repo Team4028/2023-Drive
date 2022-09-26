@@ -8,7 +8,6 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
 import frc.robot.utilities.encoder.BeakAbsoluteEncoder;
 import frc.robot.utilities.motor.BeakMotorController;
 
@@ -28,7 +27,7 @@ public class BeakEpicSwerveModule {
     /**
      * Construct a new Swerve Module.
      * 
-     * @param config {@link SwerveModuleConfiguration} containing
+     * @param config {@link EpicSwerveModuleConfiguration} containing
      *               details of the module.
      */
     public BeakEpicSwerveModule(EpicSwerveModuleConfiguration config) {}
@@ -36,16 +35,16 @@ public class BeakEpicSwerveModule {
     /**
      * Call this function in a subclass AFTER setting up motors and encoders
      */
-    protected void setup(EpicSwerveModuleConfiguration config) {
+    public void setup(EpicSwerveModuleConfiguration config) {
         turnCPR = config.turnGearRatio * m_turningMotor.getPositionEncoderCPR();
         driveEncoderDistancePerPulse = (config.wheelDiameter * Math.PI)
-                / (config.driveGearRatio * m_driveMotor.getVelocityEncoderCPR());
+                * config.driveGearRatio / m_driveMotor.getVelocityEncoderCPR();
 
         m_feedforward = config.feedforward;
 
         configTurningEncoder(config);
-        configTurningMotor(config);
         configDriveMotor(config);
+        configTurningMotor(config);
     }
 
     public void configDriveMotor(EpicSwerveModuleConfiguration config) {
@@ -81,6 +80,7 @@ public class BeakEpicSwerveModule {
         m_turningMotor.setAllowedClosedLoopError(config.allowedError, 0);
 
         m_turningMotor.setP(config.turn_kP, 0);
+        m_turningMotor.setD(0.3, 0); // TODO: Add to config
     }
 
     public void configTurningEncoder(EpicSwerveModuleConfiguration config) {
@@ -99,8 +99,8 @@ public class BeakEpicSwerveModule {
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-                m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10,
-                new Rotation2d(getTurningEncoderRadians()));
+                m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
+                new Rotation2d(getAbsoluteTurningEncoderRadians()));
     }
 
     /**
@@ -111,14 +111,12 @@ public class BeakEpicSwerveModule {
      */
     public void setDesiredState(SwerveModuleState desiredState) {
         // Optimize the state to avoid spinning more than 90 degrees.
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, getState().angle);
-
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
+        
         // Calculate Arb Feed Forward for drive motor
         // TODO: calc from SysId
         double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
 
-        // TODO: why divide by 10?
-        // So actually it's because of the 100ms thing with Talons I think...
         m_driveMotor.setVelocityNU(
                 optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
                 arbFeedforward,
@@ -136,7 +134,22 @@ public class BeakEpicSwerveModule {
      */
     public void resetTurningMotor() {
         m_turningMotor.setEncoderPositionNU(
-                m_turningEncoder.getAbsolutePosition() / 360.0 * turnCPR);
+                -Math.toDegrees(getAbsoluteTurningEncoderRadians()) / 360.0 * turnCPR);
+    }
+
+    /**
+     * Get the angle of the wheel.
+     * 
+     * @return Angle of the wheel in radians.
+     */
+    public double getAbsoluteTurningEncoderRadians() {
+        double angle = Units.degreesToRadians(m_turningEncoder.getAbsolutePosition());
+        angle %= 2.0 * Math.PI;
+        if (angle < 0.0) {
+            angle += 2.0 * Math.PI;
+        }
+
+        return angle;
     }
 
     /**
@@ -145,7 +158,13 @@ public class BeakEpicSwerveModule {
      * @return Angle of the wheel in radians.
      */
     public double getTurningEncoderRadians() {
-        return m_turningMotor.getPositionNU() * 2.0 * Math.PI / turnCPR;
+        double angle = Units.degreesToRadians(m_turningEncoder.getPosition());
+        angle %= 2.0 * Math.PI;
+        if (angle < 0.0) {
+            angle += 2.0 * Math.PI;
+        }
+
+        return angle;
     }
 
     /**
@@ -162,22 +181,15 @@ public class BeakEpicSwerveModule {
      * @param newAngle Angle to turn the wheel to, in degrees.
      */
     public void setAngle(double newAngle) {
-        // Get current wheel angle in degrees
-        double currentAngle = Units.radiansToDegrees(getTurningEncoderRadians());
+        // Does some funky stuff to do the cool thing
+        double currentSensorPosition = m_turningMotor.getPositionNU() * 360.0
+                / turnCPR;
+        double remainder = Math.IEEEremainder(currentSensorPosition, 360.0);
+        double newAngleDemand = newAngle + currentSensorPosition - remainder;
 
-        double remainder = Math.IEEEremainder(currentAngle, 360.0);
-
-        // Make sure the new angle isn't too far off from the current
-        // TODO: sussy, check if the reported wheel angles make sense
-        double newAngleDemand = newAngle + currentAngle - remainder;
-
-        double angleDelta = newAngleDemand - currentAngle;
-        // Ensuring it stays within [-180, 180]
-        // I think that because of this check it will never reach an angle above 540
-        // degrees?
-        if (angleDelta > 180.1) {
+        if (newAngleDemand - currentSensorPosition > 180.1) {
             newAngleDemand -= 360.0;
-        } else if (angleDelta < -180.1) {
+        } else if (newAngleDemand - currentSensorPosition < -180.1) {
             newAngleDemand += 360.0;
         }
 
@@ -188,6 +200,8 @@ public class BeakEpicSwerveModule {
         switch(config.moduleType) {
             case MK4i:
                 return new BeakEpicMk4iSwerveModule(config);
+            case MK2:
+                return new BeakEpicMk2SwerveModule(config);
             default:
                 return null;
         }

@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.utilities.drive.swerve;
+package frc.robot.utilities.drive.swerve.epic;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -11,7 +11,7 @@ import frc.robot.utilities.encoder.BeakAnalogInput;
 import frc.robot.utilities.motor.BeakSparkMAX;
 
 /** SDS Mk2 Swerve Module. */
-public class BeakMk2SwerveModule extends BeakSwerveModule {
+public class BeakEpicMk2SwerveModule extends BeakEpicSwerveModule {
     PIDController m_turningPIDController;
 
     /**
@@ -20,7 +20,7 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
      * @param config {@link SwerveModuleConfiguration} containing
      *               details of the module.
      */
-    public BeakMk2SwerveModule(SwerveModuleConfiguration config) {
+    public BeakEpicMk2SwerveModule(EpicSwerveModuleConfiguration config) {
         super(config);
         m_driveMotor = new BeakSparkMAX(config.driveMotorID);
         m_turningMotor = new BeakSparkMAX(config.turnMotorID);
@@ -33,7 +33,7 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         super.setup(config);
     }
 
-    public void configDriveMotor(SwerveModuleConfiguration config) {
+    public void configDriveMotor(EpicSwerveModuleConfiguration config) {
         super.configDriveMotor(config);
 
         // Prevent huge CAN spikes
@@ -45,7 +45,7 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         // m_driveMotor.setStatusPeriod(StatusFrameEnhanced.Status_6_Misc.value, 59);
     }
 
-    public void configTurningMotor(SwerveModuleConfiguration config) {
+    public void configTurningMotor(EpicSwerveModuleConfiguration config) {
         super.configTurningMotor(config);
 
         // Prevent huge CAN spikes

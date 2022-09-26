@@ -21,7 +21,13 @@ import frc.robot.utilities.drive.RobotPhysics;
 
 /** Generic Swerve Drivetrain subsystem. */
 public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
-    List<BeakEpicSwerveModule> m_modules;
+    /**
+     * The modules in this swerve drivetrain. </p>
+     * These are in the same order as passed in the constructor; i.e if the front left
+     * module is passed in as the first module, <code>m_modules.get(0)</code> would
+     * return the front left module.
+     */
+    protected List<BeakEpicSwerveModule> m_modules;
     int m_numModules;
 
     protected SwerveDriveOdometry m_odom;
