@@ -18,6 +18,16 @@ public class BeakCANCoder extends WPI_CANCoder implements BeakAbsoluteEncoder {
     }
 
     @Override
+    public double getPosition() {
+        return Math.toRadians(super.getPosition());
+    }
+
+    @Override
+    public double getAbsolutePosition() {
+        return Math.toRadians(super.getAbsolutePosition());
+    }
+
+    @Override
     public void setEncoderPosition(double position) {
         super.setPosition(position);
     }

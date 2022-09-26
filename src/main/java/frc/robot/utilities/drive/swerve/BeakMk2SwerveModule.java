@@ -5,8 +5,10 @@
 package frc.robot.utilities.drive.swerve;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utilities.encoder.BeakAnalogInput;
 import frc.robot.utilities.motor.BeakSparkMAX;
 
@@ -60,6 +62,7 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
 
     @Override
     public void setDesiredState(SwerveModuleState desiredState) {
+        SmartDashboard.putNumber("bruh " + bruh, desiredState.speedMetersPerSecond / Units.feetToMeters(14.3));
         // Optimize the state to avoid spinning more than 90 degrees.
         SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, getState().angle);
 
@@ -72,7 +75,7 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         // optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
         // arbFeedforward,
         // 0);
-        m_driveMotor.set(optimizedState.speedMetersPerSecond / Units.feetToMeters(12.0));
+        m_driveMotor.set(optimizedState.speedMetersPerSecond / Units.feetToMeters(14.3));
 
         double turnOutput = m_turningPIDController.calculate(getTurningEncoderRadians(), desiredState.angle.getRadians());
 

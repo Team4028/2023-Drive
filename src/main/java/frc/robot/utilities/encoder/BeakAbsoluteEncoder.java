@@ -10,14 +10,14 @@ public interface BeakAbsoluteEncoder {
      * Get the encoder's position. Depending on the configuration,
      * this may be either relative (based on the magnet offset), or absolute.
      * 
-     * @return Position, usually in degrees.
+     * @return Position, in radians.
      */
     public double getPosition();
 
     /**
      * Set the encoder's position.
      * 
-     * @param position New position, usually in degrees.
+     * @param position New position, radians.
      */
     public void setEncoderPosition(double position);
 
@@ -31,7 +31,7 @@ public interface BeakAbsoluteEncoder {
     /**
      * Get the encoder's absolute position, independent of calls to setPosition().
      * 
-     * @return Absolute position, usually in degrees.
+     * @return Absolute position, in radians.
      */
     public double getAbsolutePosition();
 

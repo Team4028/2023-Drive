@@ -14,6 +14,7 @@ import frc.robot.utilities.motor.BeakMotorController;
 /** Base class for any non-differential swerve module. */
 public class BeakSwerveModule {
     protected double turnCPR;
+    protected int bruh;
 
     // Calculated from Drive CPR.
     protected double driveEncoderDistancePerPulse;
@@ -41,6 +42,8 @@ public class BeakSwerveModule {
                 * config.driveGearRatio / m_driveMotor.getVelocityEncoderCPR();
 
         m_feedforward = config.feedforward;
+
+        bruh = config.driveMotorID;
 
         configTurningEncoder(config);
         configDriveMotor(config);
@@ -143,7 +146,7 @@ public class BeakSwerveModule {
      * @return Angle of the wheel in radians.
      */
     public double getAbsoluteTurningEncoderRadians() {
-        double angle = Units.degreesToRadians(m_turningEncoder.getAbsolutePosition());
+        double angle = m_turningEncoder.getAbsolutePosition();
         angle %= 2.0 * Math.PI;
         if (angle < 0.0) {
             angle += 2.0 * Math.PI;
@@ -158,7 +161,7 @@ public class BeakSwerveModule {
      * @return Angle of the wheel in radians.
      */
     public double getTurningEncoderRadians() {
-        double angle = Units.degreesToRadians(m_turningEncoder.getPosition());
+        double angle = m_turningEncoder.getPosition();
         angle %= 2.0 * Math.PI;
         if (angle < 0.0) {
             angle += 2.0 * Math.PI;
