@@ -46,8 +46,8 @@ public class BeakSwerveModule {
         bruh = config.driveMotorID;
 
         configTurningEncoder(config);
-        configDriveMotor(config);
         configTurningMotor(config);
+        configDriveMotor(config);
     }
 
     public void configDriveMotor(SwerveModuleConfiguration config) {
@@ -103,7 +103,7 @@ public class BeakSwerveModule {
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
-                new Rotation2d(getAbsoluteTurningEncoderRadians()));
+                new Rotation2d(getTurningEncoderRadians()));
     }
 
     /**
@@ -137,7 +137,7 @@ public class BeakSwerveModule {
      */
     public void resetTurningMotor() {
         m_turningMotor.setEncoderPositionNU(
-                -Math.toDegrees(getAbsoluteTurningEncoderRadians()) / 360.0 * turnCPR);
+                -Math.toDegrees(getTurningEncoderRadians()) / 360.0 * turnCPR);
     }
 
     /**

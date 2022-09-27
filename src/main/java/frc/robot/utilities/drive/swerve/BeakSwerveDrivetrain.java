@@ -116,13 +116,9 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         y *= m_physics.maxVelocity;
         rot *= m_physics.maxAngularVelocity;
 
-        // System.out.println(rot);
-
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, m_odom.getPoseMeters().getRotation())
                         : new ChassisSpeeds(x, y, rot));
-
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, m_physics.maxVelocity);
 
         setModuleStates(states);
     }
