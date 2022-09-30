@@ -13,7 +13,6 @@ public class Distance {
 
     /**
      * Create a distance from a meter value.
-     * @param meters
      */
     public Distance(double meters) {
         m_distance = meters;
@@ -21,7 +20,6 @@ public class Distance {
 
     /**
      * Construct a distance from an inch value.
-     * @param inches
      */
     public void fromInches(double inches) {
         m_distance = Units.inchesToMeters(inches);
@@ -29,7 +27,6 @@ public class Distance {
 
     /**
      * Construct a distance from a feet value.
-     * @param feet
      */
     public void fromFeet(double feet) {
         m_distance = Units.feetToMeters(feet);
@@ -37,15 +34,20 @@ public class Distance {
 
     /**
      * Construct a distance from a centimeter value.
-     * @param cm
      */
     public void fromCentimeters(double cm) {
         m_distance = cm / 100.;
     }
 
     /**
+     * Get the distance in meters.
+     */
+    public double getAsMeters() {
+        return m_distance;
+    }
+
+    /**
      * Get the distance in inches.
-     * @return
      */
     public double getAsInches() {
         return Units.metersToInches(m_distance);
@@ -53,7 +55,6 @@ public class Distance {
 
     /**
      * Get the distance in feet.
-     * @return
      */
     public double getAsFeet() {
         return Units.metersToFeet(m_distance);
@@ -61,7 +62,6 @@ public class Distance {
 
     /**
      * Get the distance in centimeters.
-     * @return
      */
     public double getAsCentimeters() {
         return m_distance * 100.;

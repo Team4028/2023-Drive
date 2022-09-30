@@ -48,23 +48,30 @@ public class Velocity {
     }
 
     /**
-     * Get the velocity in inches.
+     * Get the velocity in meters per second.
      */
-    public double getAsInches() {
+    public double getAsMetersPerSecond() {
+        return m_velocity;
+    }
+
+    /**
+     * Get the velocity in inches per second.
+     */
+    public double getAsInchesPerSecond() {
         return Units.metersToInches(m_velocity);
     }
 
     /**
-     * Get the velocity in feet.
+     * Get the velocity in feet per second.
      */
-    public double getAsFeet() {
+    public double getAsFeetPerSecond() {
         return Units.metersToFeet(m_velocity);
     }
 
     /**
-     * Get the velocity in centimeters.
+     * Get the velocity in centimeters per second.
      */
-    public double getAsCentimeters() {
+    public double getAsCentimetersPerSecond() {
         return m_velocity * 100.;
     }
 
