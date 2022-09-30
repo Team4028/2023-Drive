@@ -36,7 +36,7 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
             0,
             0);
 
-    private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK2_L2;
+    private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK2_8p33;
 
     private static final String CAN_BUS = "";
 

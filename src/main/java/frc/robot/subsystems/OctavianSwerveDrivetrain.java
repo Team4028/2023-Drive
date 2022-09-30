@@ -32,15 +32,15 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
 
     private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
-            0,
-            0,
-            0);
+            0.17479,
+            0.8771,
+            0.15465); // TODO: Properly ziptie azimuth
 
-    private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK2_L2;
+    private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK2_6p92;
 
     private static final String CAN_BUS = "";
 
-    private static final double MAX_VELOCITY = Units.feetToMeters(12.0);
+    private static final double MAX_VELOCITY = Units.feetToMeters(14.3);
 
     // distance from the right to left wheels on the robot
     private static final double TRACK_WIDTH = 22.5;
@@ -132,7 +132,7 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
                 m_backRightConfig,
                 PHYSICS,
                 m_gyro,
-                true,
+                false,
                 PIDConstants.Theta.gains,
                 AUTON_DRIVE_GAINS);
     }

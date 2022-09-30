@@ -8,11 +8,19 @@ import frc.robot.utilities.drive.swerve.SdsModuleConfiguration.ModuleType;
 
 /** Preset configurations for SDS Swerve Modules. */
 public final class SdsModuleConfigurations {
-    public static final SdsModuleConfiguration MK2_L2 = new SdsModuleConfiguration(
+    public static final SdsModuleConfiguration MK2_8p33 = new SdsModuleConfiguration(
             0.1016,
             // (16.0 / 40.0) * (24.0 / 20.0) * (15.0 / 60.0),
             (15.0 / 60.0) * (24.0 / 20.0) * (16.0 / 40.0),
             true,
+            (1.0 / 18.0), // TODO
+            false,
+            ModuleType.MK2);
+        public static final SdsModuleConfiguration MK2_6p92 = new SdsModuleConfiguration(
+            0.1016,
+            // (16.0 / 40.0) * (24.0 / 20.0) * (15.0 / 60.0),
+            (15.0 / 60.0) * (26.0 / 18.0) * (16.0 / 40.0),
+            false,
             (1.0 / 18.0), // TODO
             false,
             ModuleType.MK2);

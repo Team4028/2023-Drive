@@ -8,6 +8,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utilities.encoder.BeakAbsoluteEncoder;
 import frc.robot.utilities.motor.BeakMotorController;
 
@@ -37,7 +38,7 @@ public class BeakSwerveModule {
      * Call this function in a subclass AFTER setting up motors and encoders
      */
     public void setup(SwerveModuleConfiguration config) {
-        turnCPR = config.turnGearRatio * m_turningMotor.getPositionEncoderCPR();
+        turnCPR = config.turnGearRatio * m_turningMotor.getVelocityEncoderCPR();
         driveEncoderDistancePerPulse = (config.wheelDiameter * Math.PI)
                 * config.driveGearRatio / m_driveMotor.getVelocityEncoderCPR();
 
@@ -103,7 +104,7 @@ public class BeakSwerveModule {
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
-                new Rotation2d(getTurningEncoderRadians()));
+                new Rotation2d(getTurningEncoderRadians())); // FUTURE: Using Absolute reverses some wheels.
     }
 
     /**
@@ -113,12 +114,16 @@ public class BeakSwerveModule {
      *                     and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
+        SmartDashboard.putNumber("bruh " + bruh, desiredState.angle.getDegrees());
+        // SmartDashboard.putNumber("bruh " + bruh, desiredState.speedMetersPerSecond);
+        // SmartDashboard.putNumber("state " + bruh, getState().speedMetersPerSecond);
         // Optimize the state to avoid spinning more than 90 degrees.
         SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
         
         // Calculate Arb Feed Forward for drive motor
         // TODO: calc from SysId
-        double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
+        // NOTE: feedforward MUST be in meters!
+        double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond);
 
         m_driveMotor.setVelocityNU(
                 optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
@@ -195,6 +200,8 @@ public class BeakSwerveModule {
         } else if (newAngleDemand - currentSensorPosition < -180.1) {
             newAngleDemand += 360.0;
         }
+
+        SmartDashboard.putNumber("state " + bruh, newAngleDemand / 360. * turnCPR);
 
         m_turningMotor.setPositionNU(newAngleDemand / 360.0 * turnCPR);
     }
