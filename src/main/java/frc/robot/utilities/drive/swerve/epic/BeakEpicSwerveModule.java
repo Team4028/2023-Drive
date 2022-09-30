@@ -37,7 +37,7 @@ public class BeakEpicSwerveModule {
      */
     public void setup(EpicSwerveModuleConfiguration config) {
         turnCPR = config.turnGearRatio * m_turningMotor.getPositionEncoderCPR();
-        driveEncoderDistancePerPulse = (config.wheelDiameter * Math.PI)
+        driveEncoderDistancePerPulse = (config.wheelDiameter.getAsMeters() * Math.PI)
                 * config.driveGearRatio / m_driveMotor.getVelocityEncoderCPR();
 
         m_feedforward = config.feedforward;

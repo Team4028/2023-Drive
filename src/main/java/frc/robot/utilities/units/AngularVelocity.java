@@ -19,24 +19,31 @@ public class AngularVelocity {
     }
 
     /**
+     * Construct a zero angular velocity.
+     */
+    public AngularVelocity() {
+        this(0.);
+    }
+
+    /**
      * Construct an angular velocity from degrees per second.
      */
-    public void fromDegreesPerSecond(double degrees) {
-        m_velocity = Units.degreesToRadians(degrees);
+    public static AngularVelocity fromDegreesPerSecond(double degrees) {
+        return new AngularVelocity(Units.degreesToRadians(degrees));
     }
 
     /**
      * Construct an angular velocity from rotations per minute.
      */
-    public void fromRotationsPerMinute(double rpm) {
-        m_velocity = Units.rotationsPerMinuteToRadiansPerSecond(rpm);
+    public static AngularVelocity fromRotationsPerMinute(double rpm) {
+        return new AngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(rpm));
     }
 
     /**
      * Construct an angular velocity from rotations per second.
      */
-    public void fromRotationsPerSecond(double rps) {
-        m_velocity = Units.rotationsPerMinuteToRadiansPerSecond(rps * 60.);
+    public static AngularVelocity fromRotationsPerSecond(double rps) {
+        return new AngularVelocity(Units.rotationsPerMinuteToRadiansPerSecond(rps * 60.));
     }
 
     /**

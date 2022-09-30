@@ -4,8 +4,8 @@
 
 package frc.robot.utilities.motor;
 
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
+import frc.robot.utilities.units.Distance;
 
 /** Common interface for all motor controllers. */
 public interface BeakMotorController extends MotorController {
@@ -573,8 +573,8 @@ public interface BeakMotorController extends MotorController {
      * @param encoderGearRatio The gear ratio between the encoder and the wheel
      * (1 if the encoder is mounted directly on the wheel)
      */
-    default void setDistancePerPulse(double wheelDiameter, double encoderGearRatio) {
-        setDistancePerPulse((Units.inchesToMeters(wheelDiameter) * Math.PI) / encoderGearRatio);
+    default void setDistancePerPulse(Distance wheelDiameter, double encoderGearRatio) {
+        setDistancePerPulse((wheelDiameter.getAsMeters() * Math.PI) / encoderGearRatio);
     }
 
     /**

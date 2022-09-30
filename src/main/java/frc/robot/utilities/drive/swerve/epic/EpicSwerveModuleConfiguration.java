@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.utilities.drive.swerve.BeakSwerveModule;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration.ModuleType;
+import frc.robot.utilities.units.Distance;
 
 /** Class containing general configuration for a {@link BeakSwerveModule}. */
 public class EpicSwerveModuleConfiguration {
@@ -21,7 +22,7 @@ public class EpicSwerveModuleConfiguration {
     public double driveGearRatio;
     public double turnGearRatio;
 
-    public double wheelDiameter;
+    public Distance wheelDiameter;
 
     public boolean driveInverted;
     public boolean turnInverted;

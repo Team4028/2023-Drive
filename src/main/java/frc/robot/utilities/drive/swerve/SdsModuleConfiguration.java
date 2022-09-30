@@ -6,6 +6,8 @@ package frc.robot.utilities.drive.swerve;
 
 import java.util.Objects;
 
+import frc.robot.utilities.units.Distance;
+
 /** Configuration of an SDS Swerve Module. */
 public class SdsModuleConfiguration {
     public enum ModuleType {
@@ -15,7 +17,7 @@ public class SdsModuleConfiguration {
         MK4i
     }
 
-    public final double wheelDiameter;
+    public final Distance wheelDiameter;
     public final double driveGearRatio;
     public final boolean driveInverted;
 
@@ -43,7 +45,7 @@ public class SdsModuleConfiguration {
      * @param moduleType     The type of the module (i.e. MK2, MK3, MK4, MK4i)
      */
     public SdsModuleConfiguration(
-            double wheelDiameter,
+            Distance wheelDiameter,
             double driveReduction,
             boolean driveInverted,
             double steerReduction,
@@ -60,7 +62,7 @@ public class SdsModuleConfiguration {
     /**
      * Gets the diameter of the wheel in meters.
      */
-    public double getWheelDiameter() {
+    public Distance getWheelDiameter() {
         return wheelDiameter;
     }
 
@@ -105,7 +107,7 @@ public class SdsModuleConfiguration {
         if (o == null || getClass() != o.getClass())
             return false;
         SdsModuleConfiguration that = (SdsModuleConfiguration) o;
-        return Double.compare(that.getWheelDiameter(), getWheelDiameter()) == 0 &&
+        return Double.compare(that.getWheelDiameter().getAsMeters(), getWheelDiameter().getAsMeters()) == 0 &&
                 Double.compare(that.getDriveReduction(), getDriveReduction()) == 0 &&
                 isDriveInverted() == that.isDriveInverted() &&
                 Double.compare(that.getSteerReduction(), getSteerReduction()) == 0 &&

@@ -11,20 +11,20 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 public class Trajectories {
     public static PathPlannerTrajectory TestPath(BeakDrivetrain drivetrain) {
         return PathPlanner.loadPath("TestPath",
-                drivetrain.getPhysics().maxVelocity,
-                drivetrain.getPhysics().maxVelocity);
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
     }
 
     public static PathPlannerTrajectory Ball1(BeakDrivetrain drivetrain) {
         return PathPlanner.loadPath("Ball1",
-                drivetrain.getPhysics().maxVelocity,
-                drivetrain.getPhysics().maxVelocity);
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
     }
 
     public static PathPlannerTrajectory Ball2(BeakDrivetrain drivetrain) {
         return PathPlanner.loadPath("Ball2",
-                drivetrain.getPhysics().maxVelocity,
-                drivetrain.getPhysics().maxVelocity);
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
     }
     // public static Trajectory getTrajectory(String path) {
     // Trajectory traj = new Trajectory();

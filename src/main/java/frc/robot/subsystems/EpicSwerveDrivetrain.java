@@ -11,6 +11,9 @@ import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
 import frc.robot.utilities.drive.swerve.epic.BeakEpicSwerveDrivetrain;
 import frc.robot.utilities.drive.swerve.epic.EpicSwerveModuleConfiguration;
+import frc.robot.utilities.units.AngularVelocity;
+import frc.robot.utilities.units.Distance;
+import frc.robot.utilities.units.Velocity;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
@@ -38,19 +41,19 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
 
     private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK4I_L2;
 
-    private static final double MAX_VELOCITY = Units.feetToMeters(16.3);
+    private static final Velocity MAX_VELOCITY = Velocity.fromFeetPerSecond(16.3);
 
     // distance from the right to left wheels on the robot
-    private static final double TRACK_WIDTH = 26;
+    private static final Distance TRACK_WIDTH = Distance.fromInches(26.);
     // distance from the front to back wheels on the robot
-    private static final double WHEEL_BASE = 28;
+    private static final Distance WHEEL_BASE = Distance.fromInches(28.);
 
     private static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
-            0,
+            new AngularVelocity(),
             TRACK_WIDTH,
             WHEEL_BASE,
-            Units.metersToInches(CONFIGURATION.wheelDiameter),
+            CONFIGURATION.wheelDiameter,
             CONFIGURATION.driveGearRatio,
             FEED_FORWARD);
 
@@ -63,25 +66,25 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
     private static final double FL_OFFSET = -Units.degreesToRadians(139.8);
-    private static final Translation2d FL_LOCATION = new Translation2d(WHEEL_BASE / 2, TRACK_WIDTH / 2);
+    private static final Translation2d FL_LOCATION = new Translation2d(WHEEL_BASE.getAsInches() / 2, TRACK_WIDTH.getAsInches() / 2); // TODO: Please God BeakTranslation2d
 
     private static final int FR_DRIVE_ID = 4;
     private static final int FR_TURN_ID = 3;
     private static final int FR_ENCODER_ID = 2; // SHOULD BE 10
     private static final double FR_OFFSET = -Math.toRadians(322.5);
-    private static final Translation2d FR_LOCATION = new Translation2d(WHEEL_BASE / 2, -TRACK_WIDTH / 2);
+    private static final Translation2d FR_LOCATION = new Translation2d(WHEEL_BASE.getAsInches() / 2, -TRACK_WIDTH.getAsInches() / 2);
 
     private static final int BL_DRIVE_ID = 6;
     private static final int BL_TURN_ID = 5;
     private static final int BL_ENCODER_ID = 3; // SHOULD BE 11
     private static final double BL_OFFSET = -Math.toRadians(106.3);
-    private static final Translation2d BL_LOCATION = new Translation2d(-WHEEL_BASE / 2, TRACK_WIDTH / 2);
+    private static final Translation2d BL_LOCATION = new Translation2d(-WHEEL_BASE.getAsInches() / 2, TRACK_WIDTH.getAsInches() / 2);
 
     private static final int BR_DRIVE_ID = 8;
     private static final int BR_TURN_ID = 7;
     private static final int BR_ENCODER_ID = 4; // SHOULD BE 12
     private static final double BR_OFFSET = -Math.toRadians(53.7 + 180.);
-    private static final Translation2d BR_LOCATION = new Translation2d(-WHEEL_BASE / 2, -TRACK_WIDTH / 2);
+    private static final Translation2d BR_LOCATION = new Translation2d(-WHEEL_BASE.getAsInches() / 2, -TRACK_WIDTH.getAsInches() / 2);
 
     private static final double ALLOWED_CLOSED_LOOP_ERROR = 40.0;
 

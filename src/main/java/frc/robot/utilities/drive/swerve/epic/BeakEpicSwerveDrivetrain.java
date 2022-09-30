@@ -102,9 +102,9 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
     }
 
     public void drive(double x, double y, double rot, boolean fieldRelative) {
-        x *= m_physics.maxVelocity;
-        y *= m_physics.maxVelocity;
-        rot *= m_physics.maxAngularVelocity;
+        x *= m_physics.maxVelocity.getAsMetersPerSecond();
+        y *= m_physics.maxVelocity.getAsMetersPerSecond();
+        rot *= m_physics.maxAngularVelocity.getAsRadiansPerSecond();
 
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, getRotation2d())
@@ -121,7 +121,7 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
      * @param desiredStates An array of the desired states for the m_modules.
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, m_physics.maxVelocity);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, m_physics.maxVelocity.getAsMetersPerSecond());
 
         for (int i = 0; i < desiredStates.length; i++) {
             m_modules.get(i).setDesiredState(desiredStates[i]);

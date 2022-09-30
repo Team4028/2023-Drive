@@ -6,6 +6,7 @@ package frc.robot.commands.auton;
 
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.Trajectories;
+import frc.robot.utilities.units.Distance;
 
 public class EpicPath extends BeakAutonCommand {
     /** Creates a new TestPath. */
@@ -13,7 +14,7 @@ public class EpicPath extends BeakAutonCommand {
         super.addCommands(
                 drivetrain.getTrajectoryCommand(Trajectories.Ball1(drivetrain)),
                 drivetrain.getTrajectoryCommand(Trajectories.Ball2(drivetrain)),
-                new RotateDrivetrainToTargetPosition(324, 162, drivetrain));
+                new RotateDrivetrainToTargetPosition(Distance.fromInches(324.), Distance.fromInches(162.), drivetrain));
         super.setInitialPose(Trajectories.Ball1(drivetrain));
     }
 }

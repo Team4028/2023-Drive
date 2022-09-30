@@ -6,6 +6,7 @@ package frc.robot.utilities.drive.swerve;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration.ModuleType;
+import frc.robot.utilities.units.Distance;
 
 /** Class containing general configuration for a {@link BeakSwerveModule}. */
 public class SwerveModuleConfiguration {
@@ -17,7 +18,7 @@ public class SwerveModuleConfiguration {
     public double driveGearRatio;
     public double turnGearRatio;
 
-    public double wheelDiameter;
+    public Distance wheelDiameter;
 
     public boolean driveInverted;
     public boolean turnInverted;

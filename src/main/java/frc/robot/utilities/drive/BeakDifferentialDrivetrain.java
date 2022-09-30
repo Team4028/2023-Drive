@@ -12,7 +12,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -45,11 +44,7 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
                 thetaPIDGains,
                 drivePIDGains,
                 gyroInverted);
-        m_kinematics = new DifferentialDriveKinematics(Units.inchesToMeters(m_trackWidth));
-
-        // TrajectoryConfig autonTrajectoryConfig = new TrajectoryConfig(
-        //         physics.maxVelocity,
-        //         physics.maxVelocity); // TODO: UNUSED
+        m_kinematics = new DifferentialDriveKinematics(m_trackWidth.getAsMeters());
     }
 
     /**
@@ -92,50 +87,14 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
     public DifferentialDriveWheelSpeeds calcWheelSpeeds(
             double x,
             double rot) {
-        x *= m_maxVelocity;
-        rot *= m_maxAngularVelocity;
+        x *= m_maxVelocity.getAsMetersPerSecond();
+        rot *= m_maxAngularVelocity.getAsRadiansPerSecond();
         DifferentialDriveWheelSpeeds speed = m_kinematics.toWheelSpeeds(
                 new ChassisSpeeds(x, 0, rot));
 
-        speed.desaturate(m_maxVelocity);
+        speed.desaturate(m_maxVelocity.getAsMetersPerSecond());
 
         return speed;
-    }
-
-    /**
-     * Method to calculate needed motor velocities for the left and right side of
-     * the drivetrain.
-     * </p>
-     * 
-     * x and rot values should be from joysticks.
-     * 
-     * @param motorController Any motor controller on the drivetrain.
-     * @param x               Speed of the robot in the x direction (forward).
-     * @param rot             Angular rate of the robot.
-     * @return {left velocity in NU, right velocity in NU}
-     * 
-     * @deprecated Due to the addition of <code>setRate</code> on
-     *             {@link BeakMotorController},
-     *             this function is no longer needed. Please use
-     *             <code>calcWheelSpeeds()</code> and <code>setRate()</code>.
-     */
-    @Deprecated(forRemoval = true)
-    public double[] calcDesiredMotorVelocities(
-            BeakMotorController motorController,
-            double x,
-            double rot) {
-        DifferentialDriveWheelSpeeds speed = calcWheelSpeeds(x, rot);
-
-        // Assumes all motor controllers are of the same type.
-        encoderDistancePerPulse = (Units.inchesToMeters(m_wheelDiameter) * Math.PI)
-                / motorController.getVelocityEncoderCPR();
-
-        double rightVel = speed.rightMetersPerSecond / encoderDistancePerPulse;
-        double leftVel = speed.leftMetersPerSecond / encoderDistancePerPulse;
-
-        double[] vels = { leftVel, rightVel };
-
-        return vels;
     }
 
     /**

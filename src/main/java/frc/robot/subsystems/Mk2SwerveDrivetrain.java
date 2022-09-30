@@ -11,6 +11,9 @@ import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
 import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
+import frc.robot.utilities.units.AngularVelocity;
+import frc.robot.utilities.units.Distance;
+import frc.robot.utilities.units.Velocity;
 
 import com.kauailabs.navx.frc.AHRS;
 
@@ -40,19 +43,19 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     private static final String CAN_BUS = "";
 
-    private static final double MAX_VELOCITY = Units.feetToMeters(12.0);
+    private static final Velocity MAX_VELOCITY = Velocity.fromFeetPerSecond(12.0);
 
     // distance from the right to left wheels on the robot
-    private static final double TRACK_WIDTH = 23.5;
+    private static final Distance TRACK_WIDTH = Distance.fromInches(23.5);
     // distance from the front to back wheels on the robot
-    private static final double WHEEL_BASE = 21.5;
+    private static final Distance WHEEL_BASE = Distance.fromInches(21.5);
 
     private static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
-            0., // TEMP
+            new AngularVelocity(), // TEMP
             TRACK_WIDTH,
             WHEEL_BASE,
-            Units.metersToInches(CONFIGURATION.wheelDiameter),
+            CONFIGURATION.wheelDiameter,
             CONFIGURATION.driveGearRatio,
             FEED_FORWARD);
 

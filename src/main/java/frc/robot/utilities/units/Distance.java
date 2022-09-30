@@ -6,6 +6,8 @@ package frc.robot.utilities.units;
 
 import edu.wpi.first.math.util.Units;
 
+// TODO: Vector class? Need something for cartesion <-> polar
+// TODO: BeakPose2d, BeakVector2d, BeakTranslation2d?
 /** Class representing a distance in any unit. */
 public class Distance {
     /** Internally represent as meters. */
@@ -19,24 +21,31 @@ public class Distance {
     }
 
     /**
+     * Construct a zero distance.
+     */
+    public Distance() {
+        this(0.);
+    }
+
+    /**
      * Construct a distance from an inch value.
      */
-    public void fromInches(double inches) {
-        m_distance = Units.inchesToMeters(inches);
+    public static Distance fromInches(double inches) {
+        return new Distance(Units.inchesToMeters(inches));
     }
 
     /**
      * Construct a distance from a feet value.
      */
-    public void fromFeet(double feet) {
-        m_distance = Units.feetToMeters(feet);
+    public static Distance fromFeet(double feet) {
+        return new Distance(Units.feetToMeters(feet));
     }
 
     /**
      * Construct a distance from a centimeter value.
      */
-    public void fromCentimeters(double cm) {
-        m_distance = cm / 100.;
+    public static Distance fromCentimeters(double cm) {
+        return new Distance(cm / 100.);
     }
 
     /**

@@ -11,6 +11,9 @@ import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
 import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
+import frc.robot.utilities.units.AngularVelocity;
+import frc.robot.utilities.units.Distance;
+import frc.robot.utilities.units.Velocity;
 
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
@@ -37,19 +40,19 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK4I_L2;
 
-    private static final double MAX_VELOCITY = Units.feetToMeters(16.3);
+    private static final Velocity MAX_VELOCITY = Velocity.fromFeetPerSecond(16.3);
 
     // distance from the right to left wheels on the robot
-    private static final double TRACK_WIDTH = 26;
+    private static final Distance TRACK_WIDTH = Distance.fromInches(26.);
     // distance from the front to back wheels on the robot
-    private static final double WHEEL_BASE = 28;
+    private static final Distance WHEEL_BASE = Distance.fromInches(28.);
 
     private static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
-            0,
+            new AngularVelocity(),
             TRACK_WIDTH,
             WHEEL_BASE,
-            Units.metersToInches(CONFIGURATION.wheelDiameter),
+            CONFIGURATION.wheelDiameter,
             CONFIGURATION.driveGearRatio,
             FEED_FORWARD);
     

@@ -23,6 +23,9 @@ import frc.robot.sim.CTREPhysicsSim;
 import frc.robot.utilities.drive.BeakDifferentialDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
 import frc.robot.utilities.motor.BeakTalonSRX;
+import frc.robot.utilities.units.AngularVelocity;
+import frc.robot.utilities.units.Distance;
+import frc.robot.utilities.units.Velocity;
 
 /** Add your docs here. */
 public class CIMDrivetrain extends BeakDifferentialDrivetrain {
@@ -41,14 +44,14 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
     private static final int FR_ID = 3;
     private static final int BR_ID = 4;
 
-    private static final double MAX_VELOCITY = Units.feetToMeters(17.8);
+    private static final Velocity MAX_VELOCITY = Velocity.fromFeetPerSecond(17.8);
 
     // distance from the right to left wheels on the robot
-    private static final double TRACK_WIDTH = 26;
+    private static final Distance TRACK_WIDTH = Distance.fromInches(26.);
     // distance from the front to back wheels on the robot
-    private static final double WHEEL_BASE = 28;
+    private static final Distance WHEEL_BASE = Distance.fromInches(28.);
 
-    private static final double WHEEL_DIAMETER = 6.258;
+    private static final Distance WHEEL_DIAMETER = Distance.fromInches(6.258);
     private static final double GEAR_RATIO = 7.5;
 
     private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
@@ -58,7 +61,7 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
 
     private static final RobotPhysics PHYSICS = new RobotPhysics(
             MAX_VELOCITY,
-            0,
+            new AngularVelocity(),
             TRACK_WIDTH,
             WHEEL_BASE,
             WHEEL_DIAMETER,
@@ -107,7 +110,7 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
                 0.9,
                 Units.lbsToKilograms(60.),
                 Units.inchesToMeters(3.),
-                Units.inchesToMeters(TRACK_WIDTH),
+                TRACK_WIDTH.getAsMeters(),
                 null);
 
         m_FL.setDistancePerPulse(m_wheelDiameter, /* m_gearRatio */1);

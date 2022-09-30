@@ -7,13 +7,14 @@ package frc.robot.commands.auton;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
+import frc.robot.utilities.units.Distance;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class RotateDrivetrainToTargetPosition extends ProfiledPIDCommand {
     /** Creates a new RotateDrivetrainByAngle. */
-    public RotateDrivetrainToTargetPosition(double x, double y, BeakDrivetrain drivetrain) {
+    public RotateDrivetrainToTargetPosition(Distance x, Distance y, BeakDrivetrain drivetrain) {
         super(
                 // The ProfiledPIDController used by the command
                 drivetrain.getThetaController(),

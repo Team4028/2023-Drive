@@ -11,7 +11,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -70,10 +69,10 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         m_gyro = gyro;
 
         m_kinematics = new SwerveDriveKinematics(
-                new Translation2d(Units.inchesToMeters(physics.wheelBase)/ 2, Units.inchesToMeters(physics.trackWidth) / 2),
-                new Translation2d(Units.inchesToMeters(physics.wheelBase)/ 2, -Units.inchesToMeters(physics.trackWidth) / 2),
-                new Translation2d(-Units.inchesToMeters(physics.wheelBase) / 2, Units.inchesToMeters(physics.trackWidth) / 2),
-                new Translation2d(-Units.inchesToMeters(physics.wheelBase) / 2, -Units.inchesToMeters(physics.trackWidth) / 2));
+                new Translation2d(physics.wheelBase.getAsMeters() / 2, physics.trackWidth.getAsMeters() / 2),
+                new Translation2d(physics.wheelBase.getAsMeters() / 2, -physics.trackWidth.getAsMeters() / 2),
+                new Translation2d(-physics.wheelBase.getAsMeters() / 2, physics.trackWidth.getAsMeters() / 2),
+                new Translation2d(-physics.wheelBase.getAsMeters() / 2, -physics.trackWidth.getAsMeters() / 2));
         
         m_odom = new SwerveDriveOdometry(m_kinematics,
         getGyroRotation2d());
@@ -111,10 +110,11 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         m_odom.resetPosition(pose, getGyroRotation2d());
     }
 
+    // TODO: Need to implement a "driveRaw" method, with regular drive being for joystick driving.
     public void drive(double x, double y, double rot, boolean fieldRelative) {
-        x *= m_physics.maxVelocity;
-        y *= m_physics.maxVelocity;
-        rot *= m_physics.maxAngularVelocity;
+        x *= m_physics.maxVelocity.getAsMetersPerSecond();
+        y *= m_physics.maxVelocity.getAsMetersPerSecond();
+        rot *= m_physics.maxAngularVelocity.getAsRadiansPerSecond();
 
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, m_odom.getPoseMeters().getRotation())
@@ -131,7 +131,7 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
      * @param desiredStates An array of the desired states for the modules.
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, m_physics.maxVelocity);
+        SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, m_physics.maxVelocity.getAsMetersPerSecond());
 
         m_FL.setDesiredState(desiredStates[0]);
         m_FR.setDesiredState(desiredStates[1]);

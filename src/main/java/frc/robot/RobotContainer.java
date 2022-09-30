@@ -26,6 +26,7 @@ import frc.robot.subsystems.SixNEODrivetrain;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.utilities.BeakXBoxController;
 import frc.robot.utilities.Util;
+import frc.robot.utilities.units.Distance;
 
 /** Add your docs here. */
 public class RobotContainer {
@@ -66,7 +67,7 @@ public class RobotContainer {
 
         m_driverController.start.whenPressed(m_drive::zero);
         m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, false));
-        m_driverController.b.whenPressed(new RotateDrivetrainToTargetPosition(324, 162, m_drive).withTimeout(2.0));
+        m_driverController.b.whenPressed(new RotateDrivetrainToTargetPosition(Distance.fromInches(324.), Distance.fromInches(162.), m_drive).withTimeout(2.0));
     }
 
     public double speedScaledDriverLeftY() {

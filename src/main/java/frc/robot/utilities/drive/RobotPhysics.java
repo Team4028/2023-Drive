@@ -5,17 +5,19 @@
 package frc.robot.utilities.drive;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.util.Units;
+import frc.robot.utilities.units.AngularVelocity;
+import frc.robot.utilities.units.Distance;
+import frc.robot.utilities.units.Velocity;
 
 /** Class containing various physical parameters of a robot. */
 public class RobotPhysics {
-    public double maxVelocity;
-    public double maxAngularVelocity;
+    public Velocity maxVelocity;
+    public AngularVelocity maxAngularVelocity;
 
-    public double trackWidth;
-    public double wheelBase;
+    public Distance trackWidth;
+    public Distance wheelBase;
 
-    public double wheelDiameter;
+    public Distance wheelDiameter;
 
     public double driveGearRatio;
 
@@ -37,18 +39,24 @@ public class RobotPhysics {
      * @param feedforward        A {@link SimpleMotorFeedforward} calculated from
      *                           SysId.
      */
-    public RobotPhysics(double maxVelocity, double maxAngularVelocity, double trackWidth, double wheelBase,
-            double wheelDiameter, double driveGearRatio, SimpleMotorFeedforward feedforward) {
+    public RobotPhysics(
+            Velocity maxVelocity,
+            AngularVelocity maxAngularVelocity,
+            Distance trackWidth,
+            Distance wheelBase,
+            Distance wheelDiameter,
+            double driveGearRatio,
+            SimpleMotorFeedforward feedforward) {
         this.maxVelocity = maxVelocity;
         this.trackWidth = trackWidth;
         this.wheelBase = wheelBase;
-        this.maxAngularVelocity = (maxAngularVelocity == 0. ? calcTheoreticalAngularVelocity() : maxAngularVelocity);
+        this.maxAngularVelocity = (maxAngularVelocity.getAsRadiansPerSecond() == 0. ? calcTheoreticalAngularVelocity() : maxAngularVelocity);
         this.wheelDiameter = wheelDiameter;
         this.driveGearRatio = driveGearRatio;
         this.feedforward = feedforward;
     }
 
-    protected double calcTheoreticalAngularVelocity() {
-        return maxVelocity / Math.hypot(Units.inchesToMeters(trackWidth) / 2.0, Units.inchesToMeters(wheelBase) / 2.0);
+    protected AngularVelocity calcTheoreticalAngularVelocity() {
+        return new AngularVelocity(maxVelocity.getAsMetersPerSecond() / Math.hypot(trackWidth.getAsMeters() / 2.0, wheelBase.getAsMeters() / 2.0));
     }
 }

@@ -11,21 +11,23 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utilities.subsystem.BeakGyroSubsystem;
+import frc.robot.utilities.units.AngularVelocity;
+import frc.robot.utilities.units.Distance;
+import frc.robot.utilities.units.Velocity;
 
 /** Base drivetrain class. */
 public class BeakDrivetrain extends BeakGyroSubsystem {
     public Pose2d m_pose;
 
-    protected double m_maxVelocity;
-    protected double m_maxAngularVelocity;
+    protected Velocity m_maxVelocity;
+    protected AngularVelocity m_maxAngularVelocity;
 
-    protected double m_trackWidth;
-    protected double m_wheelBase;
+    protected Distance m_trackWidth;
+    protected Distance m_wheelBase;
 
-    protected double m_wheelDiameter;
+    protected Distance m_wheelDiameter;
 
     protected double m_gearRatio;
 
@@ -57,7 +59,7 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
         m_feedForward = physics.feedforward;
 
         final TrapezoidProfile.Constraints thetaConstraints = new TrapezoidProfile.Constraints(
-                physics.maxAngularVelocity, physics.maxAngularVelocity);
+                physics.maxAngularVelocity.getAsRadiansPerSecond(), physics.maxAngularVelocity.getAsRadiansPerSecond());
 
         m_thetaController = new ProfiledPIDController(
                 thetaPIDGains[0],
@@ -199,9 +201,9 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
      * @return A {@link Rotation2d} of the drivetrain's angle to the target
      *         position.
      */
-    public Rotation2d getAngleToTargetPosition(double x, double y) {
-        double xDelta = Units.inchesToMeters(x) - getPoseMeters().getX();
-        double yDelta = Units.inchesToMeters(y) - getPoseMeters().getY();
+    public Rotation2d getAngleToTargetPosition(Distance x, Distance y) {
+        double xDelta = x.getAsMeters() - getPoseMeters().getX();
+        double yDelta = y.getAsMeters() - getPoseMeters().getY();
 
         double radiansToTarget = Math.atan2(yDelta, xDelta);
 

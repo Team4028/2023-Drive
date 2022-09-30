@@ -19,32 +19,39 @@ public class Velocity {
     }
 
     /**
+     * Construct a zero velocity.
+     */
+    public Velocity() {
+        this(0.);
+    }
+
+    /**
      * Construct a velocity from an inches per second value.
      */
-    public void fromInchesPerSecond(double inches) {
-        m_velocity = Units.inchesToMeters(inches);
+    public static Velocity fromInchesPerSecond(double inches) {
+        return new Velocity(Units.inchesToMeters(inches));
     }
 
     /**
      * Construct a velocity from a feet per second value.
      */
-    public void fromFeetPerSecond(double feet) {
-        m_velocity = Units.feetToMeters(feet);
+    public static Velocity fromFeetPerSecond(double feet) {
+        return new Velocity(Units.feetToMeters(feet));
     }
 
     /**
      * Construct a velocity from a centimeters per second value.
      */
-    public void fromCentimetersPerSecond(double cm) {
-        m_velocity = cm / 100.;
+    public static Velocity fromCentimetersPerSecond(double cm) {
+        return new Velocity(cm / 100.);
     }
 
     /**
      * Construct a velocity from a miles per hour value.
      */
-    public void fromMilesPerHour(double mph) {
+    public static Velocity fromMilesPerHour(double mph) {
         /* Converts to feet per second first. */
-        m_velocity = Units.feetToMeters(mph / 5280. / 3600.);
+        return new Velocity(Units.feetToMeters(mph / 5280. / 3600.));
     }
 
     /**
