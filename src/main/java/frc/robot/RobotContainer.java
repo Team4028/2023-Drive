@@ -18,6 +18,7 @@ import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.RotateDrivetrainToTargetPosition;
 import frc.robot.commands.auton.TestPath;
 import frc.robot.subsystems.CIMDrivetrain;
+import frc.robot.subsystems.EpicSwerveDrivetrain;
 import frc.robot.subsystems.FalconDrivetrain;
 import frc.robot.subsystems.Mk2SwerveDrivetrain;
 import frc.robot.subsystems.NEODrivetrain;
@@ -38,7 +39,9 @@ public class RobotContainer {
     // private FalconDrivetrain m_drive = FalconDrivetrain.getInstance();
     // private Mk2SwerveDrivetrain m_drive = Mk2SwerveDrivetrain.getInstance();
     // private OctavianSwerveDrivetrain m_drive = OctavianSwerveDrivetrain.getInstance();
-    private SwerveDrivetrain m_drive = SwerveDrivetrain.getInstance();
+    // private SwerveDrivetrain m_drive = SwerveDrivetrain.getInstance();
+    private EpicSwerveDrivetrain m_drive = EpicSwerveDrivetrain.getInstance();
+    
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
 
     private SlewRateLimiter m_xLimiter = new SlewRateLimiter(4.0);

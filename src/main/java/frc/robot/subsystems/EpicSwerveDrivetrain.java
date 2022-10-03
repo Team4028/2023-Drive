@@ -36,9 +36,9 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
     private static final String CAN_BUS = "DriveSubsystem";
 
     private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
-            0,
-            0,
-            0);
+            (0.19 + 0.225 + 0.214 + 0.2256) / 4.0,
+            (2.2565 + 2.2785 + 2.2754 + 2.291) / 4.0,
+            (0.277 + 0.31) / 2.0);
 
     private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK4I_L2;
 
@@ -68,29 +68,29 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
     private static final double FL_OFFSET = -Units.degreesToRadians(139.8);
-    private static final Translation2d FL_LOCATION = new Translation2d(WHEEL_BASE.getAsInches() / 2,
-            TRACK_WIDTH.getAsInches() / 2); // TODO: Please God BeakTranslation2d
+    private static final Translation2d FL_LOCATION = new Translation2d(WHEEL_BASE.getAsMeters() / 2,
+            TRACK_WIDTH.getAsMeters() / 2); // TODO: Please God BeakTranslation2d
 
     private static final int FR_DRIVE_ID = 4;
     private static final int FR_TURN_ID = 3;
     private static final int FR_ENCODER_ID = 2; // SHOULD BE 10
     private static final double FR_OFFSET = -Math.toRadians(322.5);
-    private static final Translation2d FR_LOCATION = new Translation2d(WHEEL_BASE.getAsInches() / 2,
-            -TRACK_WIDTH.getAsInches() / 2);
+    private static final Translation2d FR_LOCATION = new Translation2d(WHEEL_BASE.getAsMeters() / 2,
+            -TRACK_WIDTH.getAsMeters() / 2);
 
     private static final int BL_DRIVE_ID = 6;
     private static final int BL_TURN_ID = 5;
     private static final int BL_ENCODER_ID = 3; // SHOULD BE 11
     private static final double BL_OFFSET = -Math.toRadians(106.3);
-    private static final Translation2d BL_LOCATION = new Translation2d(-WHEEL_BASE.getAsInches() / 2,
-            TRACK_WIDTH.getAsInches() / 2);
+    private static final Translation2d BL_LOCATION = new Translation2d(-WHEEL_BASE.getAsMeters() / 2,
+            TRACK_WIDTH.getAsMeters() / 2);
 
     private static final int BR_DRIVE_ID = 8;
     private static final int BR_TURN_ID = 7;
     private static final int BR_ENCODER_ID = 4; // SHOULD BE 12
     private static final double BR_OFFSET = -Math.toRadians(53.7 + 180.);
-    private static final Translation2d BR_LOCATION = new Translation2d(-WHEEL_BASE.getAsInches() / 2,
-            -TRACK_WIDTH.getAsInches() / 2);
+    private static final Translation2d BR_LOCATION = new Translation2d(-WHEEL_BASE.getAsMeters() / 2,
+            -TRACK_WIDTH.getAsMeters() / 2);
 
     private static final double ALLOWED_CLOSED_LOOP_ERROR = 40.0;
 

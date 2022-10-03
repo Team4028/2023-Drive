@@ -50,13 +50,18 @@ public class RobotPhysics {
         this.maxVelocity = maxVelocity;
         this.trackWidth = trackWidth;
         this.wheelBase = wheelBase;
-        this.maxAngularVelocity = (maxAngularVelocity.getAsRadiansPerSecond() == 0. ? calcTheoreticalAngularVelocity() : maxAngularVelocity);
+        this.maxAngularVelocity = (maxAngularVelocity.getAsRadiansPerSecond() == 0. ? calcTheoreticalAngularVelocity()
+                : maxAngularVelocity);
         this.wheelDiameter = wheelDiameter;
         this.driveGearRatio = driveGearRatio;
         this.feedforward = feedforward;
     }
 
     protected AngularVelocity calcTheoreticalAngularVelocity() {
-        return new AngularVelocity(maxVelocity.getAsMetersPerSecond() / Math.hypot(trackWidth.getAsMeters() / 2.0, wheelBase.getAsMeters() / 2.0));
+
+        AngularVelocity bruh = new AngularVelocity(maxVelocity.getAsMetersPerSecond()
+                / Math.hypot(trackWidth.getAsMeters() / 2.0, wheelBase.getAsMeters() / 2.0));
+        System.out.println(bruh.getAsRadiansPerSecond());
+        return bruh;
     }
 }

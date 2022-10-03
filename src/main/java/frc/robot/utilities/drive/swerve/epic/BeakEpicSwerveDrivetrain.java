@@ -4,6 +4,7 @@
 
 package frc.robot.utilities.drive.swerve.epic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
@@ -27,7 +29,7 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
      * module is passed in as the first module, <code>m_modules.get(0)</code> would
      * return the front left module.
      */
-    protected List<BeakEpicSwerveModule> m_modules;
+    protected List<BeakEpicSwerveModule> m_modules = new ArrayList<BeakEpicSwerveModule>();
     int m_numModules;
 
     protected SwerveDriveOdometry m_odom;
@@ -60,16 +62,19 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
         m_physics = physics;
 
         m_numModules = configs.length;
-        Translation2d[] moduleLocations = {};
+        Translation2d[] moduleLocations = new Translation2d[m_numModules];
 
         for (int i = 0; i < m_numModules; i++) {
-            m_modules.add(BeakEpicSwerveModule.fromSwerveModuleConfig(configs[i]));
+            BeakEpicSwerveModule module = BeakEpicSwerveModule.fromSwerveModuleConfig(configs[i]);
+            m_modules.add(module);
             moduleLocations[i] = configs[i].moduleLocation;
         }
 
         m_gyro = gyro;
 
         m_kinematics = new SwerveDriveKinematics(moduleLocations);
+
+        m_odom = new SwerveDriveOdometry(m_kinematics, getGyroRotation2d());
     }
 
     public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
@@ -106,6 +111,8 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
         y *= m_physics.maxVelocity.getAsMetersPerSecond();
         rot *= m_physics.maxAngularVelocity.getAsRadiansPerSecond();
 
+        SmartDashboard.putNumber("rot", rot);
+
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, getRotation2d())
                         : new ChassisSpeeds(x, y, rot));
@@ -134,7 +141,7 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
      * @return Array of {@link SwerveModuleState}s for each module.
      */
     public SwerveModuleState[] getModuleStates() {
-        SwerveModuleState[] states = {};
+        SwerveModuleState[] states = new SwerveModuleState[m_numModules];
         for (int i = 0; i < m_numModules; i++) {
             states[i] = m_modules.get(i).getState();
         }

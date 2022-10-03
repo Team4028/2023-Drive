@@ -114,9 +114,6 @@ public class BeakEpicSwerveModule {
      *                     and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
-        SmartDashboard.putNumber("bruh " + bruh, desiredState.angle.getDegrees());
-        // SmartDashboard.putNumber("bruh " + bruh, desiredState.speedMetersPerSecond);
-        // SmartDashboard.putNumber("state " + bruh, getState().speedMetersPerSecond);
         // Optimize the state to avoid spinning more than 90 degrees.
         SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
         
@@ -129,6 +126,8 @@ public class BeakEpicSwerveModule {
                 optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
                 arbFeedforward,
                 0);
+        
+        SmartDashboard.putNumber("bruh " + bruh, m_driveMotor.getOutputVoltage());
 
         // Set the turning motor to the correct position.
         setAngle(optimizedState.angle.getDegrees());

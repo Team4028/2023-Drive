@@ -48,7 +48,6 @@ public class BeakMk4iSwerveModule extends BeakSwerveModule {
         m_turningMotor.setStatusPeriod(StatusFrameEnhanced.Status_6_Misc.value, 59);
     }
 
-
     @Override
     public double getTurningEncoderRadians() {
         double angle = m_turningEncoder.getAbsolutePosition();
