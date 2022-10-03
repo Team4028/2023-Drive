@@ -6,7 +6,7 @@ package frc.robot.utilities.units;
 
 import edu.wpi.first.math.util.Units;
 
-/** Add your docs here. */
+/** Class representing an angular velocity in any unit. */
 public class AngularVelocity {
     /** Internally represent as radians per second */
     private double m_velocity;
