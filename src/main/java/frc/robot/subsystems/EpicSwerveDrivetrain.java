@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
-    private static final double DRIVE_kP = 0.01;
+    private static final double DRIVE_kP = 0.015;
     private static final double TURN_kP = 0.4;
     private static final double TURN_kD = 0.3;
 

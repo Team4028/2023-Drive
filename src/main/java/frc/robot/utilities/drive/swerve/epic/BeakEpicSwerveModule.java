@@ -32,7 +32,8 @@ public class BeakEpicSwerveModule {
      * @param config {@link EpicSwerveModuleConfiguration} containing
      *               details of the module.
      */
-    public BeakEpicSwerveModule(EpicSwerveModuleConfiguration config) {}
+    public BeakEpicSwerveModule(EpicSwerveModuleConfiguration config) {
+    }
 
     /**
      * Call this function in a subclass AFTER setting up motors and encoders
@@ -65,6 +66,8 @@ public class BeakEpicSwerveModule {
 
         // Configure PID
         m_driveMotor.setP(config.drive_kP, 0);
+
+        m_driveMotor.setDistancePerPulse(config.wheelDiameter, config.driveGearRatio);
     }
 
     public void configTurningMotor(EpicSwerveModuleConfiguration config) {
@@ -103,7 +106,8 @@ public class BeakEpicSwerveModule {
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-                m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
+                // m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
+                m_driveMotor.getRate() / 10.,
                 new Rotation2d(getTurningEncoderRadians())); // FUTURE: Using Absolute reverses some wheels.
     }
 
@@ -115,18 +119,21 @@ public class BeakEpicSwerveModule {
      */
     public void setDesiredState(SwerveModuleState desiredState) {
         // Optimize the state to avoid spinning more than 90 degrees.
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
-        
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState,
+                new Rotation2d(getTurningEncoderRadians()));
+
         // Calculate Arb Feed Forward for drive motor
         // TODO: calc from SysId
         // NOTE: feedforward MUST be in meters!
         double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond);
 
-        m_driveMotor.setVelocityNU(
-                optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
+        // m_driveMotor.setVelocityNU(
+        m_driveMotor.setRate(
+                // optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
+                optimizedState.speedMetersPerSecond,
                 arbFeedforward,
                 0);
-        
+
         SmartDashboard.putNumber("bruh " + bruh, m_driveMotor.getOutputVoltage());
 
         // Set the turning motor to the correct position.
@@ -191,7 +198,7 @@ public class BeakEpicSwerveModule {
     }
 
     public static BeakEpicSwerveModule fromSwerveModuleConfig(EpicSwerveModuleConfiguration config) {
-        switch(config.moduleType) {
+        switch (config.moduleType) {
             case MK4i:
                 return new BeakEpicMk4iSwerveModule(config);
             case MK2:
