@@ -8,12 +8,14 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utilities.encoder.BeakAbsoluteEncoder;
 import frc.robot.utilities.motor.BeakMotorController;
 
 /** Base class for any non-differential swerve module. */
 public class BeakEpicSwerveModule {
     protected double turnCPR;
+    protected int bruh;
 
     // Calculated from Drive CPR.
     protected double driveEncoderDistancePerPulse;
@@ -36,15 +38,17 @@ public class BeakEpicSwerveModule {
      * Call this function in a subclass AFTER setting up motors and encoders
      */
     public void setup(EpicSwerveModuleConfiguration config) {
-        turnCPR = config.turnGearRatio * m_turningMotor.getPositionEncoderCPR();
+        turnCPR = config.turnGearRatio * m_turningMotor.getVelocityEncoderCPR();
         driveEncoderDistancePerPulse = (config.wheelDiameter.getAsMeters() * Math.PI)
                 * config.driveGearRatio / m_driveMotor.getVelocityEncoderCPR();
 
         m_feedforward = config.feedforward;
 
+        bruh = config.driveMotorID;
+
         configTurningEncoder(config);
-        configDriveMotor(config);
         configTurningMotor(config);
+        configDriveMotor(config);
     }
 
     public void configDriveMotor(EpicSwerveModuleConfiguration config) {
@@ -100,7 +104,7 @@ public class BeakEpicSwerveModule {
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
-                new Rotation2d(getAbsoluteTurningEncoderRadians()));
+                new Rotation2d(getTurningEncoderRadians())); // FUTURE: Using Absolute reverses some wheels.
     }
 
     /**
@@ -110,12 +114,16 @@ public class BeakEpicSwerveModule {
      *                     and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
+        SmartDashboard.putNumber("bruh " + bruh, desiredState.angle.getDegrees());
+        // SmartDashboard.putNumber("bruh " + bruh, desiredState.speedMetersPerSecond);
+        // SmartDashboard.putNumber("state " + bruh, getState().speedMetersPerSecond);
         // Optimize the state to avoid spinning more than 90 degrees.
         SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
         
         // Calculate Arb Feed Forward for drive motor
         // TODO: calc from SysId
-        double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
+        // NOTE: feedforward MUST be in meters!
+        double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond);
 
         m_driveMotor.setVelocityNU(
                 optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
@@ -134,22 +142,7 @@ public class BeakEpicSwerveModule {
      */
     public void resetTurningMotor() {
         m_turningMotor.setEncoderPositionNU(
-                -Math.toDegrees(getAbsoluteTurningEncoderRadians()) / 360.0 * turnCPR);
-    }
-
-    /**
-     * Get the angle of the wheel.
-     * 
-     * @return Angle of the wheel in radians.
-     */
-    public double getAbsoluteTurningEncoderRadians() {
-        double angle = Units.degreesToRadians(m_turningEncoder.getAbsolutePosition());
-        angle %= 2.0 * Math.PI;
-        if (angle < 0.0) {
-            angle += 2.0 * Math.PI;
-        }
-
-        return angle;
+                -Math.toDegrees(getTurningEncoderRadians()) / 360.0 * turnCPR);
     }
 
     /**
@@ -158,7 +151,7 @@ public class BeakEpicSwerveModule {
      * @return Angle of the wheel in radians.
      */
     public double getTurningEncoderRadians() {
-        double angle = Units.degreesToRadians(m_turningEncoder.getPosition());
+        double angle = m_turningEncoder.getPosition();
         angle %= 2.0 * Math.PI;
         if (angle < 0.0) {
             angle += 2.0 * Math.PI;
@@ -192,6 +185,8 @@ public class BeakEpicSwerveModule {
         } else if (newAngleDemand - currentSensorPosition < -180.1) {
             newAngleDemand += 360.0;
         }
+
+        SmartDashboard.putNumber("state " + bruh, newAngleDemand / 360. * turnCPR);
 
         m_turningMotor.setPositionNU(newAngleDemand / 360.0 * turnCPR);
     }

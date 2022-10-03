@@ -6,10 +6,10 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.PIDConstants;
 import frc.robot.utilities.drive.RobotPhysics;
+import frc.robot.utilities.drive.swerve.epic.BeakEpicSwerveDrivetrain;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
-import frc.robot.utilities.drive.swerve.epic.BeakEpicSwerveDrivetrain;
 import frc.robot.utilities.drive.swerve.epic.EpicSwerveModuleConfiguration;
 import frc.robot.utilities.units.AngularVelocity;
 import frc.robot.utilities.units.Distance;
@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
     private static final double DRIVE_kP = 0.01;
     private static final double TURN_kP = 0.4;
+    private static final double TURN_kD = 0.3;
 
     private static final double AUTON_kP = 3.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
@@ -57,34 +58,39 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             CONFIGURATION.driveGearRatio,
             FEED_FORWARD);
 
-    private static SwerveDrivetrain m_instance;
+    private static EpicSwerveDrivetrain m_instance;
 
     private Field2d m_field = new Field2d();
+
     // TODO: get offsets
     // TODO: organize this
     private static final int FL_DRIVE_ID = 2;
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
     private static final double FL_OFFSET = -Units.degreesToRadians(139.8);
-    private static final Translation2d FL_LOCATION = new Translation2d(WHEEL_BASE.getAsInches() / 2, TRACK_WIDTH.getAsInches() / 2); // TODO: Please God BeakTranslation2d
+    private static final Translation2d FL_LOCATION = new Translation2d(WHEEL_BASE.getAsInches() / 2,
+            TRACK_WIDTH.getAsInches() / 2); // TODO: Please God BeakTranslation2d
 
     private static final int FR_DRIVE_ID = 4;
     private static final int FR_TURN_ID = 3;
     private static final int FR_ENCODER_ID = 2; // SHOULD BE 10
     private static final double FR_OFFSET = -Math.toRadians(322.5);
-    private static final Translation2d FR_LOCATION = new Translation2d(WHEEL_BASE.getAsInches() / 2, -TRACK_WIDTH.getAsInches() / 2);
+    private static final Translation2d FR_LOCATION = new Translation2d(WHEEL_BASE.getAsInches() / 2,
+            -TRACK_WIDTH.getAsInches() / 2);
 
     private static final int BL_DRIVE_ID = 6;
     private static final int BL_TURN_ID = 5;
     private static final int BL_ENCODER_ID = 3; // SHOULD BE 11
     private static final double BL_OFFSET = -Math.toRadians(106.3);
-    private static final Translation2d BL_LOCATION = new Translation2d(-WHEEL_BASE.getAsInches() / 2, TRACK_WIDTH.getAsInches() / 2);
+    private static final Translation2d BL_LOCATION = new Translation2d(-WHEEL_BASE.getAsInches() / 2,
+            TRACK_WIDTH.getAsInches() / 2);
 
     private static final int BR_DRIVE_ID = 8;
     private static final int BR_TURN_ID = 7;
     private static final int BR_ENCODER_ID = 4; // SHOULD BE 12
     private static final double BR_OFFSET = -Math.toRadians(53.7 + 180.);
-    private static final Translation2d BR_LOCATION = new Translation2d(-WHEEL_BASE.getAsInches() / 2, -TRACK_WIDTH.getAsInches() / 2);
+    private static final Translation2d BR_LOCATION = new Translation2d(-WHEEL_BASE.getAsInches() / 2,
+            -TRACK_WIDTH.getAsInches() / 2);
 
     private static final double ALLOWED_CLOSED_LOOP_ERROR = 40.0;
 
@@ -94,8 +100,10 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
 
     private final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(PIGEON2_ID, CAN_BUS);
 
-    private static final SwerveDrivetrainConfiguration DRIVE_CONFIG = new SwerveDrivetrainConfiguration(DRIVE_kP,
+    private static final SwerveDrivetrainConfiguration DRIVE_CONFIG = new SwerveDrivetrainConfiguration(
+            DRIVE_kP,
             TURN_kP,
+            TURN_kD,
             ALLOWED_CLOSED_LOOP_ERROR,
             TURN_CURRENT_LIMIT,
             DRIVE_SUPPLY_LIMIT,
@@ -148,9 +156,10 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
                 m_backLeftConfig,
                 m_backRightConfig);
     }
-    public static SwerveDrivetrain getInstance() {
+
+    public static EpicSwerveDrivetrain getInstance() {
         if (m_instance == null) {
-            m_instance = new SwerveDrivetrain();
+            m_instance = new EpicSwerveDrivetrain();
         }
         return m_instance;
     }
@@ -159,11 +168,10 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
     public void periodic() {
         updateOdometry();
 
-        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_modules.get(0).getAbsoluteTurningEncoderRadians()));
-        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_modules.get(1).getAbsoluteTurningEncoderRadians()));
-        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_modules.get(2).getAbsoluteTurningEncoderRadians()));
-        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_modules.get(3).getAbsoluteTurningEncoderRadians()));
-
+        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_modules.get(0).getTurningEncoderRadians()));
+        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_modules.get(1).getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_modules.get(2).getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_modules.get(3).getTurningEncoderRadians()));
         m_field.setRobotPose(getPoseMeters());
         SmartDashboard.putData(m_field);
 

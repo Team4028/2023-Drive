@@ -10,6 +10,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 public class SwerveDrivetrainConfiguration {
     public final double drive_kP;
     public final double turn_kP;
+    public final double turn_kD;
 
     public final double allowedClosedLoopError;
 
@@ -27,6 +28,7 @@ public class SwerveDrivetrainConfiguration {
      * 
      * @param drive_kP               Proportional gain to use for the drive motor.
      * @param turn_kP                Proportional gain to use for the turning motor.
+     * @param turn_kD               Derivative gain to use for the turning motor.
      * @param allowedClosedLoopError Allowed error of the turning motor, in NU.
      * @param turnCurrentLimit       Current limit of the turning motor.
      * @param driveSupplyLimit       Supply current limit of the drive motor.
@@ -42,6 +44,7 @@ public class SwerveDrivetrainConfiguration {
     public SwerveDrivetrainConfiguration(
             double drive_kP,
             double turn_kP,
+            double turn_kD,
             double allowedClosedLoopError,
             int turnCurrentLimit,
             int driveSupplyLimit,
@@ -51,6 +54,7 @@ public class SwerveDrivetrainConfiguration {
             SdsModuleConfiguration moduleConfiguration) {
         this.drive_kP = drive_kP;
         this.turn_kP = turn_kP;
+        this.turn_kD = turn_kD;
         this.allowedClosedLoopError = allowedClosedLoopError;
         this.turnCurrentLimit = turnCurrentLimit;
         this.driveSupplyLimit = driveSupplyLimit;

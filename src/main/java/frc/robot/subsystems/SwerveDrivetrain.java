@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final double DRIVE_kP = 0.01;
     private static final double TURN_kP = 0.4;
+    private static final double TURN_kD = 0.3;
 
     private static final double AUTON_kP = 3.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
@@ -55,7 +56,7 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             CONFIGURATION.wheelDiameter,
             CONFIGURATION.driveGearRatio,
             FEED_FORWARD);
-    
+
     private static SwerveDrivetrain m_instance;
 
     private Field2d m_field = new Field2d();
@@ -89,9 +90,11 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final int DRIVE_STATOR_LIMIT = 80;
 
     private final static WPI_Pigeon2 m_gyro = new WPI_Pigeon2(PIGEON2_ID, CAN_BUS);
-    
-    private static final SwerveDrivetrainConfiguration DRIVE_CONFIG = new SwerveDrivetrainConfiguration(DRIVE_kP,
+
+    private static final SwerveDrivetrainConfiguration DRIVE_CONFIG = new SwerveDrivetrainConfiguration(
+            DRIVE_kP,
             TURN_kP,
+            TURN_kD,
             ALLOWED_CLOSED_LOOP_ERROR,
             TURN_CURRENT_LIMIT,
             DRIVE_SUPPLY_LIMIT,

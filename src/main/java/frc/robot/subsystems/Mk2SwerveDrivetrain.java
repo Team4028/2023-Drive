@@ -30,6 +30,7 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     private static final double DRIVE_kP = 0.0001;
     private static final double TURN_kP = 0.45;
+    private static final double TURN_kD = 0.3;
 
     private static final double AUTON_kP = 1.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
@@ -64,22 +65,22 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final int FL_DRIVE_ID = 4;
     private static final int FL_TURN_ID = 3;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
-    private static final double FL_OFFSET = -Units.degreesToRadians(19.4);//244.9 + 180.); //324.4 + 180.0);
+    private static final double FL_OFFSET = -Units.degreesToRadians(19.4);// 244.9 + 180.); //324.4 + 180.0);
 
     private static final int FR_DRIVE_ID = 2;
     private static final int FR_TURN_ID = 1;
     private static final int FR_ENCODER_ID = 2; // SHOULD BE 10
-    private static final double FR_OFFSET = Units.degreesToRadians(272.5);//317.9 + 180.); //219.6 + 180.0);
+    private static final double FR_OFFSET = Units.degreesToRadians(272.5);// 317.9 + 180.); //219.6 + 180.0);
 
     private static final int BL_DRIVE_ID = 5;
     private static final int BL_TURN_ID = 6;
     private static final int BL_ENCODER_ID = 0; // SHOULD BE 11
-    private static final double BL_OFFSET = -Units.degreesToRadians(96.7);//87.7 + 180.); //135.4 + 180.0);
+    private static final double BL_OFFSET = -Units.degreesToRadians(96.7);// 87.7 + 180.); //135.4 + 180.0);
 
     private static final int BR_DRIVE_ID = 7;
     private static final int BR_TURN_ID = 8;
     private static final int BR_ENCODER_ID = 3; // SHOULD BE 12
-    private static final double BR_OFFSET = Units.degreesToRadians(140. - 98.);//345.65 + 180.);
+    private static final double BR_OFFSET = Units.degreesToRadians(140. - 98.);// 345.65 + 180.);
 
     private static final double ALLOWED_CLOSED_LOOP_ERROR = 0.0001;
 
@@ -89,8 +90,10 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     private final static AHRS m_gyro = new AHRS(SPI.Port.kMXP);
 
-    private static final SwerveDrivetrainConfiguration DRIVE_CONFIG = new SwerveDrivetrainConfiguration(DRIVE_kP,
+    private static final SwerveDrivetrainConfiguration DRIVE_CONFIG = new SwerveDrivetrainConfiguration(
+            DRIVE_kP,
             TURN_kP,
+            TURN_kD,
             ALLOWED_CLOSED_LOOP_ERROR,
             TURN_CURRENT_LIMIT,
             DRIVE_SUPPLY_LIMIT,

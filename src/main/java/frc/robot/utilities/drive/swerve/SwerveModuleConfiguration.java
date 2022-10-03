@@ -25,6 +25,7 @@ public class SwerveModuleConfiguration {
 
     public double drive_kP;
     public double turn_kP;
+    public double turn_kD;
 
     public double allowedError;
 
@@ -61,6 +62,7 @@ public class SwerveModuleConfiguration {
         this.angleOffset = angleOffset;
         this.drive_kP = driveConfig.drive_kP;
         this.turn_kP = driveConfig.turn_kP;
+        this.turn_kD = driveConfig.turn_kD;
 
         this.allowedError = driveConfig.allowedClosedLoopError;
 

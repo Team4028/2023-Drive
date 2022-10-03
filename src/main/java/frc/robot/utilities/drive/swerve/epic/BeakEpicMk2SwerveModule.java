@@ -5,8 +5,7 @@
 package frc.robot.utilities.drive.swerve.epic;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utilities.encoder.BeakAnalogInput;
 import frc.robot.utilities.motor.BeakSparkMAX;
 
@@ -59,27 +58,12 @@ public class BeakEpicMk2SwerveModule extends BeakEpicSwerveModule {
     }
 
     @Override
-    public void setDesiredState(SwerveModuleState desiredState) {
-        // Optimize the state to avoid spinning more than 90 degrees.
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, getState().angle);
-
-        // // Calculate Arb Feed Forward for drive motor
-        // // TODO: calc from SysId
-        // double arbFeedforward =
-        // m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
-
-        // m_driveMotor.setVelocityNU(
-        // optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
-        // arbFeedforward,
-        // 0);
-        m_driveMotor.set(optimizedState.speedMetersPerSecond / Units.feetToMeters(12.0));
-
-        double turnOutput = m_turningPIDController.calculate(getTurningEncoderRadians(), desiredState.angle.getRadians());
+    public void setAngle(double angle) { // TODO: Angle motor PID
+        double turnOutput = m_turningPIDController.calculate(getTurningEncoderRadians(), Math.toRadians(angle));
 
         // Calculate the turning motor output from the turning PID controller.
         m_turningMotor.set(turnOutput);
 
-        // Set the turning motor to the correct position.
-        // setAngle(optimizedState.angle.getDegrees());
+        SmartDashboard.putNumber("state " + bruh, m_turningMotor.getPositionNU() * 360. / turnCPR);
     }
 }
