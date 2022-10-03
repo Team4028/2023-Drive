@@ -144,10 +144,10 @@ public class Mk2SwerveDrivetrain extends BeakSwerveDrivetrain {
     public void periodic() {
         updateOdometry();
 
-        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_FL.getAbsoluteTurningEncoderRadians()));
-        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_FR.getAbsoluteTurningEncoderRadians()));
-        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getAbsoluteTurningEncoderRadians()));
-        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_BR.getAbsoluteTurningEncoderRadians()));
+        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_FL.getTurningEncoderRadians()));
+        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_FR.getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_BR.getTurningEncoderRadians()));
 
         // SmartDashboard.putNumber("FL getangle", m_FL.getState().angle.getDegrees());
         // SmartDashboard.putNumber("FR getangle", m_FR.getState().angle.getDegrees());

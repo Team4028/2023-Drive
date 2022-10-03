@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.revrobotics.REVPhysicsSim;
 
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,6 +47,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         m_robotContainer = RobotContainer.getInstance();
+        // Solenoid m_solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
         // try {
         //     m_autonLogger = new BeakLogger(m_logFileFolder, "auton");

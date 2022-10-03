@@ -150,21 +150,6 @@ public class BeakSwerveModule {
      * 
      * @return Angle of the wheel in radians.
      */
-    public double getAbsoluteTurningEncoderRadians() {
-        double angle = m_turningEncoder.getAbsolutePosition();
-        angle %= 2.0 * Math.PI;
-        if (angle < 0.0) {
-            angle += 2.0 * Math.PI;
-        }
-
-        return angle;
-    }
-
-    /**
-     * Get the angle of the wheel.
-     * 
-     * @return Angle of the wheel in radians.
-     */
     public double getTurningEncoderRadians() {
         double angle = m_turningEncoder.getPosition();
         angle %= 2.0 * Math.PI;
