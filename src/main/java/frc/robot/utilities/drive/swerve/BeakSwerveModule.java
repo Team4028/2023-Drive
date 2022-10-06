@@ -114,7 +114,7 @@ public class BeakSwerveModule {
      *                     and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
-        SmartDashboard.putNumber("bruh " + bruh, desiredState.angle.getDegrees());
+        // SmartDashboard.putNumber("bruh " + bruh, desiredState.angle.getDegrees());
         // SmartDashboard.putNumber("bruh " + bruh, desiredState.speedMetersPerSecond);
         // SmartDashboard.putNumber("state " + bruh, getState().speedMetersPerSecond);
         // Optimize the state to avoid spinning more than 90 degrees.
@@ -129,6 +129,9 @@ public class BeakSwerveModule {
                 optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
                 arbFeedforward,
                 0);
+        
+        SmartDashboard.putNumber("bruh " + bruh, desiredState.speedMetersPerSecond);
+        SmartDashboard.putNumber("state " + bruh, getState().speedMetersPerSecond);
 
         // Set the turning motor to the correct position.
         setAngle(optimizedState.angle.getDegrees());
@@ -186,7 +189,7 @@ public class BeakSwerveModule {
             newAngleDemand += 360.0;
         }
 
-        SmartDashboard.putNumber("state " + bruh, newAngleDemand / 360. * turnCPR);
+        // SmartDashboard.putNumber("state " + bruh, newAngleDemand / 360. * turnCPR);
 
         m_turningMotor.setPositionNU(newAngleDemand / 360.0 * turnCPR);
     }

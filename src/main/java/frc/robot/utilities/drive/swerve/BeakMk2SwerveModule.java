@@ -35,6 +35,8 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
     public void configDriveMotor(SwerveModuleConfiguration config) {
         super.configDriveMotor(config);
 
+        m_driveMotor.setD(config.drive_kP * 10., 0);
+
         // Prevent huge CAN spikes
         // m_driveMotor.setStatusPeriod(StatusFrameEnhanced.Status_1_General.value, 19);
         // m_driveMotor.setStatusPeriod(StatusFrameEnhanced.Status_2_Feedback0.value,
@@ -64,6 +66,6 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         // Calculate the turning motor output from the turning PID controller.
         m_turningMotor.set(turnOutput);
 
-        SmartDashboard.putNumber("state " + bruh, m_turningMotor.getPositionNU() * 360. / turnCPR);
+        // SmartDashboard.putNumber("state " + bruh, m_turningMotor.getPositionNU() * 360. / turnCPR);
     }
 }
