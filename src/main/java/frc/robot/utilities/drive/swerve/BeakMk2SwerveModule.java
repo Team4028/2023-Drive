@@ -5,6 +5,9 @@
 package frc.robot.utilities.drive.swerve;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utilities.encoder.BeakAnalogInput;
 import frc.robot.utilities.motor.BeakSparkMAX;
@@ -38,25 +41,54 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         m_driveMotor.setD(config.drive_kP * 10., 0);
 
         // Prevent huge CAN spikes
-        // m_driveMotor.setStatusPeriod(StatusFrameEnhanced.Status_1_General.value, 19);
-        // m_driveMotor.setStatusPeriod(StatusFrameEnhanced.Status_2_Feedback0.value,
-        // 19);
-        // m_driveMotor.setStatusPeriod(StatusFrameEnhanced.Status_4_AinTempVbat.value,
-        // 253);
-        // m_driveMotor.setStatusPeriod(StatusFrameEnhanced.Status_6_Misc.value, 59);
+        // TODO: CAN status frames
     }
 
     public void configTurningMotor(SwerveModuleConfiguration config) {
         super.configTurningMotor(config);
 
         // Prevent huge CAN spikes
-        // m_turningMotor.setStatusPeriod(StatusFrameEnhanced.Status_1_General.value,
-        // 19);
-        // m_turningMotor.setStatusPeriod(StatusFrameEnhanced.Status_2_Feedback0.value,
-        // 19);
-        // m_turningMotor.setStatusPeriod(StatusFrameEnhanced.Status_4_AinTempVbat.value,
-        // 253);
-        // m_turningMotor.setStatusPeriod(StatusFrameEnhanced.Status_6_Misc.value, 59);
+        // TODO: CAN status frames
+    }
+
+    /**
+     * Minimize the change in heading the desired swerve module state would require
+     * by potentially
+     * reversing the direction the wheel spins. If this is used with the
+     * PIDController class's
+     * continuous input functionality, the furthest a wheel will ever rotate is 90
+     * degrees.
+     *
+     * @param desiredState The desired state.
+     * @param currentAngle The current module angle.
+     * @return Optimized swerve module state.
+     */
+    public static SwerveModuleState optimize(
+            SwerveModuleState desiredState, Rotation2d currentAngle) {
+        var delta = desiredState.angle.minus(currentAngle);
+        if (Math.abs(delta.getDegrees()) > 90.0) {
+            return new SwerveModuleState(
+                    -desiredState.speedMetersPerSecond,
+                    desiredState.angle.getDegrees() == 0. ? desiredState.angle : desiredState.angle.rotateBy(Rotation2d.fromDegrees(180.0)));
+        } else {
+            return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
+        }
+    }
+
+    @Override
+    public void setDesiredState(SwerveModuleState desiredState) {
+        // Optimize the state to avoid spinning more than 90 degrees.
+        // TODO: All attempts at an optimize function seem to break stuff for MK2.
+        SwerveModuleState optimizedState = desiredState;//optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
+        // SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
+
+        SmartDashboard.putNumber("bruh " + bruh, desiredState.speedMetersPerSecond);
+        SmartDashboard.putNumber("state " + bruh, getState().speedMetersPerSecond);
+
+        m_driveMotor.set(desiredState.speedMetersPerSecond / Units.feetToMeters(14.3));
+
+        // Set the turning motor to the correct position.
+        setAngle(optimizedState.angle.getDegrees());
     }
 
     @Override
@@ -66,6 +98,7 @@ public class BeakMk2SwerveModule extends BeakSwerveModule {
         // Calculate the turning motor output from the turning PID controller.
         m_turningMotor.set(turnOutput);
 
-        // SmartDashboard.putNumber("state " + bruh, m_turningMotor.getPositionNU() * 360. / turnCPR);
+        // SmartDashboard.putNumber("state " + bruh, m_turningMotor.getPositionNU() *
+        // 360. / turnCPR);
     }
 }
