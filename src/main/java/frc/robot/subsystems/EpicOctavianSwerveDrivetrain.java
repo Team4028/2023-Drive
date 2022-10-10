@@ -6,7 +6,6 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.PIDConstants;
 import frc.robot.utilities.drive.RobotPhysics;
-import frc.robot.utilities.drive.swerve.BeakSwerveDrivetrain;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
@@ -19,6 +18,7 @@ import frc.robot.utilities.units.Velocity;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -121,13 +121,15 @@ public class EpicOctavianSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             FL_TURN_ID,
             FL_ENCODER_ID,
             FL_OFFSET,
-            null, DRIVE_CONFIG);
+            FL_LOCATION,
+            DRIVE_CONFIG);
 
     private static EpicSwerveModuleConfiguration m_frontRightConfig = new EpicSwerveModuleConfiguration(
             FR_DRIVE_ID,
             FR_TURN_ID,
             FR_ENCODER_ID,
             FR_OFFSET,
+            FR_LOCATION,
             DRIVE_CONFIG);
 
     private static EpicSwerveModuleConfiguration m_backLeftConfig = new EpicSwerveModuleConfiguration(
@@ -135,6 +137,7 @@ public class EpicOctavianSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             BL_TURN_ID,
             BL_ENCODER_ID,
             BL_OFFSET,
+            BL_LOCATION,
             DRIVE_CONFIG);
 
     private static EpicSwerveModuleConfiguration m_backRightConfig = new EpicSwerveModuleConfiguration(
@@ -142,6 +145,7 @@ public class EpicOctavianSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             BR_TURN_ID,
             BR_ENCODER_ID,
             BR_OFFSET,
+            BR_LOCATION,
             DRIVE_CONFIG);
 
     public EpicOctavianSwerveDrivetrain() {
@@ -161,15 +165,10 @@ public class EpicOctavianSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
     public void periodic() {
         updateOdometry();
 
-        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_FL.getTurningEncoderRadians()));
-        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_FR.getTurningEncoderRadians()));
-        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getTurningEncoderRadians()));
-        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_BR.getTurningEncoderRadians()));
-
-        // SmartDashboard.putNumber("FL getangle", m_FL.getState().angle.getDegrees());
-        // SmartDashboard.putNumber("FR getangle", m_FR.getState().angle.getDegrees());
-        // SmartDashboard.putNumber("BL getangle", m_BL.getState().angle.getDegrees());
-        // SmartDashboard.putNumber("BR getangle", m_BR.getState().angle.getDegrees());
+        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_modules.get(0).getTurningEncoderRadians()));
+        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_modules.get(1).getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_modules.get(2).getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_modules.get(3).getTurningEncoderRadians()));
 
         m_field.setRobotPose(getPoseMeters());
         SmartDashboard.putData(m_field);
