@@ -67,28 +67,28 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
     private static final int FL_DRIVE_ID = 2;
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
-    private static final double FL_OFFSET = -Units.degreesToRadians(139.8);
+    private static final double FL_OFFSET = -Units.degreesToRadians(139.2);
     private static final Translation2d FL_LOCATION = new Translation2d(WHEEL_BASE.getAsMeters() / 2,
             TRACK_WIDTH.getAsMeters() / 2); // TODO: Please God BeakTranslation2d
 
     private static final int FR_DRIVE_ID = 4;
     private static final int FR_TURN_ID = 3;
     private static final int FR_ENCODER_ID = 2; // SHOULD BE 10
-    private static final double FR_OFFSET = -Math.toRadians(322.5);
+    private static final double FR_OFFSET = -Math.toRadians(322.3);
     private static final Translation2d FR_LOCATION = new Translation2d(WHEEL_BASE.getAsMeters() / 2,
             -TRACK_WIDTH.getAsMeters() / 2);
 
     private static final int BL_DRIVE_ID = 6;
     private static final int BL_TURN_ID = 5;
     private static final int BL_ENCODER_ID = 3; // SHOULD BE 11
-    private static final double BL_OFFSET = -Math.toRadians(106.3);
+    private static final double BL_OFFSET = -Math.toRadians(106.1);
     private static final Translation2d BL_LOCATION = new Translation2d(-WHEEL_BASE.getAsMeters() / 2,
             TRACK_WIDTH.getAsMeters() / 2);
 
     private static final int BR_DRIVE_ID = 8;
     private static final int BR_TURN_ID = 7;
     private static final int BR_ENCODER_ID = 4; // SHOULD BE 12
-    private static final double BR_OFFSET = -Math.toRadians(53.7 + 180.);
+    private static final double BR_OFFSET = -Math.toRadians(234.1);
     private static final Translation2d BR_LOCATION = new Translation2d(-WHEEL_BASE.getAsMeters() / 2,
             -TRACK_WIDTH.getAsMeters() / 2);
 

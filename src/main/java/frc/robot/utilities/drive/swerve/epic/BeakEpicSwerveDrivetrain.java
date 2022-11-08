@@ -171,7 +171,7 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
      * Zero the pose and heading of the robot.
      */
     public void zero() {
-        resetTurningMotors();
+        // resetTurningMotors();
         resetOdometry(new Pose2d());
     }
 

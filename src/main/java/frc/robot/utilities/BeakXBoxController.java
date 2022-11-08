@@ -59,6 +59,8 @@ public final class BeakXBoxController {
     public Trigger lt;
     public Trigger rt;
 
+    public DirectionalPad dpad;
+
     private int port;
 
     /**
@@ -86,6 +88,8 @@ public final class BeakXBoxController {
 
         lt = new Trigger(controller, HAND.LEFT);
         rt = new Trigger(controller, HAND.RIGHT);
+
+        dpad = new DirectionalPad(controller);
     }
 
     public double getLeftXAxis() {
@@ -115,6 +119,50 @@ public final class BeakXBoxController {
 
     public static enum HAND {
         LEFT, RIGHT
+    }
+
+    public static enum DPAD {
+        UP(0),
+        RIGHT(90),
+        DOWN(180),
+        LEFT(270);
+
+        /* Instance Value */
+        private int value;
+
+        /**
+         * Constructor
+         * 
+         * @param value
+         */
+        DPAD(final int value) {
+            this.value = value;
+        }
+
+        /**
+         * Convert integers to DPAD values
+         * 
+         * @param value
+         * @return DPAD with matching angle
+         */
+        public static DPAD getEnum(int angle) {
+            angle = Math.abs(angle);
+            angle %= 360;
+            angle = Math.round(angle / 45) * 45; // May have rounding errors. Due to rounding errors.
+
+            DPAD[] all = DPAD.values();
+            for (int i = 0; i < all.length; i++) {
+                if (all[i].value == angle) {
+                    return all[i];
+                }
+            }
+            // I don't know what to do here
+            // throw new UnsupportedOperationException("Integer supplied (" + angle + ") is
+            // not a possible value of this enum.");
+            System.out.println(
+                    "[XboxController.DPAD.getEnum()] Angle supplied (" + angle + ") has no related DPad direction");
+            return DPAD.UP;
+        }
     }
 
     public static class Thumbstick extends Button {
@@ -417,6 +465,93 @@ public final class BeakXBoxController {
          */
         public void setTriggerSensitivity(double number) {
             this.sensitivity = number;
+        }
+    }
+
+    public static class DirectionalPad extends Button {
+        /* Instance Values */
+        private final XboxController parent;
+        public final Button up;
+        public final Button right;
+        public final Button down;
+        public final Button left;
+
+        /**
+         * Constructor
+         * 
+         * @param parent
+         */
+        DirectionalPad(final XboxController parent) {
+            /* Initialize */
+            this.parent = parent;
+            this.up = new DPadButton(this, DPAD.UP);
+            this.right = new DPadButton(this, DPAD.RIGHT);
+            this.down = new DPadButton(this, DPAD.DOWN);
+            this.left = new DPadButton(this, DPAD.LEFT);
+        }
+
+        /**
+         * This class is used to represent each of the 8 values a
+         * dPad has as a button.
+         */
+        public static class DPadButton extends Button {
+            /* Instance Values */
+            private final DPAD direction;
+            private final DirectionalPad parent;
+
+            /**
+             * Constructor
+             * 
+             * @param parent
+             * @param dPad
+             */
+            DPadButton(final DirectionalPad parent, final DPAD dPadDirection) {
+                /* Initialize */
+                this.direction = dPadDirection;
+                this.parent = parent;
+            }
+
+            /* Extended Methods */
+            @Override
+            public boolean get() {
+                return parent.getAngle() == direction.value;
+            }
+        }
+
+        private int angle() {
+            return parent.getPOV();
+        }
+
+        /* Extended Methods */
+        @Override
+        public boolean get() {
+            return angle() != -1;
+        }
+
+        /* Get Methods */
+        /**
+         * UP 0;
+         * UP_RIGHT 45;
+         * RIGHT 90;
+         * DOWN_RIGHT 135;
+         * DOWN 180;
+         * DOWN_LEFT 225;
+         * LEFT 270;
+         * UP_LEFT 315;
+         * 
+         * @return A number between 0 and 315 indicating direction
+         */
+        public int getAngle() {
+            return angle();
+        }
+
+        /**
+         * Just like getAngle, but returns a direction instead of an angle
+         * 
+         * @return A DPAD direction
+         */
+        public DPAD getDirection() {
+            return DPAD.getEnum(angle());
         }
     }
 

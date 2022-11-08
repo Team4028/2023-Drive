@@ -14,12 +14,15 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
 import frc.robot.commands.auton.EpicPath;
+import frc.robot.commands.auton.MoveDrivetrainToTargetDistance;
+import frc.robot.commands.auton.RotateDrivetrainByLimelightAngle;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.RotateDrivetrainToTargetPosition;
 import frc.robot.commands.auton.TestPath;
 import frc.robot.subsystems.CIMDrivetrain;
 import frc.robot.subsystems.EpicSwerveDrivetrain;
 import frc.robot.subsystems.FalconDrivetrain;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Mk2SwerveDrivetrain;
 import frc.robot.subsystems.NEODrivetrain;
 import frc.robot.subsystems.OctavianSwerveDrivetrain;
@@ -38,9 +41,11 @@ public class RobotContainer {
     // private CIMDrivetrain m_drive = CIMDrivetrain.getInstance();
     // private FalconDrivetrain m_drive = FalconDrivetrain.getInstance();
     // private Mk2SwerveDrivetrain m_drive = Mk2SwerveDrivetrain.getInstance();
-    private OctavianSwerveDrivetrain m_drive = OctavianSwerveDrivetrain.getInstance();
+    // private OctavianSwerveDrivetrain m_drive = OctavianSwerveDrivetrain.getInstance();
     // private SwerveDrivetrain m_drive = SwerveDrivetrain.getInstance();
-    // private EpicSwerveDrivetrain m_drive = EpicSwerveDrivetrain.getInstance();
+    private EpicSwerveDrivetrain m_drive = EpicSwerveDrivetrain.getInstance();
+
+    private Limelight m_limelight = Limelight.getInstance();
     
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
 
@@ -71,6 +76,8 @@ public class RobotContainer {
         m_driverController.start.whenPressed(m_drive::zero);
         m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, false));
         m_driverController.b.whenPressed(new RotateDrivetrainToTargetPosition(Distance.fromInches(324.), Distance.fromInches(162.), m_drive).withTimeout(2.0));
+        m_driverController.x.whenPressed(new RotateDrivetrainByLimelightAngle(m_limelight, m_drive).withTimeout(2.0));
+        m_driverController.y.whenPressed(new MoveDrivetrainToTargetDistance(15., m_limelight, m_drive).withTimeout(999999.0));
     }
 
     public double speedScaledDriverLeftY() {

@@ -106,8 +106,8 @@ public class BeakEpicSwerveModule {
      */
     public SwerveModuleState getState() {
         return new SwerveModuleState(
-                // m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
-                m_driveMotor.getRate() / 10.,
+                m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
+                // m_driveMotor.getRate() / 10.,
                 new Rotation2d(getTurningEncoderRadians())); // FUTURE: Using Absolute reverses some wheels.
     }
 
@@ -127,10 +127,10 @@ public class BeakEpicSwerveModule {
         // NOTE: feedforward MUST be in meters!
         double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond);
 
-        // m_driveMotor.setVelocityNU(
-        m_driveMotor.setRate(
-                // optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
-                optimizedState.speedMetersPerSecond,
+        m_driveMotor.setVelocityNU(
+        // m_driveMotor.setRate(
+                optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
+                // optimizedState.speedMetersPerSecond,
                 arbFeedforward,
                 0);
 
