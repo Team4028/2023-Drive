@@ -4,9 +4,6 @@
 
 package frc.robot.commands.auton;
 
-import java.util.function.DoubleSupplier;
-import java.util.function.Supplier;
-
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -25,7 +22,7 @@ public class MoveDrivetrainToTargetDistance extends ProfiledPIDCommand {
    * 
    * Moves to a target distance and additionally drives theta to 0.
    */
-  public MoveDrivetrainToTargetDistance(double goalTargetDistance, Limelight limelight, BeakDrivetrain drivetrain) {
+  public MoveDrivetrainToTargetDistance(Distance goalTargetDistance, Limelight limelight, BeakDrivetrain drivetrain) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
@@ -40,7 +37,7 @@ public class MoveDrivetrainToTargetDistance extends ProfiledPIDCommand {
         // This should return the measurement
         () -> Units.feetToMeters(limelight.getTargetDistance()),
         // This should return the goal (can also be a constant)
-        Units.feetToMeters(19.),
+        goalTargetDistance.getAsMeters(),
         // This uses the output
         (output, setpoint) -> {
           // Use the output (and setpoint, if desired) here

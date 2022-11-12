@@ -33,5 +33,6 @@ public class Limelight extends BeakLimelight {
 	public void periodic() {
 		// This method will be called once per scheduler run
 		SmartDashboard.putNumber("Limelight Distance", getTargetDistance());
+		SmartDashboard.putNumber("Limelight Target X", getRoundedXOffset());
 	}
 }

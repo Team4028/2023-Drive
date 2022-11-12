@@ -77,7 +77,7 @@ public class RobotContainer {
         m_driverController.a.whenPressed(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, false));
         m_driverController.b.whenPressed(new RotateDrivetrainToTargetPosition(Distance.fromInches(324.), Distance.fromInches(162.), m_drive).withTimeout(2.0));
         m_driverController.x.whenPressed(new RotateDrivetrainByLimelightAngle(m_limelight, m_drive).withTimeout(2.0));
-        m_driverController.y.whenPressed(new MoveDrivetrainToTargetDistance(15., m_limelight, m_drive).withTimeout(999999.0));
+        m_driverController.y.whenPressed(new MoveDrivetrainToTargetDistance(Distance.fromFeet(19.), m_limelight, m_drive).withTimeout(999999.0));
     }
 
     public double speedScaledDriverLeftY() {
