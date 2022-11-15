@@ -50,7 +50,8 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         m_robotContainer = RobotContainer.getInstance();
-        // Solenoid m_solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
+        
+        Solenoid m_solenoid = new Solenoid(PneumaticsModuleType.CTREPCM, 0);
 
         // try {
         //     m_autonLogger = new BeakLogger(m_logFileFolder, "auton");

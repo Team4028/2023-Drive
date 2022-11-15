@@ -58,7 +58,7 @@ public class BeakLimelight extends SubsystemBase {
 
     /** Creates a new Limelight. */
     public BeakLimelight() {
-        setPipeline(0);
+        setPipeline(1);
         setPictureInPicture(0);
         setLedMode(0);
     }

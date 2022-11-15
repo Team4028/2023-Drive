@@ -17,42 +17,45 @@ import frc.robot.utilities.units.Distance;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class MoveDrivetrainToTargetDistance extends ProfiledPIDCommand {
-  ProfiledPIDController m_thetaController;
+  BeakDrivetrain m_drive;
   /** Creates a new MoveDrivetrainToTargetDistance.
    * 
    * Moves to a target distance and additionally drives theta to 0.
    */
-  public MoveDrivetrainToTargetDistance(Distance goalTargetDistance, Limelight limelight, BeakDrivetrain drivetrain) {
+  public MoveDrivetrainToTargetDistance(double targetY, Limelight limelight, BeakDrivetrain drivetrain) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            4.0,
-            0.02,
-            0.04,
+            0.05,
+            0.,
+            0.0,
             // The motion profile constraints
             new TrapezoidProfile.Constraints(
-                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5,
-                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5)),
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25,
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25)),
         // This should return the measurement
-        () -> Units.feetToMeters(limelight.getTargetDistance()),
+        () -> limelight.getY(),
         // This should return the goal (can also be a constant)
-        goalTargetDistance.getAsMeters(),
+        () -> targetY,
         // This uses the output
         (output, setpoint) -> {
           // Use the output (and setpoint, if desired) here
           drivetrain.drive( // TODO: driveRaw
-              -(output + setpoint.velocity) / drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+              (output + setpoint.velocity),// / drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
               0.,
               0.,
               false);
+              SmartDashboard.putNumber("output", output);
+              SmartDashboard.putNumber("Setpoint", setpoint.velocity);
         });
     // Use addRequirements() here to declare subsystem dependencies.
     // Configure additional PID options by calling `getController` here.
     addRequirements(limelight, drivetrain);
+    m_drive = drivetrain;
     // getController().enableContinuousInput(-2.5,//-drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
     //     2.5);//drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
-    getController().setTolerance(0.1);
+    getController().setTolerance(1.0);
   }
 
   @Override
@@ -60,7 +63,14 @@ public class MoveDrivetrainToTargetDistance extends ProfiledPIDCommand {
     super.execute();
 
     SmartDashboard.putNumber("Target", getController().getGoal().position);
-    SmartDashboard.putNumber("current", getController().getSetpoint().velocity);
+    SmartDashboard.putNumber("Error", getController().getGoal().position - Limelight.getInstance().getY());
+  }
+
+  @Override
+  public void end(boolean interruptible) {
+    super.end(interruptible);
+
+    m_drive.drive(0, 0, 0);
   }
 
   // Returns true when the command should end.

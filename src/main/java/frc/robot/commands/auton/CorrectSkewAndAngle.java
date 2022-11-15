@@ -15,15 +15,15 @@ import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.units.Distance;
 
 // TODO: This is broken.
-public class MoveToTargetDistance extends CommandBase {
+public class CorrectSkewAndAngle extends CommandBase {
   private final ProfiledPIDController m_thetaController;
-  private final ProfiledPIDController m_distanceController;
+  private final ProfiledPIDController m_skewController;
 
   private final Distance m_distance;
   private final BeakDrivetrain m_drive;
   private final Limelight m_limelight;
   /** Creates a new MoveToTargetDistance. */
-  public MoveToTargetDistance(Distance distance, BeakDrivetrain drivetrain, Limelight limelight) {
+  public CorrectSkewAndAngle(Distance distance, BeakDrivetrain drivetrain, Limelight limelight) {
     m_distance = distance;
     m_drive = drivetrain;
     m_limelight = limelight;
@@ -31,9 +31,9 @@ public class MoveToTargetDistance extends CommandBase {
     System.out.println(distance.getAsMeters());
 
     m_thetaController = new ProfiledPIDController(
-      drivetrain.getThetaController().getP() * 0.8,
-      0.,
-      0.,
+      4.4,
+      0.015,
+      0.4,
       new TrapezoidProfile.Constraints(
                 drivetrain.getPhysics().maxAngularVelocity.getAsRadiansPerSecond(),
                 drivetrain.getPhysics().maxAngularVelocity.getAsRadiansPerSecond())); // TODO: getThetaConstraints()
@@ -41,15 +41,15 @@ public class MoveToTargetDistance extends CommandBase {
     m_thetaController.setTolerance(1.0);
     m_thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    m_distanceController = new ProfiledPIDController(
-      4.0,
+    m_skewController = new ProfiledPIDController(
+      0.05,
       0.,
-      0.015,
+      0.0,
       new TrapezoidProfile.Constraints(
-                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.05,
-                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.05));
-    m_distanceController.setGoal(distance.getAsMeters());
-    m_distanceController.setTolerance(0.2);
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25,
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25));
+    m_skewController.setGoal(0.);
+    m_skewController.setTolerance(0.2);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain, limelight);
@@ -65,14 +65,17 @@ public class MoveToTargetDistance extends CommandBase {
     double thetaOutput = m_thetaController.calculate(Units.degreesToRadians(m_limelight.getX()), 0.);
     State thetaSetpoint = m_thetaController.getSetpoint();
 
-    double distanceOutput = m_distanceController.calculate(Units.feetToMeters(m_limelight.getDistance()), m_distance.getAsMeters());
-    State distanceSetpoint = m_distanceController.getSetpoint();
+    double skew = m_limelight.getSkew();
+    skew = m_limelight.getX() > 0 ? skew - 90 : skew;
 
-    SmartDashboard.putNumber("output", distanceOutput + distanceSetpoint.velocity);
+    double skewOutput = m_skewController.calculate(skew, 0.);
+    State skewSetpoint = m_skewController.getSetpoint();
+
+    SmartDashboard.putNumber("output", skewOutput + skewSetpoint.velocity);
 
     m_drive.drive( // TODO: PLEASE DRIVERAW
-      (distanceSetpoint.velocity) / m_drive.getPhysics().maxVelocity.getAsMetersPerSecond(),
       0.,
+      -(skewOutput + skewSetpoint.velocity) / m_drive.getPhysics().maxVelocity.getAsMetersPerSecond(),
       (thetaOutput + thetaSetpoint.velocity) / m_drive.getPhysics().maxAngularVelocity.getAsRadiansPerSecond(),
       false);
   }
@@ -90,6 +93,6 @@ public class MoveToTargetDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_thetaController.atGoal() && m_distanceController.atGoal();
+    return m_thetaController.atGoal() && m_skewController.atGoal();
   }
 }

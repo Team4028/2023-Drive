@@ -21,9 +21,9 @@ public class RotateDrivetrainByLimelightAngle extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            4.0,
-            0.1,
-            0.2, // This is the best tuning solution I've found but it still needs a lot of work.
+            4.4,
+            0.011,
+            0.4, // This is the best tuning solution I've found but it still needs a lot of work.
             // This currently gets to about 1 degree off but it needs to be like 0.1.
             // Behavior is relatively consistent; seems to be 1 degree overshooting.
             // Also it sometimes oscillates. God save me
