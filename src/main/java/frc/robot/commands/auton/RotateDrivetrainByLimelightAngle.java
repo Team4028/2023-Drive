@@ -47,7 +47,7 @@ public class RotateDrivetrainByLimelightAngle extends ProfiledPIDCommand {
     // Configure additional PID options by calling `getController` here.
     addRequirements(drivetrain, limelight);
     getController().enableContinuousInput(-Math.PI, Math.PI);
-    // getController().setTolerance(Math.toRadians(0.1));
+    getController().setTolerance(Math.toRadians(0.4));
 
     SmartDashboard.putNumber("P gain", getController().getP());
     SmartDashboard.putNumber("I gain", getController().getI());

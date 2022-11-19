@@ -13,7 +13,7 @@ public class Limelight extends BeakLimelight {
 	public Limelight() {
 		super();
 		
-		super.setTargetHeight(TargetHeight.RAPID_REACT);
+		super.setTargetHeight(32.5);
 		super.setMountAngle(35.45);
 		super.setMountHeight(21.);
 	}
@@ -32,7 +32,7 @@ public class Limelight extends BeakLimelight {
 	@Override
 	public void periodic() {
 		// This method will be called once per scheduler run
-		SmartDashboard.putNumber("Limelight Distance", getTargetDistance());
+		SmartDashboard.putNumber("Limelight Distance", getDistance());
 		SmartDashboard.putNumber("Limelight Target X", getRoundedXOffset());
 		SmartDashboard.putNumber("Limelight target Y", getY());
 	}

@@ -22,7 +22,7 @@ public class MoveDrivetrainToTargetDistance extends ProfiledPIDCommand {
    * 
    * Moves to a target distance and additionally drives theta to 0.
    */
-  public MoveDrivetrainToTargetDistance(double targetY, Limelight limelight, BeakDrivetrain drivetrain) {
+  public MoveDrivetrainToTargetDistance(Distance targetDistance, Limelight limelight, BeakDrivetrain drivetrain) {
     super(
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
@@ -35,14 +35,14 @@ public class MoveDrivetrainToTargetDistance extends ProfiledPIDCommand {
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25,
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25)),
         // This should return the measurement
-        () -> limelight.getY(),
+        () -> Distance.fromFeet(limelight.getDistance()).getAsMeters(),
         // This should return the goal (can also be a constant)
-        () -> targetY,
+        () -> targetDistance.getAsMeters(),
         // This uses the output
         (output, setpoint) -> {
           // Use the output (and setpoint, if desired) here
           drivetrain.drive( // TODO: driveRaw
-              (output + setpoint.velocity),// / drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+              -(output + setpoint.velocity) / drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
               0.,
               0.,
               false);
@@ -61,9 +61,6 @@ public class MoveDrivetrainToTargetDistance extends ProfiledPIDCommand {
   @Override
   public void execute() {
     super.execute();
-
-    SmartDashboard.putNumber("Target", getController().getGoal().position);
-    SmartDashboard.putNumber("Error", getController().getGoal().position - Limelight.getInstance().getY());
   }
 
   @Override
