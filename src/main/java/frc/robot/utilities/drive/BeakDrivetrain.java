@@ -4,12 +4,13 @@
 
 package frc.robot.utilities.drive;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utilities.subsystem.BeakGyroSubsystem;
@@ -117,7 +118,7 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
      * @return A {@link SequentialCommandGroup} to run the trajectory, and stop the
      *         drivetrain.
      */
-    public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
+    public SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj) {
         return null;
     }
 

@@ -26,8 +26,20 @@ public class Trajectories {
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
     }
+
+    public static PathPlannerTrajectory JStop1(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("J Stop 1",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5,
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5);
+    }
+
+    public static PathPlannerTrajectory JStop2(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("J Stop 2",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5,
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5);
+    }
     // public static Trajectory getTrajectory(String path) {
-    // Trajectory traj = new Trajectory();
+    // PathPlannerTrajectory traj = new Trajectory();
     // try {
     // Path trajPath = Filesystem.getDeployDirectory().toPath().resolve("output/" +
     // path + ".wpilib.json");

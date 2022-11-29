@@ -4,16 +4,17 @@
 
 package frc.robot.utilities.drive.swerve;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
 
@@ -78,8 +79,8 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         getGyroRotation2d());
     }
 
-    public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
-        return new SwerveControllerCommand(
+    public SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj) {
+        return new PPSwerveControllerCommand(
                 traj,
                 this::getPoseMeters,
                 m_kinematics,

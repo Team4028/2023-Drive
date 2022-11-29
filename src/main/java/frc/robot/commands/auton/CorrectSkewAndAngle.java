@@ -38,10 +38,10 @@ public class CorrectSkewAndAngle extends CommandBase {
       0.011,
       0.,
       new TrapezoidProfile.Constraints(
-                drivetrain.getPhysics().maxAngularVelocity.getAsRadiansPerSecond(),
-                drivetrain.getPhysics().maxAngularVelocity.getAsRadiansPerSecond())); // TODO: getThetaConstraints()
+                drivetrain.getPhysics().maxAngularVelocity.getAsRadiansPerSecond() * 0.1,
+                drivetrain.getPhysics().maxAngularVelocity.getAsRadiansPerSecond() * 0.25)); // TODO: getThetaConstraints()
     m_thetaController.setGoal(0.);
-    m_thetaController.setTolerance(1.0);
+    m_thetaController.setTolerance(0.5);
     m_thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     m_skewController = new ProfiledPIDController(
@@ -82,6 +82,7 @@ public class CorrectSkewAndAngle extends CommandBase {
 
     m_distanceController.reset(Distance.fromFeet(m_limelight.getDistance()).getAsMeters());
 
+    m_timer.reset();
     m_timer.start();
   }
 
@@ -101,8 +102,8 @@ public class CorrectSkewAndAngle extends CommandBase {
     State distanceSetpoint = m_distanceController.getSetpoint();
 
     m_drive.drive( // TODO: PLEASE DRIVERAW
-      m_timer.hasElapsed(220.4) ? -(distanceOutput + distanceSetpoint.velocity) / m_drive.getPhysics().maxVelocity.getAsMetersPerSecond() : 0.,
-      m_timer.hasElapsed(0.2) ? -(skewOutput + skewSetpoint.velocity) / m_drive.getPhysics().maxVelocity.getAsMetersPerSecond() : 0.,
+      m_timer.hasElapsed(1.0) ? -(distanceOutput + distanceSetpoint.velocity) / m_drive.getPhysics().maxVelocity.getAsMetersPerSecond() : 0.,
+      0.0,//m_timer.hasElapsed(0.2) ? -(skewOutput + skewSetpoint.velocity) / m_drive.getPhysics().maxVelocity.getAsMetersPerSecond() : 0.,
       (thetaOutput + thetaSetpoint.velocity) / m_drive.getPhysics().maxAngularVelocity.getAsRadiansPerSecond(),
       false);
   }

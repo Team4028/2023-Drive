@@ -13,13 +13,14 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
-import frc.robot.commands.auton.EpicPath;
 import frc.robot.commands.auton.MoveDrivetrainToTargetDistance;
 import frc.robot.commands.auton.CorrectSkewAndAngle;
 import frc.robot.commands.auton.RotateDrivetrainByLimelightAngle;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.RotateDrivetrainToTargetPosition;
-import frc.robot.commands.auton.TestPath;
+import frc.robot.commands.auton.paths.EpicPath;
+import frc.robot.commands.auton.paths.JPath;
+import frc.robot.commands.auton.paths.TestPath;
 import frc.robot.subsystems.CIMDrivetrain;
 import frc.robot.subsystems.EpicSwerveDrivetrain;
 import frc.robot.subsystems.FalconDrivetrain;
@@ -105,6 +106,7 @@ public class RobotContainer {
     private void initAutonChooser() {
         _autonChooser.setDefaultOption("Epic Path", new EpicPath(m_drive));
         _autonChooser.addOption("Test Path", new TestPath(m_drive));
+        _autonChooser.addOption("J path", new JPath(m_limelight, m_drive));
 
         SmartDashboard.putData("Auton Chooser", _autonChooser);
     }
