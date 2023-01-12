@@ -6,8 +6,6 @@ package frc.robot.utilities.drive.swerve.epic;
 
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
-import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
 import frc.robot.utilities.encoder.BeakCANCoder;
 import frc.robot.utilities.motor.BeakTalonFX;

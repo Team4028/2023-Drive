@@ -7,17 +7,18 @@ package frc.robot.utilities.drive.swerve.epic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
 
@@ -77,8 +78,8 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
         m_odom = new SwerveDriveOdometry(m_kinematics, getGyroRotation2d());
     }
 
-    public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
-        return new SwerveControllerCommand(
+    public SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj) {
+        return new PPSwerveControllerCommand(
                 traj,
                 this::getPoseMeters,
                 m_kinematics,
@@ -171,7 +172,7 @@ public class BeakEpicSwerveDrivetrain extends BeakDrivetrain {
      * Zero the pose and heading of the robot.
      */
     public void zero() {
-        resetTurningMotors();
+        // resetTurningMotors();
         resetOdometry(new Pose2d());
     }
 
