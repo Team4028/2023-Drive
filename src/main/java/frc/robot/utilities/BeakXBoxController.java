@@ -4,8 +4,7 @@
 
 package frc.robot.utilities;
 
-import java.util.function.BooleanSupplier;
-
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -53,8 +52,13 @@ public final class BeakXBoxController {
     public Trigger ls;
     public Trigger rs;
 
-    public TriggerAxis lt;
-    public TriggerAxis rt;
+    public Trigger lt;
+    public Trigger rt;
+
+    public Trigger dpadRight;
+    public Trigger dpadLeft;
+    public Trigger dpadUp;
+    public Trigger dpadDown;
 
     private int port;
 
@@ -78,82 +82,37 @@ public final class BeakXBoxController {
         ls = controller.leftStick();
         rs = controller.rightStick();
 
-        lt = new TriggerAxis(controller, HAND.LEFT, TRIGGER_SENSITIVITY);
-        rt = new TriggerAxis(controller, HAND.RIGHT, TRIGGER_SENSITIVITY);
+        lt = controller.axisGreaterThan(XboxController.Axis.kLeftTrigger.value, TRIGGER_SENSITIVITY);
+        rt = controller.axisGreaterThan(XboxController.Axis.kRightTrigger.value, TRIGGER_SENSITIVITY);
+
+        dpadRight = controller.pov(90);
+        dpadLeft = controller.pov(270);
+        dpadDown = controller.pov(180);
+        dpadUp = controller.pov(0);
     }
 
     public double getLeftXAxis() {
-        return controller.getLeftX();
+        return createDeadZone(controller.getLeftX(), THUMBSTICK_DEADBAND);
     }
 
     public double getLeftYAxis() {
-        return controller.getLeftY();
+        return createDeadZone(controller.getLeftY(), THUMBSTICK_DEADBAND);
     }
 
     public double getRightXAxis() {
-        return controller.getRightX();
-
+        return createDeadZone(controller.getRightX(), THUMBSTICK_DEADBAND);
     }
 
     public double getRightYAxis() {
-        return controller.getRightY();
+        return createDeadZone(controller.getRightY(), THUMBSTICK_DEADBAND);
     }
 
     public double getLeftTrigger() {
-        return lt.getX();
+        return createDeadZone(controller.getLeftTriggerAxis(), TRIGGER_DEADBAND);
     }
 
     public double getRightTrigger() {
-        return rt.getX();
-    }
-
-    public static enum HAND {
-        LEFT, RIGHT
-    }
-
-    public static class TriggerAxis extends Trigger {
-        private final CommandXboxController m_parent;
-        private final HAND m_hand;
-
-        private static BooleanSupplier m_supplier;
-
-        private final double m_sensitivity;
-
-        public TriggerAxis(final CommandXboxController controller, final HAND hand, final double sensitivity) {
-            super(m_supplier);
-
-            m_supplier = () -> {
-                double input;
-
-                if (hand == HAND.LEFT) {
-                    input = controller.getLeftTriggerAxis();
-                } else {
-                    input = controller.getRightTriggerAxis();
-                }
-
-                return input > sensitivity;
-            };
-
-            m_parent = controller;
-            m_hand = hand;
-            m_sensitivity = sensitivity;
-        }
-
-        public double getX() {
-            double input;
-
-            if (m_hand == HAND.LEFT) {
-                input = m_parent.getLeftTriggerAxis();
-            } else {
-                input = m_parent.getRightTriggerAxis();
-            }
-
-            return input;
-        }
-
-        public boolean get() {
-            return getX() > m_sensitivity;
-        }
+        return createDeadZone(controller.getRightTriggerAxis(), TRIGGER_DEADBAND);
     }
 
     /**

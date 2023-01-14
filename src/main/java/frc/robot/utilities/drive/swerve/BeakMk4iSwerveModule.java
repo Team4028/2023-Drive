@@ -59,23 +59,23 @@ public class BeakMk4iSwerveModule extends BeakSwerveModule {
         return angle;
     }
 
-    // public void setDesiredState(SwerveModuleState desiredState) {
-    //     // Optimize the state to avoid spinning more than 90 degrees.
-    //     SwerveModuleState optimizedState = desiredState; //SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
+    public void setDesiredState(SwerveModuleState desiredState) {
+        // Optimize the state to avoid spinning more than 90 degrees.
+        SwerveModuleState optimizedState = desiredState; //SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
 
-    //     // TODO: Fix optimization
+        // TODO: Fix optimization
         
-    //     // // Calculate Arb Feed Forward for drive motor
-    //     // // TODO: calc from SysId
-    //     // double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
+        // // Calculate Arb Feed Forward for drive motor
+        // // TODO: calc from SysId
+        // double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
 
-    //     // m_driveMotor.setVelocityNU(
-    //     //         optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
-    //     //         arbFeedforward,
-    //     //         0);
-    //     m_driveMotor.set(optimizedState.speedMetersPerSecond / Units.feetToMeters(16.3));
+        // m_driveMotor.setVelocityNU(
+        //         optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
+        //         arbFeedforward,
+        //         0);
+        m_driveMotor.set(optimizedState.speedMetersPerSecond / Units.feetToMeters(16.3));
 
-    //     // Set the turning motor to the correct position.
-    //     setAngle(optimizedState.angle.getDegrees());
-    // }
+        // Set the turning motor to the correct position.
+        setAngle(optimizedState.angle.getDegrees());
+    }
 }
