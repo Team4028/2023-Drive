@@ -4,14 +4,19 @@
 
 package frc.robot.utilities.drive.swerve;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
@@ -19,10 +24,14 @@ import frc.robot.utilities.drive.RobotPhysics;
 
 /** Generic Swerve Drivetrain subsystem. */
 public class BeakSwerveDrivetrain extends BeakDrivetrain {
-    protected BeakSwerveModule m_FL;
-    protected BeakSwerveModule m_FR;
-    protected BeakSwerveModule m_BL;
-    protected BeakSwerveModule m_BR;
+    /**
+     * The modules in this swerve drivetrain. </p>
+     * These are in the same order as passed in the constructor; i.e if the front left
+     * module is passed in as the first module, <code>m_modules.get(0)</code> would
+     * return the front left module.
+     */
+    protected List<BeakSwerveModule> m_modules = new ArrayList<BeakSwerveModule>();
+    int m_numModules;
 
     protected SwerveDriveOdometry m_odom;
     protected SwerveDriveKinematics m_kinematics;
@@ -30,30 +39,22 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     protected RobotPhysics m_physics;
 
     /**
-     * Create a new Swerve Drivetrain.
+     * Create a new Swerve drivetrain.
      * 
-     * @param frontLeftConfig  {@link SwerveModuleConfiguration} for the front left
-     *                         module.
-     * @param frontRightConfig {@link SwerveModuleConfiguration} for the front right
-     *                         module.
-     * @param backLeftConfig   {@link SwerveModuleConfiguration} for the back left
-     *                         module.
-     * @param backRightConfig  {@link SwerveModuleConfiguration} for the back right
-     *                         module.
-     * @param physics          {@link RobotPhysics} containing the robot's physical
-     *                         details.
-     * @param pigeonID         ID of the Pigeon2 IMU.
+     * @param physics       {@link RobotPhysics} containing the robot's physical
+     *                      details.
+     * @param gyro          The gyroscope used by this drivetrain.
+     * @param thetaPIDGains The PID gains for the theta controller.
+     * @param drivePIDGains The PID gains for the auton drive controller.
+     * @param configs       Configurations for all swerve modules.
      */
     public BeakSwerveDrivetrain(
-            SwerveModuleConfiguration frontLeftConfig,
-            SwerveModuleConfiguration frontRightConfig,
-            SwerveModuleConfiguration backLeftConfig,
-            SwerveModuleConfiguration backRightConfig,
             RobotPhysics physics,
             Gyro gyro,
             boolean gyroInverted,
             double[] thetaPIDGains,
-            double[] drivePIDGains) {
+            double[] drivePIDGains,
+            SwerveModuleConfiguration... configs) {
         super(physics,
                 thetaPIDGains,
                 drivePIDGains,
@@ -61,21 +62,20 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
 
         m_physics = physics;
 
-        m_FL = BeakSwerveModule.fromSwerveModuleConfig(frontLeftConfig);
-        m_FR = BeakSwerveModule.fromSwerveModuleConfig(frontRightConfig);
-        m_BL = BeakSwerveModule.fromSwerveModuleConfig(backLeftConfig);
-        m_BR = BeakSwerveModule.fromSwerveModuleConfig(backRightConfig);
+        m_numModules = configs.length;
+        Translation2d[] moduleLocations = new Translation2d[m_numModules];
+
+        for (int i = 0; i < m_numModules; i++) {
+            BeakSwerveModule module = BeakSwerveModule.fromSwerveModuleConfig(configs[i]);
+            m_modules.add(module);
+            moduleLocations[i] = configs[i].moduleLocation;
+        }
 
         m_gyro = gyro;
 
-        m_kinematics = new SwerveDriveKinematics(
-                new Translation2d(physics.wheelBase.getAsMeters() / 2, physics.trackWidth.getAsMeters() / 2),
-                new Translation2d(physics.wheelBase.getAsMeters() / 2, -physics.trackWidth.getAsMeters() / 2),
-                new Translation2d(-physics.wheelBase.getAsMeters() / 2, physics.trackWidth.getAsMeters() / 2),
-                new Translation2d(-physics.wheelBase.getAsMeters() / 2, -physics.trackWidth.getAsMeters() / 2));
-        
-        //TODO: set the initial positions to 0.
-        m_odom = new SwerveDriveOdometry(m_kinematics, getGyroRotation2d(), null);
+        m_kinematics = new SwerveDriveKinematics(moduleLocations);
+
+        m_odom = new SwerveDriveOdometry(m_kinematics, getGyroRotation2d(), getModulePositions());
     }
 
     public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
@@ -92,13 +92,10 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     }
 
     public Pose2d updateOdometry() {
-        // TODO: Update to use position.
+        // TODO: use position.
         m_pose = m_odom.update(
                 getGyroRotation2d(),
-                m_FL.getState(),
-                m_BL.getState(),
-                m_FR.getState(),
-                m_BR.getState());
+                getModulePositions());
 
         return m_pose;
     }
@@ -108,18 +105,19 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     }
 
     public void resetOdometry(Pose2d pose) {
-        // TODO: report 0 for position changes?
+        // TODO: report 0 for pos changes
         m_odom.resetPosition(getGyroRotation2d(), null, pose);
     }
 
-    // TODO: Need to implement a "driveRaw" method, with regular drive being for joystick driving.
     public void drive(double x, double y, double rot, boolean fieldRelative) {
         x *= m_physics.maxVelocity.getAsMetersPerSecond();
         y *= m_physics.maxVelocity.getAsMetersPerSecond();
         rot *= m_physics.maxAngularVelocity.getAsRadiansPerSecond();
 
+        SmartDashboard.putNumber("rot", rot);
+
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, m_odom.getPoseMeters().getRotation())
+                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, getRotation2d())
                         : new ChassisSpeeds(x, y, rot));
 
         setModuleStates(states);
@@ -130,15 +128,14 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     /**
      * Set each module's {@link SwerveModuleState}.
      * 
-     * @param desiredStates An array of the desired states for the modules.
+     * @param desiredStates An array of the desired states for the m_modules.
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, m_physics.maxVelocity.getAsMetersPerSecond());
 
-        m_FL.setDesiredState(desiredStates[0]);
-        m_FR.setDesiredState(desiredStates[1]);
-        m_BL.setDesiredState(desiredStates[2]);
-        m_BR.setDesiredState(desiredStates[3]);
+        for (int i = 0; i < desiredStates.length; i++) {
+            m_modules.get(i).setDesiredState(desiredStates[i]);
+        }
     }
 
     /**
@@ -147,32 +144,44 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
      * @return Array of {@link SwerveModuleState}s for each module.
      */
     public SwerveModuleState[] getModuleStates() {
-        return new SwerveModuleState[] {
-                m_FL.getState(),
-                m_FR.getState(),
-                m_BL.getState(),
-                m_BR.getState()
-        };
+        SwerveModuleState[] states = new SwerveModuleState[m_numModules];
+        for (int i = 0; i < m_numModules; i++) {
+            states[i] = m_modules.get(i).getState();
+        }
+
+        return states;
+    }
+
+    /**
+     * Get the positions of each module.
+     * 
+     * @return Array of {@link SwerveModulePosition}s for each module.
+     */
+    public SwerveModulePosition[] getModulePositions() {
+        SwerveModulePosition[] states = new SwerveModulePosition[m_numModules];
+        for (int i = 0; i < m_numModules; i++) {
+            states[i] = m_modules.get(i).getPosition();
+        }
+
+        return states;
     }
 
     /**
      * Reset all drive and turning encoders to zero.
      */
     public void resetEncoders() {
-        m_FL.resetEncoders();
-        m_FR.resetEncoders();
-        m_BL.resetEncoders();
-        m_BR.resetEncoders();
+        for (BeakSwerveModule module : m_modules) {
+            module.resetEncoders();
+        }
     }
 
     /**
      * Re-zero all turning encoders to match the CANCoder.
      */
     public void resetTurningMotors() {
-        m_FL.resetTurningMotor();
-        m_FR.resetTurningMotor();
-        m_BL.resetTurningMotor();
-        m_BR.resetTurningMotor();
+        for (BeakSwerveModule module : m_modules) {
+            module.resetTurningMotor();
+        }
     }
 
     /**

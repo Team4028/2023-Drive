@@ -5,6 +5,7 @@
 package frc.robot.utilities.drive.swerve;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration.ModuleType;
 import frc.robot.utilities.units.Distance;
 
@@ -14,6 +15,7 @@ public class SwerveModuleConfiguration {
     public int turnMotorID;
     public int turnEncoderID;
     public double angleOffset;
+    public Translation2d moduleLocation;
 
     public double driveGearRatio;
     public double turnGearRatio;
@@ -25,7 +27,6 @@ public class SwerveModuleConfiguration {
 
     public double drive_kP;
     public double turn_kP;
-    public double turn_kD;
 
     public double allowedError;
 
@@ -43,26 +44,29 @@ public class SwerveModuleConfiguration {
     /**
      * Generate a new Swerve Module configuration.
      * 
-     * @param driveMotorID  CAN ID of the drive motor.
-     * @param turnMotorID   CAN ID of the turning motor.
-     * @param turnEncoderID CAN ID of the CANCoder.
-     * @param angleOffset   Offset of the CANCoder, in radians.
-     * @param driveConfig   {@link SwerveDrivetrainConfiguration} for the drivetrain
-     *                      this module lies on.
+     * @param driveMotorID   CAN ID of the drive motor.
+     * @param turnMotorID    CAN ID of the turning motor.
+     * @param turnEncoderID  CAN ID of the CANCoder.
+     * @param angleOffset    Offset of the CANCoder, in radians.
+     * @param moduleLocation The module's translation relative to the robot center.
+     * @param driveConfig    {@link SwerveDrivetrainConfiguration} for the
+     *                       drivetrain this module lies on.
      */
     public SwerveModuleConfiguration(
             int driveMotorID,
             int turnMotorID,
             int turnEncoderID,
             double angleOffset,
+            Translation2d moduleLocation,
             SwerveDrivetrainConfiguration driveConfig) {
         this.driveMotorID = driveMotorID;
         this.turnMotorID = turnMotorID;
         this.turnEncoderID = turnEncoderID;
         this.angleOffset = angleOffset;
+        this.moduleLocation = moduleLocation;
+
         this.drive_kP = driveConfig.drive_kP;
         this.turn_kP = driveConfig.turn_kP;
-        this.turn_kD = driveConfig.turn_kD;
 
         this.allowedError = driveConfig.allowedClosedLoopError;
 

@@ -6,11 +6,11 @@ package frc.robot.subsystems;
 
 import frc.robot.Constants.PIDConstants;
 import frc.robot.utilities.drive.RobotPhysics;
-import frc.robot.utilities.drive.swerve.epic.BeakEpicSwerveDrivetrain;
+import frc.robot.utilities.drive.swerve.BeakSwerveDrivetrain;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
-import frc.robot.utilities.drive.swerve.epic.EpicSwerveModuleConfiguration;
+import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
 import frc.robot.utilities.units.AngularVelocity;
 import frc.robot.utilities.units.Distance;
 import frc.robot.utilities.units.Velocity;
@@ -24,21 +24,21 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
-public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
-    private static final double DRIVE_kP = 0.015;
-    private static final double TURN_kP = 0.4;
-    private static final double TURN_kD = 0.3;
+public class PracticeSwerveDrivetrain extends BeakSwerveDrivetrain {
+    private static final double DRIVE_kP = 0.0125;
+    private static final double TURN_kP = 0.2;
+    private static final double TURN_kD = 0.0;
 
     private static final double AUTON_kP = 3.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
 
     private static final int PIGEON2_ID = 1;
-    private static final String CAN_BUS = "DriveSubsystem";
+    private static final String CAN_BUS = "rio";
 
     private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
-            (0.19 + 0.225 + 0.214 + 0.2256) / 4.0,
-            (2.2565 + 2.2785 + 2.2754 + 2.291) / 4.0,
-            (0.277 + 0.31) / 2.0);
+            0.,
+            0.,
+            0.);
 
     private static final SdsModuleConfiguration CONFIGURATION = SdsModuleConfigurations.MK4I_L2;
 
@@ -58,7 +58,7 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             CONFIGURATION.driveGearRatio,
             FEED_FORWARD);
 
-    private static EpicSwerveDrivetrain m_instance;
+    private static PracticeSwerveDrivetrain m_instance;
 
     private Field2d m_field = new Field2d();
 
@@ -67,28 +67,28 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
     private static final int FL_DRIVE_ID = 2;
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 1; // SHOULD BE 9
-    private static final double FL_OFFSET = -Units.degreesToRadians(139.8);
+    private static final double FL_OFFSET = -Units.degreesToRadians(180.9);
     private static final Translation2d FL_LOCATION = new Translation2d(WHEEL_BASE.getAsMeters() / 2,
             TRACK_WIDTH.getAsMeters() / 2); // TODO: Please God BeakTranslation2d
 
     private static final int FR_DRIVE_ID = 4;
     private static final int FR_TURN_ID = 3;
     private static final int FR_ENCODER_ID = 2; // SHOULD BE 10
-    private static final double FR_OFFSET = -Math.toRadians(322.5);
+    private static final double FR_OFFSET = -Math.toRadians(86.8);
     private static final Translation2d FR_LOCATION = new Translation2d(WHEEL_BASE.getAsMeters() / 2,
             -TRACK_WIDTH.getAsMeters() / 2);
 
     private static final int BL_DRIVE_ID = 6;
     private static final int BL_TURN_ID = 5;
     private static final int BL_ENCODER_ID = 3; // SHOULD BE 11
-    private static final double BL_OFFSET = -Math.toRadians(106.3);
+    private static final double BL_OFFSET = -Math.toRadians(328.7);
     private static final Translation2d BL_LOCATION = new Translation2d(-WHEEL_BASE.getAsMeters() / 2,
             TRACK_WIDTH.getAsMeters() / 2);
 
     private static final int BR_DRIVE_ID = 8;
     private static final int BR_TURN_ID = 7;
     private static final int BR_ENCODER_ID = 4; // SHOULD BE 12
-    private static final double BR_OFFSET = -Math.toRadians(53.7 + 180.);
+    private static final double BR_OFFSET = -Math.toRadians(159.6);
     private static final Translation2d BR_LOCATION = new Translation2d(-WHEEL_BASE.getAsMeters() / 2,
             -TRACK_WIDTH.getAsMeters() / 2);
 
@@ -112,7 +112,7 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             FEED_FORWARD,
             CONFIGURATION);
 
-    private static EpicSwerveModuleConfiguration m_frontLeftConfig = new EpicSwerveModuleConfiguration(
+    private static SwerveModuleConfiguration m_frontLeftConfig = new SwerveModuleConfiguration(
             FL_DRIVE_ID,
             FL_TURN_ID,
             FL_ENCODER_ID,
@@ -120,7 +120,7 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             FL_LOCATION,
             DRIVE_CONFIG);
 
-    private static EpicSwerveModuleConfiguration m_frontRightConfig = new EpicSwerveModuleConfiguration(
+    private static SwerveModuleConfiguration m_frontRightConfig = new SwerveModuleConfiguration(
             FR_DRIVE_ID,
             FR_TURN_ID,
             FR_ENCODER_ID,
@@ -128,7 +128,7 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             FR_LOCATION,
             DRIVE_CONFIG);
 
-    private static EpicSwerveModuleConfiguration m_backLeftConfig = new EpicSwerveModuleConfiguration(
+    private static SwerveModuleConfiguration m_backLeftConfig = new SwerveModuleConfiguration(
             BL_DRIVE_ID,
             BL_TURN_ID,
             BL_ENCODER_ID,
@@ -136,7 +136,7 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             BL_LOCATION,
             DRIVE_CONFIG);
 
-    private static EpicSwerveModuleConfiguration m_backRightConfig = new EpicSwerveModuleConfiguration(
+    private static SwerveModuleConfiguration m_backRightConfig = new SwerveModuleConfiguration(
             BR_DRIVE_ID,
             BR_TURN_ID,
             BR_ENCODER_ID,
@@ -144,7 +144,7 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
             BR_LOCATION,
             DRIVE_CONFIG);
 
-    public EpicSwerveDrivetrain() {
+    public PracticeSwerveDrivetrain() {
         super(
                 PHYSICS,
                 m_gyro,
@@ -157,9 +157,9 @@ public class EpicSwerveDrivetrain extends BeakEpicSwerveDrivetrain {
                 m_backRightConfig);
     }
 
-    public static EpicSwerveDrivetrain getInstance() {
+    public static PracticeSwerveDrivetrain getInstance() {
         if (m_instance == null) {
-            m_instance = new EpicSwerveDrivetrain();
+            m_instance = new PracticeSwerveDrivetrain();
         }
         return m_instance;
     }

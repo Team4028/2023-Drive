@@ -7,10 +7,10 @@ package frc.robot.subsystems;
 import frc.robot.Constants.PIDConstants;
 import frc.robot.utilities.drive.RobotPhysics;
 import frc.robot.utilities.drive.swerve.BeakSwerveDrivetrain;
+import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfiguration;
 import frc.robot.utilities.drive.swerve.SdsModuleConfigurations;
 import frc.robot.utilities.drive.swerve.SwerveDrivetrainConfiguration;
-import frc.robot.utilities.drive.swerve.SwerveModuleConfiguration;
 import frc.robot.utilities.units.AngularVelocity;
 import frc.robot.utilities.units.Distance;
 import frc.robot.utilities.units.Velocity;
@@ -18,6 +18,7 @@ import frc.robot.utilities.units.Velocity;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -65,23 +66,35 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final int FL_DRIVE_ID = 2;
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 0; // SHOULD BE 9
-    private static final double FL_OFFSET = -Units.degreesToRadians(247.8); //247.5);// 244.9 + 180.); //324.4 + 180.0);
+    private static final double FL_OFFSET = -Units.degreesToRadians(247.8); // 247.5);// 244.9 + 180.); //324.4 +
+                                                                            // 180.0);
+    private static final Translation2d FL_LOCATION = new Translation2d(WHEEL_BASE.getAsMeters() / 2,
+            TRACK_WIDTH.getAsMeters() / 2); // TODO: Please God BeakTranslation2d
 
     private static final int FR_DRIVE_ID = 4;
     private static final int FR_TURN_ID = 3;
     private static final int FR_ENCODER_ID = 1; // SHOULD BE 10
-    private static final double FR_OFFSET = -Units.degreesToRadians(248.95); //248.9);// 317.9 + 180.); //219.6 + 180.0);
+    private static final double FR_OFFSET = -Units.degreesToRadians(248.95); // 248.9);// 317.9 + 180.); //219.6 +
+                                                                             // 180.0);
+    private static final Translation2d FR_LOCATION = new Translation2d(WHEEL_BASE.getAsMeters() / 2,
+            -TRACK_WIDTH.getAsMeters() / 2);
 
     private static final int BL_DRIVE_ID = 6;
     private static final int BL_TURN_ID = 5;
     private static final int BL_ENCODER_ID = 2; // SHOULD BE 11
-    private static final double BL_OFFSET = -Units.degreesToRadians(117.75); //119.3);// 87.7 + 180.); //135.4 + 180.0);
+    private static final double BL_OFFSET = -Units.degreesToRadians(117.75); // 119.3);// 87.7 + 180.); //135.4 +
+                                                                             // 180.0);
+    private static final Translation2d BL_LOCATION = new Translation2d(-WHEEL_BASE.getAsMeters() / 2,
+            TRACK_WIDTH.getAsMeters() / 2);
 
     private static final int BR_DRIVE_ID = 8;
     private static final int BR_TURN_ID = 7;
     private static final int BR_ENCODER_ID = 3; // SHOULD BE 12
-    private static final double BR_OFFSET = -Units.degreesToRadians(46.8); //44.85);// -Units.degreesToRadians(44.85);//345.65 +
+    private static final double BR_OFFSET = -Units.degreesToRadians(46.8); // 44.85);//
+                                                                           // -Units.degreesToRadians(44.85);//345.65 +
                                                                            // 180.);
+    private static final Translation2d BR_LOCATION = new Translation2d(-WHEEL_BASE.getAsMeters() / 2,
+            -TRACK_WIDTH.getAsMeters() / 2);
 
     private static final double ALLOWED_CLOSED_LOOP_ERROR = 0.0001;
 
@@ -108,6 +121,7 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
             FL_TURN_ID,
             FL_ENCODER_ID,
             FL_OFFSET,
+            FL_LOCATION,
             DRIVE_CONFIG);
 
     private static SwerveModuleConfiguration m_frontRightConfig = new SwerveModuleConfiguration(
@@ -115,6 +129,7 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
             FR_TURN_ID,
             FR_ENCODER_ID,
             FR_OFFSET,
+            FR_LOCATION,
             DRIVE_CONFIG);
 
     private static SwerveModuleConfiguration m_backLeftConfig = new SwerveModuleConfiguration(
@@ -122,6 +137,7 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
             BL_TURN_ID,
             BL_ENCODER_ID,
             BL_OFFSET,
+            BL_LOCATION,
             DRIVE_CONFIG);
 
     private static SwerveModuleConfiguration m_backRightConfig = new SwerveModuleConfiguration(
@@ -129,34 +145,30 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
             BR_TURN_ID,
             BR_ENCODER_ID,
             BR_OFFSET,
+            BR_LOCATION,
             DRIVE_CONFIG);
 
     public OctavianSwerveDrivetrain() {
         super(
-                m_frontLeftConfig,
-                m_frontRightConfig,
-                m_backLeftConfig,
-                m_backRightConfig,
                 PHYSICS,
                 m_gyro,
                 false,
                 PIDConstants.Theta.gains,
-                AUTON_DRIVE_GAINS);
+                AUTON_DRIVE_GAINS,
+                m_frontLeftConfig,
+                m_frontRightConfig,
+                m_backLeftConfig,
+                m_backRightConfig);
     }
 
     @Override
     public void periodic() {
         updateOdometry();
 
-        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_FL.getTurningEncoderRadians()));
-        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_FR.getTurningEncoderRadians()));
-        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_BL.getTurningEncoderRadians()));
-        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_BR.getTurningEncoderRadians()));
-
-        // SmartDashboard.putNumber("FL getangle", m_FL.getState().angle.getDegrees());
-        // SmartDashboard.putNumber("FR getangle", m_FR.getState().angle.getDegrees());
-        // SmartDashboard.putNumber("BL getangle", m_BL.getState().angle.getDegrees());
-        // SmartDashboard.putNumber("BR getangle", m_BR.getState().angle.getDegrees());
+        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_modules.get(0).getTurningEncoderRadians()));
+        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_modules.get(1).getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_modules.get(2).getTurningEncoderRadians()));
+        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_modules.get(3).getTurningEncoderRadians()));
 
         m_field.setRobotPose(getPoseMeters());
         SmartDashboard.putData(m_field);

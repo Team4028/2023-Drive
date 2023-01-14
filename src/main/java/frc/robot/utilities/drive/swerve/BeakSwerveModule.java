@@ -6,6 +6,7 @@ package frc.robot.utilities.drive.swerve;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,7 +33,8 @@ public class BeakSwerveModule {
      * @param config {@link SwerveModuleConfiguration} containing
      *               details of the module.
      */
-    public BeakSwerveModule(SwerveModuleConfiguration config) {}
+    public BeakSwerveModule(SwerveModuleConfiguration config) {
+    }
 
     /**
      * Call this function in a subclass AFTER setting up motors and encoders
@@ -65,6 +67,8 @@ public class BeakSwerveModule {
 
         // Configure PID
         m_driveMotor.setP(config.drive_kP, 0);
+
+        m_driveMotor.setDistancePerPulse(config.wheelDiameter, config.driveGearRatio);
     }
 
     public void configTurningMotor(SwerveModuleConfiguration config) {
@@ -104,7 +108,22 @@ public class BeakSwerveModule {
     public SwerveModuleState getState() {
         return new SwerveModuleState(
                 m_driveMotor.getVelocityNU() * driveEncoderDistancePerPulse * 10., // TODO
+                // m_driveMotor.getRate() / 10.,
                 new Rotation2d(getTurningEncoderRadians())); // FUTURE: Using Absolute reverses some wheels.
+    }
+
+    /**
+     * Get the module's current position.
+     * 
+     * @return Current position of the module.
+     */
+    public SwerveModulePosition getPosition() {
+        double positionDistancePerPulse = driveEncoderDistancePerPulse * m_driveMotor.getVelocityEncoderCPR() / m_driveMotor.getPositionEncoderCPR();
+        // TODO: I have no idea if this will work
+        return new SwerveModulePosition(
+            m_driveMotor.getPositionNU() * positionDistancePerPulse,
+            new Rotation2d(getTurningEncoderRadians())
+        );
     }
 
     /**
@@ -114,24 +133,23 @@ public class BeakSwerveModule {
      *                     and angle.
      */
     public void setDesiredState(SwerveModuleState desiredState) {
-        // SmartDashboard.putNumber("bruh " + bruh, desiredState.angle.getDegrees());
-        // SmartDashboard.putNumber("bruh " + bruh, desiredState.speedMetersPerSecond);
-        // SmartDashboard.putNumber("state " + bruh, getState().speedMetersPerSecond);
         // Optimize the state to avoid spinning more than 90 degrees.
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
-        
+        SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState,
+                new Rotation2d(getTurningEncoderRadians()));
+
         // Calculate Arb Feed Forward for drive motor
         // TODO: calc from SysId
         // NOTE: feedforward MUST be in meters!
         double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond);
 
         m_driveMotor.setVelocityNU(
+        // m_driveMotor.setRate(
                 optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
+                // optimizedState.speedMetersPerSecond,
                 arbFeedforward,
                 0);
-        
-        SmartDashboard.putNumber("bruh " + bruh, desiredState.speedMetersPerSecond);
-        SmartDashboard.putNumber("state " + bruh, getState().speedMetersPerSecond);
+
+        SmartDashboard.putNumber("bruh " + bruh, m_driveMotor.getOutputVoltage());
 
         // Set the turning motor to the correct position.
         setAngle(optimizedState.angle.getDegrees());
@@ -189,13 +207,13 @@ public class BeakSwerveModule {
             newAngleDemand += 360.0;
         }
 
-        // SmartDashboard.putNumber("state " + bruh, newAngleDemand / 360. * turnCPR);
+        SmartDashboard.putNumber("state " + bruh, newAngleDemand / 360. * turnCPR);
 
         m_turningMotor.setPositionNU(newAngleDemand / 360.0 * turnCPR);
     }
 
     public static BeakSwerveModule fromSwerveModuleConfig(SwerveModuleConfiguration config) {
-        switch(config.moduleType) {
+        switch (config.moduleType) {
             case MK4i:
                 return new BeakMk4iSwerveModule(config);
             case MK2:
