@@ -23,6 +23,7 @@ import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.FalconDrivetrain;
 import frc.robot.subsystems.NEODrivetrain;
 import frc.robot.subsystems.OctavianSwerveDrivetrain;
+import frc.robot.subsystems.PracticeSwerveDrivetrain;
 import frc.robot.subsystems.SixNEODrivetrain;
 import frc.robot.utilities.BeakXBoxController;
 import frc.robot.utilities.Util;
@@ -37,7 +38,8 @@ public class RobotContainer {
     // private CIMDrivetrain m_drive = CIMDrivetrain.getInstance();
     // private FalconDrivetrain m_drive = FalconDrivetrain.getInstance();
     // private OctavianSwerveDrivetrain m_drive = OctavianSwerveDrivetrain.getInstance();
-    private SwerveDrivetrain m_drive = SwerveDrivetrain.getInstance();
+    // private SwerveDrivetrain m_drive = SwerveDrivetrain.getInstance();
+    private PracticeSwerveDrivetrain m_drive = PracticeSwerveDrivetrain.getInstance();
     
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
 
@@ -59,7 +61,7 @@ public class RobotContainer {
     public void configureButtonBindings() {
         m_drive.setDefaultCommand(
                 new RunCommand(() -> m_drive.drive(
-                        speedScaledDriverLeftY(),
+                        -speedScaledDriverLeftY(),
                         speedScaledDriverLeftX(),
                         speedScaledDriverRightX(),
                         true),

@@ -106,7 +106,7 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
 
     public void resetOdometry(Pose2d pose) {
         // TODO: report 0 for pos changes
-        m_odom.resetPosition(getGyroRotation2d(), null, pose);
+        m_odom.resetPosition(getGyroRotation2d(), getModulePositions(), pose);
     }
 
     public void drive(double x, double y, double rot, boolean fieldRelative) {
