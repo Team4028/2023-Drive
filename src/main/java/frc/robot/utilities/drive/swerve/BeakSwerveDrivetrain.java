@@ -114,6 +114,10 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         y *= m_physics.maxVelocity.getAsMetersPerSecond();
         rot *= m_physics.maxAngularVelocity.getAsRadiansPerSecond();
 
+        // if (Math.abs(x) < 0.05) x = 0.;
+        // if (Math.abs(y) < 0.05) y = 0.;
+        // if (Math.abs(rot) < 0.05) rot = 0.;
+
         SmartDashboard.putNumber("rot", rot);
 
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(
@@ -133,7 +137,9 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, m_physics.maxVelocity.getAsMetersPerSecond());
 
+
         for (int i = 0; i < desiredStates.length; i++) {
+            // SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredStates[i], m_modules.get(i).getState().angle);
             m_modules.get(i).setDesiredState(desiredStates[i]);
         }
     }

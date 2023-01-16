@@ -163,7 +163,7 @@ public class BeakSwerveModule {
      */
     public void resetTurningMotor() {
         m_turningMotor.setEncoderPositionNU(
-                -Math.toDegrees(getTurningEncoderRadians()) / 360.0 * turnCPR);
+                Math.toDegrees(getTurningEncoderRadians()) / 360.0 * turnCPR);
     }
 
     /**

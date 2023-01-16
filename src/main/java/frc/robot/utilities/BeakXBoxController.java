@@ -96,7 +96,7 @@ public final class BeakXBoxController {
     }
 
     public double getLeftYAxis() {
-        return createDeadZone(controller.getLeftY(), 0.);
+        return createDeadZone(controller.getLeftY(), THUMBSTICK_DEADBAND);
     }
 
     public double getRightXAxis() {
