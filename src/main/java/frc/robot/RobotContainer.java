@@ -14,9 +14,12 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
+import frc.robot.commands.auton.CarsonVPath;
 import frc.robot.commands.auton.EpicPath;
+import frc.robot.commands.auton.NickPath;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.RotateDrivetrainToTargetPosition;
+import frc.robot.commands.auton.SamPath;
 import frc.robot.commands.auton.TestPath;
 import frc.robot.subsystems.CIMDrivetrain;
 import frc.robot.subsystems.SwerveDrivetrain;
@@ -93,6 +96,9 @@ public class RobotContainer {
     private void initAutonChooser() {
         _autonChooser.setDefaultOption("Epic Path", new EpicPath(m_drive));
         _autonChooser.addOption("Test Path", new TestPath(m_drive));
+        _autonChooser.addOption("Carson V Path", new CarsonVPath(m_drive));
+        _autonChooser.addOption("Sam Path", new SamPath(m_drive));
+        _autonChooser.addOption("Nick Path", new NickPath(m_drive));
 
         SmartDashboard.putData("Auton Chooser", _autonChooser);
     }

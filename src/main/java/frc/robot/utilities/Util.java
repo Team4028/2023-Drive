@@ -4,7 +4,7 @@
 
 package frc.robot.utilities;
 
-/** Useful utility functions for drive. */
+/** Useful utility functions. */
 public final class Util {
     public static final double speedScale(double input, double base, double throttle) {
         return input * (base + throttle * (1.0 - base));

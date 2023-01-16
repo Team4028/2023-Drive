@@ -26,6 +26,24 @@ public class Trajectories {
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
     }
+
+    public static PathPlannerTrajectory CarsonVPath(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("Carson V Path",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
+    }
+
+    public static PathPlannerTrajectory SamPath(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("Sam Path",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
+    }
+    
+    public static PathPlannerTrajectory NickPath(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("Nick Path",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
+    }
     // public static Trajectory getTrajectory(String path) {
     // Trajectory traj = new Trajectory();
     // try {
