@@ -16,6 +16,8 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
 import frc.robot.commands.auton.CarsonVPath;
 import frc.robot.commands.auton.EpicPath;
+import frc.robot.commands.auton.JPath1;
+import frc.robot.commands.auton.JPath2;
 import frc.robot.commands.auton.NickPath;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.RotateDrivetrainToTargetPosition;
@@ -99,7 +101,8 @@ public class RobotContainer {
         _autonChooser.addOption("Carson V Path", new CarsonVPath(m_drive));
         _autonChooser.addOption("Sam Path", new SamPath(m_drive));
         _autonChooser.addOption("Nick Path", new NickPath(m_drive));
-
+        _autonChooser.addOption("j path 1", new JPath1(m_drive));
+        _autonChooser.addOption("j path 2", new JPath2(m_drive));
         SmartDashboard.putData("Auton Chooser", _autonChooser);
     }
 

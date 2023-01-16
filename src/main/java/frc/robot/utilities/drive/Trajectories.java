@@ -44,6 +44,17 @@ public class Trajectories {
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
     }
+    public static PathPlannerTrajectory JPath1(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("j path 1",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
+    }
+
+    public static PathPlannerTrajectory JPath2(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("j path 2",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
+    }
     // public static Trajectory getTrajectory(String path) {
     // Trajectory traj = new Trajectory();
     // try {
