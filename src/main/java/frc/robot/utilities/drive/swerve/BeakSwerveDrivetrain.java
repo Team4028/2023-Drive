@@ -76,6 +76,8 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         m_kinematics = new SwerveDriveKinematics(moduleLocations);
 
         m_odom = new SwerveDriveOdometry(m_kinematics, getGyroRotation2d(), getModulePositions());
+
+        resetTurningMotors();
     }
 
     public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
@@ -136,7 +138,6 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, m_physics.maxVelocity.getAsMetersPerSecond());
-
 
         for (int i = 0; i < desiredStates.length; i++) {
             // SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredStates[i], m_modules.get(i).getState().angle);

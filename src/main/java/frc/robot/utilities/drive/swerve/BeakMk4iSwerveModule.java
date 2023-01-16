@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utilities.encoder.BeakCANCoder;
 import frc.robot.utilities.motor.BeakTalonFX;
 
@@ -61,21 +62,26 @@ public class BeakMk4iSwerveModule extends BeakSwerveModule {
 
     public void setDesiredState(SwerveModuleState desiredState) {
         // Optimize the state to avoid spinning more than 90 degrees.
-        SwerveModuleState optimizedState = desiredState; //SwerveModuleState.optimize(desiredState, new Rotation2d(getTurningEncoderRadians()));
+        // SwerveModuleState optimizedState = desiredState;
+        // //SwerveModuleState.optimize(desiredState, new
+        // Rotation2d(getTurningEncoderRadians()));
 
         // TODO: Fix optimization
-        
+
         // // Calculate Arb Feed Forward for drive motor
         // // TODO: calc from SysId
-        // double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond) / 12.0;
+        double arbFeedforward = m_feedforward.calculate(desiredState.speedMetersPerSecond);
 
-        // m_driveMotor.setVelocityNU(
-        //         optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
-        //         arbFeedforward,
-        //         0);
-        m_driveMotor.set(optimizedState.speedMetersPerSecond / Units.feetToMeters(16.3));
+        m_driveMotor.setVelocityNU(
+                desiredState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
+                arbFeedforward,
+                0);
+        // m_driveMotor.set(desiredState.speedMetersPerSecond /
+        // Units.feetToMeters(16.3));
+        SmartDashboard.putNumber("bruh " + bruh, m_driveMotor.getOutputVoltage());
+        SmartDashboard.putNumber("state " + bruh, desiredState.angle.getDegrees());
 
         // Set the turning motor to the correct position.
-        setAngle(optimizedState.angle.getDegrees());
+        setAngle(desiredState.angle.getDegrees());
     }
 }

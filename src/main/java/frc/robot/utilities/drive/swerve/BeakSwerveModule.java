@@ -119,7 +119,6 @@ public class BeakSwerveModule {
      */
     public SwerveModulePosition getPosition() {
         double positionDistancePerPulse = driveEncoderDistancePerPulse * m_driveMotor.getVelocityEncoderCPR() / m_driveMotor.getPositionEncoderCPR();
-        // TODO: I have no idea if this will work
         return new SwerveModulePosition(
             m_driveMotor.getPositionNU() * positionDistancePerPulse,
             new Rotation2d(getTurningEncoderRadians())
@@ -207,7 +206,7 @@ public class BeakSwerveModule {
             newAngleDemand += 360.0;
         }
 
-        SmartDashboard.putNumber("state " + bruh, newAngleDemand / 360. * turnCPR);
+        // SmartDashboard.putNumber("state " + bruh, newAngleDemand / 360. * turnCPR);
 
         m_turningMotor.setPositionNU(newAngleDemand / 360.0 * turnCPR);
     }

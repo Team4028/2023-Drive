@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class SwerveDrivetrain extends BeakSwerveDrivetrain {
-    private static final double DRIVE_kP = 0.015;
+    private static final double DRIVE_kP = 0.0125;
     private static final double TURN_kP = 0.2;
     private static final double TURN_kD = 0.0;
 
