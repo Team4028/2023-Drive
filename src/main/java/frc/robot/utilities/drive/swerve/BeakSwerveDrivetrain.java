@@ -6,6 +6,10 @@ package frc.robot.utilities.drive.swerve;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -80,14 +84,15 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         resetTurningMotors();
     }
 
-    public SequentialCommandGroup getTrajectoryCommand(Trajectory traj) {
-        return new SwerveControllerCommand(
+    public SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj) {
+        // Consumer<SwerveModuleState[]> c = this::setModuleStates;
+        return new PPSwerveControllerCommand(
                 traj,
                 this::getPoseMeters,
                 m_kinematics,
                 m_driveController,
                 m_driveController,
-                m_thetaController,
+                m_autonThetaController,
                 this::setModuleStates,
                 this)
                         .andThen(() -> drive(0, 0, 0));
@@ -125,6 +130,12 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, getRotation2d())
                         : new ChassisSpeeds(x, y, rot));
+
+        setModuleStates(states);
+    }
+
+    public void driveChassisSpeeds(ChassisSpeeds speeds) {
+        SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
 
         setModuleStates(states);
     }
