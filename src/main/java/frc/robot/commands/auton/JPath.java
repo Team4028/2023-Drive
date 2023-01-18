@@ -4,14 +4,17 @@
 
 package frc.robot.commands.auton;
 
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.Trajectories;
 
-public class JPath1 extends BeakAutonCommand {
+public class JPath extends BeakAutonCommand {
     /** Creates a new TestPath. */
-    public JPath1(BeakDrivetrain drivetrain) {
+    public JPath(BeakDrivetrain drivetrain) {
         super.addCommands(
-                drivetrain.getTrajectoryCommand(Trajectories.JPath1(drivetrain)));
+                drivetrain.getTrajectoryCommand(Trajectories.JPath1(drivetrain)),
+                new WaitCommand(0.5),
+                drivetrain.getTrajectoryCommand(Trajectories.JPath2(drivetrain)));
         super.setInitialPose(Trajectories.JPath1(drivetrain));
     }
 }

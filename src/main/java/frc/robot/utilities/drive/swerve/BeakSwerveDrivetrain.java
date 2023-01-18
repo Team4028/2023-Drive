@@ -6,7 +6,6 @@ package frc.robot.utilities.drive.swerve;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
@@ -18,11 +17,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
 
@@ -85,7 +82,6 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     }
 
     public SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj) {
-        // Consumer<SwerveModuleState[]> c = this::setModuleStates;
         return new PPSwerveControllerCommand(
                 traj,
                 this::getPoseMeters,
@@ -120,10 +116,6 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         x *= m_physics.maxVelocity.getAsMetersPerSecond();
         y *= m_physics.maxVelocity.getAsMetersPerSecond();
         rot *= m_physics.maxAngularVelocity.getAsRadiansPerSecond();
-
-        // if (Math.abs(x) < 0.05) x = 0.;
-        // if (Math.abs(y) < 0.05) y = 0.;
-        // if (Math.abs(rot) < 0.05) rot = 0.;
 
         SmartDashboard.putNumber("rot", rot);
 

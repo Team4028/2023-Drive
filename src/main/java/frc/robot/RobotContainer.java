@@ -16,6 +16,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
 import frc.robot.commands.auton.CarsonVPath;
 import frc.robot.commands.auton.EpicPath;
+import frc.robot.commands.auton.JPath;
 import frc.robot.commands.auton.JPath1;
 import frc.robot.commands.auton.JPath2;
 import frc.robot.commands.auton.NickPath;
@@ -103,6 +104,7 @@ public class RobotContainer {
         _autonChooser.addOption("Nick Path", new NickPath(m_drive));
         _autonChooser.addOption("j path 1", new JPath1(m_drive));
         _autonChooser.addOption("j path 2", new JPath2(m_drive));
+        _autonChooser.addOption("J Path", new JPath(m_drive));
 
         SmartDashboard.putData("Auton Chooser", _autonChooser);
     }
@@ -114,8 +116,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         m_drive.resetOdometry(_autonChooser.getSelected().getInitialPose());
-        // return _autonChooser.getSelected();
-        return new InstantCommand();
+        return _autonChooser.getSelected();
+        // return new InstantCommand();
     }
 
     public static RobotContainer getInstance() {
