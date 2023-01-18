@@ -103,6 +103,7 @@ public class RobotContainer {
         _autonChooser.addOption("Nick Path", new NickPath(m_drive));
         _autonChooser.addOption("j path 1", new JPath1(m_drive));
         _autonChooser.addOption("j path 2", new JPath2(m_drive));
+
         SmartDashboard.putData("Auton Chooser", _autonChooser);
     }
 
@@ -113,7 +114,8 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         m_drive.resetOdometry(_autonChooser.getSelected().getInitialPose());
-        return _autonChooser.getSelected();
+        // return _autonChooser.getSelected();
+        return new InstantCommand();
     }
 
     public static RobotContainer getInstance() {

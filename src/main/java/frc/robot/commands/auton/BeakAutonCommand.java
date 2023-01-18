@@ -4,6 +4,8 @@
 
 package frc.robot.commands.auton;
 
+import com.pathplanner.lib.PathPlannerTrajectory;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -20,8 +22,8 @@ public class BeakAutonCommand extends SequentialCommandGroup {
         // addCommands(new FooCommand(), new BarCommand());
     }
 
-    protected void setInitialPose(Trajectory initialTrajectory) {
-        this.initialPose = initialTrajectory.getInitialPose();
+    protected void setInitialPose(PathPlannerTrajectory initialTrajectory) {
+        this.initialPose = initialTrajectory.getInitialHolonomicPose();
     }
 
     public Pose2d getInitialPose() {
