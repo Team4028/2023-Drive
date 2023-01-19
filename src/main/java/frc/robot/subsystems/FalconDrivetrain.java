@@ -131,7 +131,6 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain implements Beak
     }
 
     public void configPID() {
-        // TODO: get these from SysId
         double maxVel = 26638.923;
 
         m_FL.setPIDF(kP, 0., kD, m_FL.calculateFeedForward(1, maxVel), 0);
