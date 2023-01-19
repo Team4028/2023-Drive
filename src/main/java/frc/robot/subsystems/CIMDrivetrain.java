@@ -124,7 +124,6 @@ public class CIMDrivetrain extends BeakDifferentialDrivetrain {
     }
 
     public void configPID() {
-        // TODO: get these from SysId
         double maxVel = 44788.395;
 
         m_FL.setPIDF(kP, 0., kD, m_FL.calculateFeedForward(1, maxVel), 0);

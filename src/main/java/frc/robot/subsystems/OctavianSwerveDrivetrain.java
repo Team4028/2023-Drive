@@ -61,8 +61,6 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
             CONFIGURATION.driveGearRatio,
             FEED_FORWARD);
 
-    // TODO: get offsets
-    // TODO: organize this
     private static final int FL_DRIVE_ID = 2;
     private static final int FL_TURN_ID = 1;
     private static final int FL_ENCODER_ID = 0; // SHOULD BE 9

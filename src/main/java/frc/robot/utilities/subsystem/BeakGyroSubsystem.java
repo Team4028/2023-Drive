@@ -35,7 +35,7 @@ public class BeakGyroSubsystem extends SubsystemBase {
             return Rotation2d.fromDegrees(m_gyroSim.getAngle());
         } else {
             return m_gyroInverted ? new Rotation2d(0).minus(m_gyro.getRotation2d())
-                : m_gyro.getRotation2d(); // TODO: add to config
+                : m_gyro.getRotation2d();
         }
     }
 

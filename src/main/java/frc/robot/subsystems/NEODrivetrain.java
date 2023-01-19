@@ -128,7 +128,6 @@ public class NEODrivetrain extends BeakDifferentialDrivetrain {
     }
 
     public void configPID() {
-        // TODO: get these from SysId
         // double maxVel = 7380.63;
 
         m_FL.setPIDF(kP, 0., kD, 0., 0);
