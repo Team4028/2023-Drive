@@ -6,6 +6,7 @@ package frc.robot.utilities.drive.swerve;
 
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -63,17 +64,19 @@ public class BeakMk4iSwerveModule extends BeakSwerveModule {
     public void setDesiredState(SwerveModuleState desiredState) {
         // Optimize the state to avoid spinning more than 90 degrees.
         // SwerveModuleState optimizedState = desiredState;
-        // //SwerveModuleState.optimize(desiredState, new
+        // SwerveModuleState.optimize(desiredState, new
         // Rotation2d(getTurningEncoderRadians()));
+
+        SwerveModuleState optimizedState = desiredState;//optimize(desiredState, new Rotation2d(super.getTurningEncoderRadians()));
 
         // TODO: Fix optimization
 
         // // Calculate Arb Feed Forward for drive motor
         // // TODO: calc from SysId
-        double arbFeedforward = m_feedforward.calculate(desiredState.speedMetersPerSecond);
+        double arbFeedforward = m_feedforward.calculate(optimizedState.speedMetersPerSecond);
 
         m_driveMotor.setVelocityNU(
-                desiredState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
+                optimizedState.speedMetersPerSecond / 10.0 / driveEncoderDistancePerPulse,
                 arbFeedforward,
                 0);
         // m_driveMotor.set(desiredState.speedMetersPerSecond /
@@ -82,6 +85,20 @@ public class BeakMk4iSwerveModule extends BeakSwerveModule {
         SmartDashboard.putNumber("state " + bruh, desiredState.angle.getDegrees());
 
         // Set the turning motor to the correct position.
-        setAngle(desiredState.angle.getDegrees());
+        setAngle(optimizedState.angle.getDegrees());
+    }
+
+    public static SwerveModuleState optimize(
+            SwerveModuleState desiredState, Rotation2d currentAngle) {
+        var delta = desiredState.angle.minus(currentAngle);
+        while (Math.abs(delta.getDegrees()) > 90.0) {
+            desiredState = new SwerveModuleState(
+                    -desiredState.speedMetersPerSecond,
+                    Rotation2d.fromDegrees(
+                            delta.getDegrees() < 90.0 ? delta.getDegrees() + 180.0 : delta.getDegrees() - 180.0));
+            delta = desiredState.angle.minus(currentAngle);
+        }
+        return new SwerveModuleState(desiredState.speedMetersPerSecond, desiredState.angle);
+
     }
 }
