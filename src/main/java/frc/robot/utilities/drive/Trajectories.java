@@ -58,8 +58,8 @@ public class Trajectories {
 
     public static PathPlannerTrajectory TwoPieceDriveUp(BeakDrivetrain drivetrain) {
         return PathPlanner.loadPath("2 Piece Drive Up",
-                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5,
-                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5);
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25,
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25);
     }
 
     public static PathPlannerTrajectory TwoPieceAcquirePiece(BeakDrivetrain drivetrain) {
