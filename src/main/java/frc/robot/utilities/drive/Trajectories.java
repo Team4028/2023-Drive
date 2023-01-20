@@ -55,6 +55,24 @@ public class Trajectories {
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5,
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5);
     }
+
+    public static PathPlannerTrajectory TwoPieceDriveUp(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("2 Piece Drive Up",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5,
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.5);
+    }
+
+    public static PathPlannerTrajectory TwoPieceAcquirePiece(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("2 Piece Acquire Piece",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.75,
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.75);
+    }
+
+    public static PathPlannerTrajectory TwoPieceScorePiece(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("2 Piece Score Piece",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.75,
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.75);
+    }
     // public static Trajectory getTrajectory(String path) {
     // Trajectory traj = new Trajectory();
     // try {

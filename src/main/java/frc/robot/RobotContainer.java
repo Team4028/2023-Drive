@@ -24,6 +24,9 @@ import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.RotateDrivetrainToTargetPosition;
 import frc.robot.commands.auton.SamPath;
 import frc.robot.commands.auton.TestPath;
+import frc.robot.commands.auton.TwoPieceAcquirePiece;
+import frc.robot.commands.auton.TwoPieceDriveUp;
+import frc.robot.commands.auton.TwoPieceScorePiece;
 import frc.robot.subsystems.CIMDrivetrain;
 import frc.robot.subsystems.SwerveDrivetrain;
 import frc.robot.subsystems.FalconDrivetrain;
@@ -105,6 +108,9 @@ public class RobotContainer {
         _autonChooser.addOption("j path 1", new JPath1(m_drive));
         _autonChooser.addOption("j path 2", new JPath2(m_drive));
         _autonChooser.addOption("J Path", new JPath(m_drive));
+        _autonChooser.addOption("Two Piece Drive Up", new TwoPieceDriveUp(m_drive));
+        _autonChooser.addOption("Two Piece Acquire Piece", new TwoPieceAcquirePiece(m_drive));
+        _autonChooser.addOption("Two Piece Score Piece", new TwoPieceScorePiece(m_drive));
 
         SmartDashboard.putData("Auton Chooser", _autonChooser);
     }

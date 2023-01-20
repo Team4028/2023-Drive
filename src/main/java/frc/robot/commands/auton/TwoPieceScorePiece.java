@@ -4,16 +4,14 @@
 
 package frc.robot.commands.auton;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.Trajectories;
 
-public class JPath2 extends BeakAutonCommand {
+public class TwoPieceScorePiece extends BeakAutonCommand {
     /** Creates a new TestPath. */
-    public JPath2(BeakDrivetrain drivetrain) {
+    public TwoPieceScorePiece(BeakDrivetrain drivetrain) {
         super.addCommands(
-                drivetrain.getTrajectoryCommand(Trajectories.JPath2(drivetrain)),
-                new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180), drivetrain, false));
-        super.setInitialPose(Trajectories.JPath2(drivetrain));
+                drivetrain.getTrajectoryCommand(Trajectories.TwoPieceScorePiece(drivetrain)));
+        super.setInitialPose(Trajectories.TwoPieceScorePiece(drivetrain));
     }
 }
