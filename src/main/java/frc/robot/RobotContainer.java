@@ -123,7 +123,6 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         m_drive.resetOdometry(_autonChooser.getSelected().getInitialPose());
         return _autonChooser.getSelected();
-        // return new InstantCommand();
     }
 
     public static RobotContainer getInstance() {
