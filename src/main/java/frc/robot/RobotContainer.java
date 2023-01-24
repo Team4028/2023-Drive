@@ -16,6 +16,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.auton.BeakAutonCommand;
 import frc.robot.commands.auton.CarsonVPath;
 import frc.robot.commands.auton.EpicPath;
+import frc.robot.commands.auton.GeneratePath;
 import frc.robot.commands.auton.JPath;
 import frc.robot.commands.auton.JPath1;
 import frc.robot.commands.auton.JPath2;
@@ -29,6 +30,7 @@ import frc.robot.commands.auton.TwoPieceDriveUp;
 import frc.robot.commands.auton.TwoPieceScorePiece;
 import frc.robot.subsystems.CIMDrivetrain;
 import frc.robot.subsystems.SwerveDrivetrain;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.FalconDrivetrain;
 import frc.robot.subsystems.NEODrivetrain;
 import frc.robot.subsystems.OctavianSwerveDrivetrain;
@@ -46,16 +48,20 @@ public class RobotContainer {
     // private SixNEODrivetrain m_drive = SixNEODrivetrain.getInstance();
     // private CIMDrivetrain m_drive = CIMDrivetrain.getInstance();
     // private FalconDrivetrain m_drive = FalconDrivetrain.getInstance();
-    // private OctavianSwerveDrivetrain m_drive = OctavianSwerveDrivetrain.getInstance();
+    // private OctavianSwerveDrivetrain m_drive =
+    // OctavianSwerveDrivetrain.getInstance();
     private SwerveDrivetrain m_drive = SwerveDrivetrain.getInstance();
-    // private PracticeSwerveDrivetrain m_drive = PracticeSwerveDrivetrain.getInstance();
-    
+    // private PracticeSwerveDrivetrain m_drive =
+    // PracticeSwerveDrivetrain.getInstance();
+
+    private Vision m_vision = Vision.getInstance();
+
     private SendableChooser<BeakAutonCommand> _autonChooser = new SendableChooser<BeakAutonCommand>();
 
     private SlewRateLimiter m_xLimiter = new SlewRateLimiter(4.0);
     private SlewRateLimiter m_yLimiter = new SlewRateLimiter(4.0);
     private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(4.0);
-    
+
     private static RobotContainer _instance = new RobotContainer();
 
     public RobotContainer() {
@@ -78,7 +84,12 @@ public class RobotContainer {
 
         m_driverController.start.onTrue(new InstantCommand(m_drive::zero));
         m_driverController.a.onTrue(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, false));
-        m_driverController.b.onTrue(new RotateDrivetrainToTargetPosition(Distance.fromInches(324.), Distance.fromInches(162.), m_drive).withTimeout(2.0));
+        m_driverController.b.onTrue(
+                new RotateDrivetrainToTargetPosition(Distance.fromInches(324.), Distance.fromInches(162.), m_drive)
+                        .withTimeout(2.0));
+
+        m_driverController.x.whileTrue(new GeneratePath(
+                () -> m_vision.getTargetPose(m_drive.getPoseMeters(), Distance.fromInches(48.)), m_drive));
     }
 
     public double speedScaledDriverLeftY() {

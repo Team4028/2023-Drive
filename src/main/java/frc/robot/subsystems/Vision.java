@@ -16,6 +16,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -88,13 +89,19 @@ public class Vision extends SubsystemBase {
         if (target != null) {
             Transform3d cameraToTarget = target.getBestCameraToTarget();
 
-            Transform3d targetOffset = cameraToTarget.plus(new Transform3d(new Pose3d(), new Pose3d(-distance.getAsMeters(), 0, 0, new Rotation3d())));
+            Transform3d targetOffset = cameraToTarget.plus(new Transform3d(new Pose3d(), new Pose3d(distance.getAsMeters(), 0, 0, new Rotation3d())));
 
             Pose3d pose = new Pose3d(robotPose);
 
             Pose3d scoringPose = pose.plus(targetOffset);
 
-            return scoringPose.toPose2d();
+            // WARNING: The following code is scuffed. Please proceed with caution.
+            Pose2d newPose = scoringPose.toPose2d();
+
+            Rotation2d newRotation = Rotation2d.fromDegrees(newPose.getRotation().getDegrees() - 180.);
+
+            Pose2d finalPose = new Pose2d(newPose.getTranslation(), newRotation);
+            return finalPose;
         }
 
         return robotPose;

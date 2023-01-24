@@ -6,6 +6,7 @@ package frc.robot.commands.auton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -13,18 +14,20 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utilities.drive.BeakDrivetrain;
 
 public class GeneratePath extends CommandBase {
-    private final Pose2d m_desiredPose;
+    private final Supplier<Pose2d> m_desiredPose;
     private final BeakDrivetrain m_drivetrain;
 
     private SequentialCommandGroup m_trajectoryCommand;
 
     /** Generate and run a trajectory to the desired pose (field relative). */
-    public GeneratePath(Pose2d desiredPose, BeakDrivetrain drivetrain) {
+    public GeneratePath(Supplier<Pose2d> desiredPose, BeakDrivetrain drivetrain) {
         m_drivetrain = drivetrain;
         m_desiredPose = desiredPose;
 
@@ -41,13 +44,23 @@ public class GeneratePath extends CommandBase {
         List<PathPoint> points = new ArrayList<PathPoint>();
 
         points.add(new PathPoint(robotPose.getTranslation(), robotPose.getRotation(), robotPose.getRotation()));
-        points.add(new PathPoint(m_desiredPose.getTranslation(), m_desiredPose.getRotation(), m_desiredPose.getRotation()));
+        points.add(new PathPoint(m_desiredPose.get().getTranslation(), m_desiredPose.get().getRotation(), m_desiredPose.get().getRotation()));
 
         PathPlannerTrajectory traj = PathPlanner.generatePath(constraints, points);
 
         m_trajectoryCommand = m_drivetrain.getTrajectoryCommand(traj);
 
+        Field2d field = new Field2d();
+
+        field.setRobotPose(m_desiredPose.get());
+        SmartDashboard.putData("BRUH FIELD", field);
+
         m_trajectoryCommand.schedule();
+    }
+    
+    @Override
+    public void end(boolean interrupted) {
+        m_trajectoryCommand.end(interrupted);
     }
 
     @Override
