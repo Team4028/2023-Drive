@@ -148,6 +148,18 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
     }
 
     /**
+     * Gets a command to control the
+     * drivetrain to follow a dynamically generated path.
+     * 
+     * @param traj Trajectory to follow.
+     * @return A {@link SequentialCommandGroup} to run the trajectory, and stop the
+     *         drivetrain.
+     */
+    public SequentialCommandGroup getGeneratedTrajectoryCommand(PathPlannerTrajectory traj) {
+        return null;
+    }
+
+    /**
      * Method to drive the robot using joystick info.
      *
      * @param x             Speed of the robot in the x direction (forward).

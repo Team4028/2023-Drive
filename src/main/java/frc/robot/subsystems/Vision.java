@@ -18,7 +18,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.units.Distance;
 
@@ -28,6 +30,8 @@ public class Vision extends SubsystemBase {
 
     private static final String CAMERA_NAME = "Global_Shutter_Camera";
 
+    private static final Pose3d CAMERA_TO_ROBOT = new Pose3d(0., Units.inchesToMeters(5.), 0., new Rotation3d());
+
     private static Vision m_instance;
 
     /** Creates a new Vision. */
@@ -35,7 +39,7 @@ public class Vision extends SubsystemBase {
         m_camera = new PhotonCamera(CAMERA_NAME);
 
         try {
-            m_layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2022RapidReact.m_resourceFile);
+            m_layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2023ChargedUp.m_resourceFile);
         } catch (IOException err) {
             throw new RuntimeException();
         }
@@ -100,7 +104,12 @@ public class Vision extends SubsystemBase {
 
             Rotation2d newRotation = Rotation2d.fromDegrees(newPose.getRotation().getDegrees() - 180.);
 
-            Pose2d finalPose = new Pose2d(newPose.getTranslation(), newRotation);
+            Pose2d finalPose = new Pose2d(newPose.getTranslation(), newRotation).plus(
+                new Transform2d(
+                    CAMERA_TO_ROBOT.getTranslation().toTranslation2d(),
+                    CAMERA_TO_ROBOT.getRotation().toRotation2d()
+                )
+            );
             return finalPose;
         }
 

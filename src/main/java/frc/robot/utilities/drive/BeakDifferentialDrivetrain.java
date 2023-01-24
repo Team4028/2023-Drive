@@ -60,14 +60,6 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
         return m_kinematics;
     }
 
-    /**
-     * Gets a command to control the
-     * drivetrain to follow a path.
-     * 
-     * @param traj Trajectory to follow.
-     * @return A {@link SequentialCommandGroup} to run the trajectory, and stop the
-     *         drivetrain.
-     */
     public SequentialCommandGroup getTrajectoryCommand(PathPlannerTrajectory traj) {
         return new PPRamseteCommand(
                 traj,
@@ -78,6 +70,20 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
                 this::getWheelSpeeds,
                 m_driveController,
                 m_driveController,
+                this::driveVolts,
+                this).andThen(() -> drive(0, 0, 0));
+    }
+
+    public SequentialCommandGroup getGeneratedTrajectoryCommand(PathPlannerTrajectory traj) {
+        return new PPRamseteCommand(
+                traj,
+                this::getPoseMeters,
+                new RamseteController(),
+                m_feedForward,
+                m_kinematics,
+                this::getWheelSpeeds,
+                m_generatedDriveController,
+                m_generatedDriveController,
                 this::driveVolts,
                 this).andThen(() -> drive(0, 0, 0));
     }

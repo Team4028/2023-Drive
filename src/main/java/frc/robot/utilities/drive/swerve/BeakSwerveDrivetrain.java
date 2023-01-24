@@ -97,6 +97,19 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
                         .andThen(() -> drive(0, 0, 0));
     }
 
+    public SequentialCommandGroup getGeneratedTrajectoryCommand(PathPlannerTrajectory traj) {
+        return new PPSwerveControllerCommand(
+                traj,
+                this::getPoseMeters,
+                m_kinematics,
+                m_generatedDriveController,
+                m_generatedDriveController,
+                m_autonThetaController,
+                this::setModuleStates,
+                this)
+                        .andThen(() -> drive(0, 0, 0));
+    }
+
     public Pose2d updateOdometry() {
         m_pose = m_odom.update(
                 getGyroRotation2d(),
