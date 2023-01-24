@@ -35,15 +35,18 @@ public class BeakDifferentialDrivetrain extends BeakDrivetrain {
      *                      information for your robot.
      * @param thetaPIDGains The PID gains for the theta controller.
      * @param drivePIDGains The PID gains for the auton drive controller.
+     * @param generatedDrivePIDGains    The PID gains for generated paths using the {@link GeneratePath} command.
      */
     public BeakDifferentialDrivetrain(
             RobotPhysics physics,
             double[] thetaPIDGains,
             double[] drivePIDGains,
+            double[] generatedDrivePIDGains,
             boolean gyroInverted) {
         super(physics,
                 thetaPIDGains,
                 drivePIDGains,
+                generatedDrivePIDGains,
                 gyroInverted);
         m_kinematics = new DifferentialDriveKinematics(m_trackWidth.getAsMeters());
     }

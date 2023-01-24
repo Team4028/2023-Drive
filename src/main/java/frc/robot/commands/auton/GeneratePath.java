@@ -36,8 +36,8 @@ public class GeneratePath extends CommandBase {
 
     @Override
     public void initialize() {
-        PathConstraints constraints = new PathConstraints(m_drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
-            m_drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
+        PathConstraints constraints = new PathConstraints(m_drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.125,
+            m_drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.125);
 
         Pose2d robotPose = m_drivetrain.getPoseMeters();
 
@@ -55,7 +55,18 @@ public class GeneratePath extends CommandBase {
         field.setRobotPose(m_desiredPose.get());
         SmartDashboard.putData("BRUH FIELD", field);
 
+        SmartDashboard.putNumber("X Error", m_drivetrain.getPoseMeters().getX() - m_desiredPose.get().getX());
+        SmartDashboard.putNumber("Y Error", m_drivetrain.getPoseMeters().getY() - m_desiredPose.get().getY());
+        SmartDashboard.putNumber("Theta Error", m_drivetrain.getPoseMeters().getRotation().getDegrees() - m_desiredPose.get().getRotation().getDegrees());
+
         m_trajectoryCommand.schedule();
+    }
+
+    @Override
+    public void execute() {
+        SmartDashboard.putNumber("X Error", m_drivetrain.getPoseMeters().getX() - m_desiredPose.get().getX());
+        SmartDashboard.putNumber("Y Error", m_drivetrain.getPoseMeters().getY() - m_desiredPose.get().getY());
+        SmartDashboard.putNumber("Theta Error", m_drivetrain.getPoseMeters().getRotation().getDegrees() - m_desiredPose.get().getRotation().getDegrees());
     }
     
     @Override

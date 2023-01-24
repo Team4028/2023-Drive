@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.sim.CTREPhysicsSim;
+import frc.robot.subsystems.Limelight;
 import frc.robot.utilities.log.BeakLogger;
 
 /**
@@ -32,6 +33,8 @@ public class Robot extends TimedRobot {
     // private String m_logFileFolder = "testLogs";
     private Command m_autonCommand;
     private RobotContainer m_robotContainer;
+
+    private Limelight m_limelight;
 
     public static BeakLogger getCurrentLogger() {
         return m_currentLogger;
@@ -58,6 +61,9 @@ public class Robot extends TimedRobot {
 
         m_currentLogger = m_disabledLogger;
 
+        m_limelight = Limelight.getInstance();
+        m_limelight.setLedMode(1.);
+
         // m_robotContainer.logAllConfigs();
         LiveWindow.disableAllTelemetry();
     }
@@ -70,6 +76,7 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
         m_currentLogger = m_autonLogger;
+        m_limelight.setLedMode(1.);
 
         m_autonCommand = m_robotContainer.getAutonomousCommand();
 
@@ -87,6 +94,7 @@ public class Robot extends TimedRobot {
     @Override
     public void teleopInit() {
         m_currentLogger = m_teleopLogger;
+        m_limelight.setLedMode(1.);
         
         if (m_autonCommand != null) {
             m_autonCommand.cancel();

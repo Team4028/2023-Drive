@@ -35,6 +35,9 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
 
     private static final double AUTON_kP = 1.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
+    
+    private static final double GENERATED_AUTON_kP = 7.5;
+    private static final double[] GENERATED_AUTON_DRIVE_GAINS = { GENERATED_AUTON_kP, 0., 0.01 };
 
     private static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(
             0.11068,
@@ -153,6 +156,7 @@ public class OctavianSwerveDrivetrain extends BeakSwerveDrivetrain {
                 false,
                 PIDConstants.Theta.gains,
                 AUTON_DRIVE_GAINS,
+                GENERATED_AUTON_DRIVE_GAINS,
                 m_frontLeftConfig,
                 m_frontRightConfig,
                 m_backLeftConfig,

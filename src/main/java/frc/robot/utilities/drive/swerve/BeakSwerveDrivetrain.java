@@ -42,12 +42,13 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     /**
      * Create a new Swerve drivetrain.
      * 
-     * @param physics       {@link RobotPhysics} containing the robot's physical
-     *                      details.
-     * @param gyro          The gyroscope used by this drivetrain.
-     * @param thetaPIDGains The PID gains for the theta controller.
-     * @param drivePIDGains The PID gains for the auton drive controller.
-     * @param configs       Configurations for all swerve modules.
+     * @param physics                   {@link RobotPhysics} containing the robot's physical
+     *                                  details.
+     * @param gyro                      The gyroscope used by this drivetrain.
+     * @param thetaPIDGains             The PID gains for the theta controller.
+     * @param drivePIDGains             The PID gains for the auton drive controller.
+     * @param generatedDrivePIDGains    The PID gains for generated paths using the {@link GeneratePath} command.
+     * @param configs                   Configurations for all swerve modules.
      */
     public BeakSwerveDrivetrain(
             RobotPhysics physics,
@@ -55,10 +56,12 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
             boolean gyroInverted,
             double[] thetaPIDGains,
             double[] drivePIDGains,
+            double[] generatedDrivePIDGains,
             SwerveModuleConfiguration... configs) {
         super(physics,
                 thetaPIDGains,
                 drivePIDGains,
+                generatedDrivePIDGains,
                 gyroInverted);
 
         m_physics = physics;

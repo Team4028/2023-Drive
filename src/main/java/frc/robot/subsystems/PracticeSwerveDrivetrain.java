@@ -31,6 +31,9 @@ public class PracticeSwerveDrivetrain extends BeakSwerveDrivetrain {
 
     private static final double AUTON_kP = 3.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
+    
+    private static final double GENERATED_AUTON_kP = 7.5;
+    private static final double[] GENERATED_AUTON_DRIVE_GAINS = { GENERATED_AUTON_kP, 0., 0.01 };
 
     private static final int PIGEON2_ID = 1;
     private static final String CAN_BUS = "rio";
@@ -149,6 +152,7 @@ public class PracticeSwerveDrivetrain extends BeakSwerveDrivetrain {
                 false,
                 PIDConstants.Theta.gains,
                 AUTON_DRIVE_GAINS,
+                GENERATED_AUTON_DRIVE_GAINS,
                 m_frontLeftConfig,
                 m_frontRightConfig,
                 m_backLeftConfig,

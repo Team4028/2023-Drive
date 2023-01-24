@@ -39,6 +39,9 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain implements Beak
 
     private static final double AUTON_kP = 5.;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0. };
+    
+    private static final double GENERATED_AUTON_kP = 7.5;
+    private static final double[] GENERATED_AUTON_DRIVE_GAINS = { GENERATED_AUTON_kP, 0., 0.01 };
 
     private static final int FL_ID = 1;
     private static final int BL_ID = 2;
@@ -80,6 +83,7 @@ public class FalconDrivetrain extends BeakDifferentialDrivetrain implements Beak
                 PHYSICS,
                 PIDConstants.Theta.gains,
                 AUTON_DRIVE_GAINS,
+                GENERATED_AUTON_DRIVE_GAINS,
                 false);
 
         m_gyro = new AHRS(SPI.Port.kMXP);

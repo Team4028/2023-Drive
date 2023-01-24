@@ -37,19 +37,24 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
     protected ProfiledPIDController m_thetaController;
     protected PIDController m_autonThetaController;
     protected PIDController m_driveController;
+    protected PIDController m_generatedDriveController;
 
     /**
      * Construct a new generic drivetrain.
      * 
-     * @param physics       A {@link RobotPhysics} object containing the relevant
-     *                      information for your robot.
-     * @param thetaPIDGains The PID gains for the theta controller.
-     * @param drivePIDGains The PID gains for the auton drive controller.
+     * @param physics                A {@link RobotPhysics} object containing the
+     *                               relevant
+     *                               information for your robot.
+     * @param thetaPIDGains          The PID gains for the theta controller.
+     * @param drivePIDGains          The PID gains for the auton drive controller.
+     * @param generatedDrivePIDGains The PID gains for generated paths using the
+     *                               {@link GeneratePath} command.
      */
     public BeakDrivetrain(
             RobotPhysics physics,
             double[] thetaPIDGains,
             double[] drivePIDGains,
+            double[] generatedDrivePIDGains,
             boolean gyroInverted) {
         super(gyroInverted);
         m_maxVelocity = physics.maxVelocity;
@@ -78,6 +83,11 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
                 drivePIDGains[0],
                 drivePIDGains[1],
                 drivePIDGains[2]);
+
+        m_generatedDriveController = new PIDController(
+                generatedDrivePIDGains[0],
+                generatedDrivePIDGains[1],
+                generatedDrivePIDGains[2]);
     }
 
     public void configMotors() {
@@ -110,6 +120,15 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
      */
     public PIDController getDriveController() {
         return m_driveController;
+    }
+
+    /**
+     * Get the drive controller for path generation usage
+     * 
+     * @return PID Controller used for dynamically generated paths.
+     */
+    public PIDController getGeneratedDriveController() {
+        return m_generatedDriveController;
     }
 
     public SimpleMotorFeedforward getFeedforward() {
