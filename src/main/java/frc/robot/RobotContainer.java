@@ -6,6 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -89,7 +93,10 @@ public class RobotContainer {
                         .withTimeout(2.0));
 
         m_driverController.x.whileTrue(new GeneratePath(
-                () -> m_vision.getTargetPose(m_drive.getPoseMeters(), Distance.fromInches(48.)), m_drive));
+                () -> m_vision.getTargetPose(m_drive.getPoseMeters(),
+                        new Transform3d(new Translation3d(Units.inchesToMeters(46.), Units.inchesToMeters(-0.), 0.),
+                                new Rotation3d())),
+                m_drive));
     }
 
     public double speedScaledDriverLeftY() {
@@ -116,7 +123,7 @@ public class RobotContainer {
         _autonChooser.addOption("Carson V Path", new CarsonVPath(m_drive));
         _autonChooser.addOption("Sam Path", new SamPath(m_drive));
         _autonChooser.addOption("Nick Path", new NickPath(m_drive));
-        _autonChooser.addOption("j path 1", new JPath1(m_drive));
+        _autonChooser.addOption("j path 1", new JPath1(m_vision, m_drive));
         _autonChooser.addOption("j path 2", new JPath2(m_drive));
         _autonChooser.addOption("J Path", new JPath(m_drive));
         _autonChooser.addOption("Two Piece Drive Up", new TwoPieceDriveUp(m_drive));

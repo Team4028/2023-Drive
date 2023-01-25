@@ -20,6 +20,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.utilities.units.Distance;
@@ -30,7 +31,7 @@ public class Vision extends SubsystemBase {
 
     private static final String CAMERA_NAME = "Global_Shutter_Camera";
 
-    private static final Pose3d CAMERA_TO_ROBOT = new Pose3d(0., Units.inchesToMeters(5.), 0., new Rotation3d());
+    private static final Pose3d CAMERA_TO_ROBOT = new Pose3d(0., Units.inchesToMeters(5.), 0., new Rotation3d(0., 0., Units.degreesToRadians(0.)));
 
     private static Vision m_instance;
 
@@ -84,16 +85,16 @@ public class Vision extends SubsystemBase {
     /**
      * Gets the pose of a target.
      * @param robotPose The current robot pose.
-     * @param distance The desired distance away from the tag (X direction only--forwards and backwards). Positive is backwards.
-     * @return The pose of the specified distance from the target.
+     * @param offset The offset of the desired pose from the target. Positive is backwards (X) and right (Y).
+     * @return The pose of the specified offset from the target.
      */
-    public Pose2d getTargetPose(Pose2d robotPose, Distance distance) {
+    public Pose2d getTargetPose(Pose2d robotPose, Transform3d offset) {
         PhotonTrackedTarget target = getBestTarget();
         
         if (target != null) {
             Transform3d cameraToTarget = target.getBestCameraToTarget();
 
-            Transform3d targetOffset = cameraToTarget.plus(new Transform3d(new Pose3d(), new Pose3d(distance.getAsMeters(), 0, 0, new Rotation3d())));
+            Transform3d targetOffset = cameraToTarget.plus(offset);
 
             Pose3d pose = new Pose3d(robotPose);
 
