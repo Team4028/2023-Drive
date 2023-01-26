@@ -4,6 +4,8 @@
 
 package frc.robot.commands.auton;
 
+import java.util.function.Supplier;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
@@ -15,12 +17,12 @@ import frc.robot.utilities.drive.BeakDrivetrain;
 public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     private boolean relative;
     private Rotation2d initialRotation;
-    private Rotation2d goal;
+    private Supplier<Rotation2d> goal;
 
     private BeakDrivetrain drivetrain;
 
     /** Creates a new RotateDrivetrainByAngle. */
-    public RotateDrivetrainToAngle(Rotation2d goal, BeakDrivetrain drivetrain, boolean relative) {
+    public RotateDrivetrainToAngle(Supplier<Rotation2d> goal, BeakDrivetrain drivetrain, boolean relative) {
         super(
                 // The ProfiledPIDController used by the command
                 drivetrain.getThetaController(),
@@ -47,7 +49,7 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     }
 
     public double getGoal() {
-        return goal.getRadians() + (relative ? initialRotation.getRadians() : 0.);
+        return goal.get().getRadians() + (relative ? initialRotation.getRadians() : 0.);
     }
 
     @Override

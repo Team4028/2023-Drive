@@ -15,16 +15,21 @@ import frc.robot.utilities.units.AngularVelocity;
 import frc.robot.utilities.units.Distance;
 import frc.robot.utilities.units.Velocity;
 
+import java.io.IOException;
+
 import com.ctre.phoenix.sensors.WPI_Pigeon2;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Add your docs here. */
 public class SwerveDrivetrain extends BeakSwerveDrivetrain {
+    private int resetTimer = 0;
+
     private static final double DRIVE_kP = 0.0125;
     private static final double TURN_kP = 0.2;
     private static final double TURN_kD = 0.0;
@@ -32,8 +37,8 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
     private static final double AUTON_kP = 3.;//7.5;
     private static final double[] AUTON_DRIVE_GAINS = { AUTON_kP, 0., 0.01 };
 
-    private static final double GENERATED_AUTON_kP = 7.5;
-    private static final double[] GENERATED_AUTON_DRIVE_GAINS = { GENERATED_AUTON_kP, 0., 0.01 };
+    private static final double GENERATED_AUTON_kP = 8.5;
+    private static final double[] GENERATED_AUTON_DRIVE_GAINS = { GENERATED_AUTON_kP, 0., 0.0125 };
 
     private static final int PIGEON2_ID = 1;
     private static final String CAN_BUS = "DriveSubsystem";
@@ -168,15 +173,31 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
 
     @Override
     public void periodic() {
-        updateOdometry();
+        if (DriverStation.isEnabled()) {
+            updateOdometry();
+        }
 
-        SmartDashboard.putNumber("FL angle", Math.toDegrees(m_modules.get(0).getTurningEncoderRadians()));
-        SmartDashboard.putNumber("FR angle", Math.toDegrees(m_modules.get(1).getTurningEncoderRadians()));
-        SmartDashboard.putNumber("BL angle", Math.toDegrees(m_modules.get(2).getTurningEncoderRadians()));
-        SmartDashboard.putNumber("BR angle", Math.toDegrees(m_modules.get(3).getTurningEncoderRadians()));
-        m_field.setRobotPose(getPoseMeters());
-        SmartDashboard.putData(m_field);
+        // if (resetTimer > 100) {
+        //     String resetCaniv = "caniv -r -d " + CAN_BUS;
+        //     try{
+        //         Runtime.getRuntime().exec(resetCaniv);
+        //     } catch (IOException excep) {
+        //         System.out.println("Something went wrong resetting canivore");
+        //     }
+        // } else {
+        //     System.out.println(resetTimer);
+        //     resetTimer++;
+        // }
 
-        SmartDashboard.putNumber("Heading", getRotation2d().getDegrees());
+        // if (resetTimer > 200) {
+            SmartDashboard.putNumber("FL angle", Math.toDegrees(m_modules.get(0).getTurningEncoderRadians()));
+            SmartDashboard.putNumber("FR angle", Math.toDegrees(m_modules.get(1).getTurningEncoderRadians()));
+            SmartDashboard.putNumber("BL angle", Math.toDegrees(m_modules.get(2).getTurningEncoderRadians()));
+            SmartDashboard.putNumber("BR angle", Math.toDegrees(m_modules.get(3).getTurningEncoderRadians()));
+            m_field.setRobotPose(getPoseMeters());
+            SmartDashboard.putData(m_field);
+    
+            SmartDashboard.putNumber("Heading", getRotation2d().getDegrees());
+        // }
     }
 }

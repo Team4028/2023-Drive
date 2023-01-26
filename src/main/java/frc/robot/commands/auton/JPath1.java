@@ -4,26 +4,33 @@
 
 package frc.robot.commands.auton;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Vision;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.Trajectories;
 
 public class JPath1 extends BeakAutonCommand {
+    private Pose2d m_desiredAprTagPose;
+
     /** Creates a new TestPath. */
     public JPath1(Vision vision, BeakDrivetrain drivetrain) {
         super.addCommands(
                 drivetrain.getTrajectoryCommand(Trajectories.JPath1(drivetrain)),
-                new WaitCommand(0.3),
+                new InstantCommand(() -> m_desiredAprTagPose = vision.getTargetPose(drivetrain.getPoseMeters(),
+                        new Transform3d(new Translation3d(Units.inchesToMeters(54.), Units.inchesToMeters(-0.), 0.),
+                                new Rotation3d(0., 0., Units.degreesToRadians(0.))))),
+                new WaitCommand(0.1),
                 new GeneratePath(
-                () -> vision.getTargetPose(drivetrain.getPoseMeters(),
-                        new Transform3d(new Translation3d(Units.inchesToMeters(52.), Units.inchesToMeters(-0.), 0.),
-                                new Rotation3d())),
-                                drivetrain));
+                        () -> m_desiredAprTagPose,
+                        drivetrain),
+                new WaitCommand(0.1),
+                new RotateDrivetrainToAngle(() -> m_desiredAprTagPose.getRotation(), drivetrain, false));
         super.setInitialPose(Trajectories.JPath1(drivetrain));
     }
 }

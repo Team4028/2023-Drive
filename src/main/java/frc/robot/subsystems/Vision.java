@@ -31,7 +31,8 @@ public class Vision extends SubsystemBase {
 
     private static final String CAMERA_NAME = "Global_Shutter_Camera";
 
-    private static final Pose3d CAMERA_TO_ROBOT = new Pose3d(0., Units.inchesToMeters(5.), 0., new Rotation3d(0., 0., Units.degreesToRadians(0.)));
+    private static final Pose3d CAMERA_TO_ROBOT = new Pose3d(0., Units.inchesToMeters(5.), 0.,
+            new Rotation3d(0., 0., Units.degreesToRadians(0.)));
 
     private static Vision m_instance;
 
@@ -48,11 +49,12 @@ public class Vision extends SubsystemBase {
 
     /**
      * Get the best target from the camera.
+     * 
      * @return The target data, or null if none are found.
      */
     public PhotonTrackedTarget getBestTarget() {
         PhotonPipelineResult result = m_camera.getLatestResult();
-        
+
         boolean hasTarget = result.hasTargets();
 
         PhotonTrackedTarget target = null;
@@ -84,13 +86,15 @@ public class Vision extends SubsystemBase {
 
     /**
      * Gets the pose of a target.
+     * 
      * @param robotPose The current robot pose.
-     * @param offset The offset of the desired pose from the target. Positive is backwards (X) and right (Y).
+     * @param offset    The offset of the desired pose from the target. Positive is
+     *                  backwards (X) and right (Y).
      * @return The pose of the specified offset from the target.
      */
     public Pose2d getTargetPose(Pose2d robotPose, Transform3d offset) {
         PhotonTrackedTarget target = getBestTarget();
-        
+
         if (target != null) {
             Transform3d cameraToTarget = target.getBestCameraToTarget();
 
@@ -106,11 +110,9 @@ public class Vision extends SubsystemBase {
             Rotation2d newRotation = Rotation2d.fromDegrees(newPose.getRotation().getDegrees() - 180.);
 
             Pose2d finalPose = new Pose2d(newPose.getTranslation(), newRotation).plus(
-                new Transform2d(
-                    CAMERA_TO_ROBOT.getTranslation().toTranslation2d(),
-                    CAMERA_TO_ROBOT.getRotation().toRotation2d()
-                )
-            );
+                    new Transform2d(
+                            CAMERA_TO_ROBOT.getTranslation().toTranslation2d(),
+                            CAMERA_TO_ROBOT.getRotation().toRotation2d()));
             return finalPose;
         }
 

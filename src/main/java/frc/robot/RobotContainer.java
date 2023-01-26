@@ -87,14 +87,14 @@ public class RobotContainer {
                         m_drive));
 
         m_driverController.start.onTrue(new InstantCommand(m_drive::zero));
-        m_driverController.a.onTrue(new RotateDrivetrainToAngle(Rotation2d.fromDegrees(180.), m_drive, false));
+        m_driverController.a.onTrue(new RotateDrivetrainToAngle(() -> Rotation2d.fromDegrees(180.), m_drive, false));
         m_driverController.b.onTrue(
                 new RotateDrivetrainToTargetPosition(Distance.fromInches(324.), Distance.fromInches(162.), m_drive)
                         .withTimeout(2.0));
 
         m_driverController.x.whileTrue(new GeneratePath(
                 () -> m_vision.getTargetPose(m_drive.getPoseMeters(),
-                        new Transform3d(new Translation3d(Units.inchesToMeters(46.), Units.inchesToMeters(-0.), 0.),
+                        new Transform3d(new Translation3d(Units.inchesToMeters(54.), Units.inchesToMeters(-0.), 0.),
                                 new Rotation3d())),
                 m_drive));
     }
