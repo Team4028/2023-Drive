@@ -4,85 +4,109 @@
 
 package frc.robot.commands.auton;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPoint;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utilities.drive.BeakDrivetrain;
 
+// credit: https://github.com/HaMosad1657/MiniProject2023/blob/chassis/src/main/java/frc/robot/commands/drivetrain/FollowGeneratedTrajectoryCommand.java
 public class GeneratePath extends CommandBase {
-    private final Supplier<Pose2d> m_desiredPoseSupplier;
+    private PIDController m_xController, m_yController, m_thetaController;
+
+    private PPHolonomicDriveController m_driveController;
+
+    private Timer m_timer;
+
+    private PathPlannerTrajectory m_traj;
+
+    private Supplier<Pose2d> m_poseSupplier;
     private Pose2d m_desiredPose;
-    private final BeakDrivetrain m_drivetrain;
 
-    private SequentialCommandGroup m_trajectoryCommand;
+    private Pose2d m_currentPose;
 
-    /** Generate and run a trajectory to the desired pose (field relative). */
+    private PathPlannerState m_setpoint;
+
+    private Pose2d m_positionTolerance;
+
+    private BeakDrivetrain m_drivetrain;
+
+    /** Creates a new GeneratePath. */
     public GeneratePath(Supplier<Pose2d> desiredPose, BeakDrivetrain drivetrain) {
         m_drivetrain = drivetrain;
-        m_desiredPoseSupplier = desiredPose;
+        m_poseSupplier = desiredPose;
 
-        addRequirements(drivetrain);
+        m_positionTolerance = new Pose2d(
+                0.1, // 4 inches
+                0.1,
+                Rotation2d.fromDegrees(2.0));
+
+        // Use addRequirements() here to declare subsystem dependencies.
     }
 
+    // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        Pose2d robotPose = m_drivetrain.getPoseMeters();
-        m_desiredPose = m_desiredPoseSupplier.get();
+        m_desiredPose = m_poseSupplier.get();
 
-        if (robotPose.equals(m_desiredPose)) {
-            this.cancel();
-            return;
-        }
+        // Set up PID controllers
+        m_xController = m_drivetrain.createGeneratedDriveController();
+        m_yController = m_drivetrain.createGeneratedDriveController();
+        m_thetaController = m_drivetrain.createAutonThetaController();
 
-        // Initialize path constraints (quarter-speed)
-        PathConstraints constraints = new PathConstraints(m_drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25,
-        m_drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25);
+        m_thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-        // Add our path points--start at the current robot pose and end at the desired pose.
-        List<PathPoint> points = new ArrayList<PathPoint>();
+        m_driveController = new PPHolonomicDriveController(
+                m_xController,
+                m_yController,
+                m_thetaController);
 
-        points.add(new PathPoint(robotPose.getTranslation(), robotPose.getRotation(), robotPose.getRotation()));
-        points.add(new PathPoint(m_desiredPose.getTranslation(), m_desiredPose.getRotation(), m_desiredPose.getRotation()));
+        m_driveController.setTolerance(m_positionTolerance);
+        m_driveController.setEnabled(true);
 
-        // Path planner magic
-        PathPlannerTrajectory traj = PathPlanner.generatePath(constraints, points);
+        // trajectory and m_timer magic
+        m_traj = m_drivetrain.generateTrajectoryToPose(m_desiredPose);
 
-        m_trajectoryCommand = m_drivetrain.getGeneratedTrajectoryCommand(traj);
+        m_timer.reset();
+        m_timer.start();
 
-        // debug
-        Field2d field = new Field2d();
-
-        field.setRobotPose(m_desiredPose);
-        SmartDashboard.putData("BRUH FIELD", field);
-
-        m_trajectoryCommand.schedule();
     }
-    
+
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        // Gets the setpoint--i.e. the next desired state.
+        m_setpoint = (PathPlannerState) m_traj.sample(m_timer.get() + 0.02);
+
+        // Gets the current pose
+        m_currentPose = m_drivetrain.getPoseMeters();
+
+        // Actual PID and driving magic
+        m_drivetrain.drive(
+                m_driveController.calculate(
+                        m_currentPose,
+                        m_setpoint));
+    }
+
+    // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_trajectoryCommand.end(interrupted);
-
-        SmartDashboard.putNumber("X Error", m_drivetrain.getPoseMeters().getX() - m_desiredPose.getX());
-        SmartDashboard.putNumber("Y Error", m_drivetrain.getPoseMeters().getY() - m_desiredPose.getY());
-        SmartDashboard.putNumber("Theta Error", m_drivetrain.getPoseMeters().getRotation().getDegrees() - m_desiredPose.getRotation().getDegrees());
+        m_timer.stop();
+        m_timer.reset();
+        m_driveController.setEnabled(false);
     }
 
+    // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        if (m_trajectoryCommand == null) {
-            return false;
-        }
-        return m_trajectoryCommand.isFinished();
+        // Ends when it should while also not ending "too early"
+        return (m_traj.getTotalTimeSeconds() < m_timer.get() && m_driveController.atReference());
     }
 }

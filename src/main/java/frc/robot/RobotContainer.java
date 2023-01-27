@@ -92,7 +92,7 @@ public class RobotContainer {
                 new RotateDrivetrainToTargetPosition(Distance.fromInches(324.), Distance.fromInches(162.), m_drive)
                         .withTimeout(2.0));
 
-        m_driverController.x.whileTrue(new GeneratePath(
+        m_driverController.x.onTrue(new GeneratePath(
                 () -> m_vision.getTargetPose(m_drive.getPoseMeters(),
                         new Transform3d(new Translation3d(Units.inchesToMeters(54.), Units.inchesToMeters(-0.), 0.),
                                 new Rotation3d())),

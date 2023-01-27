@@ -12,9 +12,9 @@ public class Constants {
 
     public static final class PIDConstants {
         public static final class Theta { // TODO: put in drivetrains
-            public static final double kP = 7.0;
-            public static final double kD = 0.2;
-            public static final double[] gains = { kP, 0, kD };
+            public static final double kP = 14.0;
+            public static final double kD = 0.75;
+            public static final double[] gains = { kP, 0.000, kD };
         }
     }
 

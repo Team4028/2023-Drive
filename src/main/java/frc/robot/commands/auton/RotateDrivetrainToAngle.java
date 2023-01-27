@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import frc.robot.utilities.drive.BeakDrivetrain;
 
@@ -25,6 +26,7 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     public RotateDrivetrainToAngle(Supplier<Rotation2d> goal, BeakDrivetrain drivetrain, boolean relative) {
         super(
                 // The ProfiledPIDController used by the command
+                // TODO: use createThetaController() and get rid of relative.
                 drivetrain.getThetaController(),
                 // This should return the measurement
                 () -> drivetrain.getRotation2d().getRadians(),
@@ -45,7 +47,7 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
         // Configure additional PID options by calling `getController` here.
         addRequirements(drivetrain);
         getController().enableContinuousInput(-Math.PI, Math.PI);
-        getController().setTolerance(Units.degreesToRadians(1.0));
+        getController().setTolerance(Units.degreesToRadians(0.75));
     }
 
     public double getGoal() {
@@ -61,6 +63,9 @@ public class RotateDrivetrainToAngle extends ProfiledPIDCommand {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        return getController().atGoal();
+        SmartDashboard.putNumber("Goal", getGoal());
+        SmartDashboard.putNumber("measurement", drivetrain.getRotation2d().getRadians() - goal.get().getRadians());
+        SmartDashboard.putBoolean("at goal", getController().atSetpoint());
+        return Math.abs(drivetrain.getRotation2d().getRadians() - goal.get().getRadians()) < getController().getPositionTolerance();
     }
 }

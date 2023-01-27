@@ -18,7 +18,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utilities.drive.BeakDrivetrain;
 import frc.robot.utilities.drive.RobotPhysics;
@@ -26,8 +25,10 @@ import frc.robot.utilities.drive.RobotPhysics;
 /** Generic Swerve Drivetrain subsystem. */
 public class BeakSwerveDrivetrain extends BeakDrivetrain {
     /**
-     * The modules in this swerve drivetrain. </p>
-     * These are in the same order as passed in the constructor; i.e if the front left
+     * The modules in this swerve drivetrain.
+     * </p>
+     * These are in the same order as passed in the constructor; i.e if the front
+     * left
      * module is passed in as the first module, <code>m_modules.get(0)</code> would
      * return the front left module.
      */
@@ -42,13 +43,15 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     /**
      * Create a new Swerve drivetrain.
      * 
-     * @param physics                   {@link RobotPhysics} containing the robot's physical
-     *                                  details.
-     * @param gyro                      The gyroscope used by this drivetrain.
-     * @param thetaPIDGains             The PID gains for the theta controller.
-     * @param drivePIDGains             The PID gains for the auton drive controller.
-     * @param generatedDrivePIDGains    The PID gains for generated paths using the {@link GeneratePath} command.
-     * @param configs                   Configurations for all swerve modules.
+     * @param physics                {@link RobotPhysics} containing the robot's
+     *                               physical
+     *                               details.
+     * @param gyro                   The gyroscope used by this drivetrain.
+     * @param thetaPIDGains          The PID gains for the theta controller.
+     * @param drivePIDGains          The PID gains for the auton drive controller.
+     * @param generatedDrivePIDGains The PID gains for generated paths using the
+     *                               {@link GeneratePath} command.
+     * @param configs                Configurations for all swerve modules.
      */
     public BeakSwerveDrivetrain(
             RobotPhysics physics,
@@ -89,12 +92,12 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
                 traj,
                 this::getPoseMeters,
                 m_kinematics,
-                m_driveController,
-                m_driveController,
-                m_autonThetaController,
+                createDriveController(),
+                createDriveController(),
+                createAutonThetaController(),
                 this::setModuleStates,
                 this)
-                        .andThen(() -> drive(0, 0, 0));
+                .andThen(() -> drive(0, 0, 0));
     }
 
     public SequentialCommandGroup getGeneratedTrajectoryCommand(PathPlannerTrajectory traj) {
@@ -102,12 +105,12 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
                 traj,
                 this::getPoseMeters,
                 m_kinematics,
-                m_generatedDriveController,
-                m_generatedDriveController,
-                m_autonThetaController,
+                createGeneratedDriveController(),
+                createGeneratedDriveController(),
+                createAutonThetaController(),
                 this::setModuleStates,
                 this)
-                        .andThen(() -> drive(0, 0, 0));
+                .andThen(() -> drive(0, 0, 0));
     }
 
     public Pose2d updateOdometry() {
@@ -131,11 +134,14 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         y *= m_physics.maxVelocity.getAsMetersPerSecond();
         rot *= m_physics.maxAngularVelocity.getAsRadiansPerSecond();
 
-        SmartDashboard.putNumber("rot", rot);
+        ChassisSpeeds speeds = fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, getRotation2d())
+        : new ChassisSpeeds(x, y, rot);
 
-        SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, getRotation2d())
-                        : new ChassisSpeeds(x, y, rot));
+        drive(speeds);
+    }
+
+    public void drive(ChassisSpeeds speeds) {
+        SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
 
         setModuleStates(states);
     }
@@ -157,7 +163,9 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, m_physics.maxVelocity.getAsMetersPerSecond());
 
         for (int i = 0; i < desiredStates.length; i++) {
-            // SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredStates[i], m_modules.get(i).getState().angle);
+            // SwerveModuleState optimizedState =
+            // SwerveModuleState.optimize(desiredStates[i],
+            // m_modules.get(i).getState().angle);
             m_modules.get(i).setDesiredState(desiredStates[i]);
         }
     }

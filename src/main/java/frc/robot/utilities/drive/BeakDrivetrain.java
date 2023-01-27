@@ -4,13 +4,20 @@
 
 package frc.robot.utilities.drive;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utilities.subsystem.BeakGyroSubsystem;
@@ -104,6 +111,66 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
                 m_feedForward);
     }
 
+     /**
+     * Generate a runnable trajectory from the current robot pose to the desired pose.
+     * 
+     * @return {@link PathPlannerTrajectory} that leads the robot to the desired pose.
+     */
+    public PathPlannerTrajectory generateTrajectoryToPose(Pose2d desiredPose) {
+        Pose2d robotPose = this.getPoseMeters();
+
+        if (robotPose.equals(desiredPose)) {
+            return new PathPlannerTrajectory();
+        }
+
+        // Initialize path constraints (quarter-speed)
+        PathConstraints constraints = new PathConstraints(this.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25,
+        this.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25);
+
+        // Add our path points--start at the current robot pose and end at the desired pose.
+        List<PathPoint> points = new ArrayList<PathPoint>();
+
+        points.add(new PathPoint(robotPose.getTranslation(), robotPose.getRotation(), robotPose.getRotation()));
+        points.add(new PathPoint(desiredPose.getTranslation(), desiredPose.getRotation(), desiredPose.getRotation()));
+
+        // Path planner magic
+        PathPlannerTrajectory traj = PathPlanner.generatePath(constraints, points);
+
+        return traj;
+    }
+
+    public PIDController createDriveController() {
+        return new PIDController(
+            m_driveController.getP(),
+            m_driveController.getI(),
+            m_driveController.getD());
+    }
+
+    public PIDController createGeneratedDriveController() {
+        return new PIDController(
+            m_generatedDriveController.getP(),
+            m_generatedDriveController.getI(),
+            m_generatedDriveController.getD());
+    }
+
+    public ProfiledPIDController createThetaController() {
+        final TrapezoidProfile.Constraints thetaConstraints = new TrapezoidProfile.Constraints(
+                getPhysics().maxAngularVelocity.getAsRadiansPerSecond(), getPhysics().maxAngularVelocity.getAsRadiansPerSecond());
+        
+        return new ProfiledPIDController(
+            m_thetaController.getP(),
+            m_thetaController.getI(),
+            m_thetaController.getD(),
+            thetaConstraints);
+    }
+
+    public PIDController createAutonThetaController() {
+        return new PIDController(
+            m_autonThetaController.getP(),
+            m_autonThetaController.getI(),
+            m_autonThetaController.getD());
+    }
+
     /**
      * Get the theta controller for auton usage.
      * 
@@ -180,6 +247,14 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
      */
     public void drive(double x, double y, double rot) {
         drive(x, y, rot, false);
+    }
+
+    /**
+     * Method to drive the robot using chassis speeds
+     * 
+     * @param speeds The ChassisSpeeds to use.
+     */
+    public void drive(ChassisSpeeds speeds) {
     }
 
     /**
