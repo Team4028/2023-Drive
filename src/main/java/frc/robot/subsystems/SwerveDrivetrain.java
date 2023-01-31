@@ -177,19 +177,16 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             updateOdometry();
         }
 
-        // if (resetTimer > 100) {
-        //     String resetCaniv = "caniv -r -d " + CAN_BUS;
-        //     try{
-        //         Runtime.getRuntime().exec(resetCaniv);
-        //     } catch (IOException excep) {
-        //         System.out.println("Something went wrong resetting canivore");
-        //     }
-        // } else {
-        //     System.out.println(resetTimer);
-        //     resetTimer++;
-        // }
+        if (resetTimer == 100) {
+            String resetCaniv = "caniv -r -d " + CAN_BUS;
+            try{
+                Runtime.getRuntime().exec(resetCaniv);
+            } catch (IOException excep) {
+                System.out.println("Something went wrong resetting canivore");
+            }
+        }
 
-        // if (resetTimer > 200) {
+        if (resetTimer > 200) {
             SmartDashboard.putNumber("FL angle", Math.toDegrees(m_modules.get(0).getTurningEncoderRadians()));
             SmartDashboard.putNumber("FR angle", Math.toDegrees(m_modules.get(1).getTurningEncoderRadians()));
             SmartDashboard.putNumber("BL angle", Math.toDegrees(m_modules.get(2).getTurningEncoderRadians()));
@@ -198,6 +195,8 @@ public class SwerveDrivetrain extends BeakSwerveDrivetrain {
             SmartDashboard.putData(m_field);
     
             SmartDashboard.putNumber("Heading", getRotation2d().getDegrees());
-        // }
+        } else {
+            resetTimer++;
+        }
     }
 }

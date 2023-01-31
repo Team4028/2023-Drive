@@ -27,7 +27,7 @@ import frc.robot.utilities.units.Velocity;
 
 /** Base drivetrain class. */
 public class BeakDrivetrain extends BeakGyroSubsystem {
-    public Pose2d m_pose;
+    protected Pose2d m_pose;
 
     protected Velocity m_maxVelocity;
     protected AngularVelocity m_maxAngularVelocity;
@@ -111,64 +111,88 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
                 m_feedForward);
     }
 
-     /**
-     * Generate a runnable trajectory from the current robot pose to the desired pose.
+    /**
+     * Generate a runnable trajectory from the current robot pose to the desired
+     * pose.
      * 
-     * @return {@link PathPlannerTrajectory} that leads the robot to the desired pose.
+     * @return {@link PathPlannerTrajectory} that leads the robot to the desired
+     *         pose.
      */
     public PathPlannerTrajectory generateTrajectoryToPose(Pose2d desiredPose) {
-        Pose2d robotPose = this.getPoseMeters();
+        Pose2d robotPose = getPoseMeters();
 
+        // If the current position is equal to the target position (for example, no
+        // target is visible if using vision pose), return a blank trajectory that does
+        // nothing. This saves computational time and is generally good practice.
         if (robotPose.equals(desiredPose)) {
             return new PathPlannerTrajectory();
         }
 
-        // Initialize path constraints (quarter-speed)
-        PathConstraints constraints = new PathConstraints(this.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25,
-        this.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25);
+        // PathPlanner takes in these constraints to determine maximum speed and
+        // acceleration. In order to maximize precision, we go at quarter speed.
+        PathConstraints constraints = new PathConstraints(getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25,
+                getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25);
 
-        // Add our path points--start at the current robot pose and end at the desired pose.
+        // Add our path points--start at the current robot pose and end at the desired
+        // pose.
         List<PathPoint> points = new ArrayList<PathPoint>();
 
         points.add(new PathPoint(robotPose.getTranslation(), robotPose.getRotation(), robotPose.getRotation()));
         points.add(new PathPoint(desiredPose.getTranslation(), desiredPose.getRotation(), desiredPose.getRotation()));
 
-        // Path planner magic
+        // PathPlanner has a built in path generation function!
         PathPlannerTrajectory traj = PathPlanner.generatePath(constraints, points);
 
         return traj;
     }
 
+    /**
+     * Create a PID controller for preplanned autonomous paths.
+     * 
+     * @return A {@link PIDController} with the configured values for driving.
+     */
     public PIDController createDriveController() {
         return new PIDController(
-            m_driveController.getP(),
-            m_driveController.getI(),
-            m_driveController.getD());
+                m_driveController.getP(),
+                m_driveController.getI(),
+                m_driveController.getD());
     }
 
+    /**
+     * Create a PID controller for on-the-fly generated autonomous paths.
+     * 
+     * @return A {@link PIDController} with the configured values for generated
+     *         driving.
+     */
     public PIDController createGeneratedDriveController() {
         return new PIDController(
-            m_generatedDriveController.getP(),
-            m_generatedDriveController.getI(),
-            m_generatedDriveController.getD());
+                m_generatedDriveController.getP(),
+                m_generatedDriveController.getI(),
+                m_generatedDriveController.getD());
     }
 
+    /**
+     * Create a Profiled PID controller for the rotation of the robot.
+     * 
+     * @return A {@link PIDController} with the configured values.
+     */
     public ProfiledPIDController createThetaController() {
         final TrapezoidProfile.Constraints thetaConstraints = new TrapezoidProfile.Constraints(
-                getPhysics().maxAngularVelocity.getAsRadiansPerSecond(), getPhysics().maxAngularVelocity.getAsRadiansPerSecond());
-        
+                getPhysics().maxAngularVelocity.getAsRadiansPerSecond(),
+                getPhysics().maxAngularVelocity.getAsRadiansPerSecond());
+
         return new ProfiledPIDController(
-            m_thetaController.getP(),
-            m_thetaController.getI(),
-            m_thetaController.getD(),
-            thetaConstraints);
+                m_thetaController.getP(),
+                m_thetaController.getI(),
+                m_thetaController.getD(),
+                thetaConstraints);
     }
 
     public PIDController createAutonThetaController() {
         return new PIDController(
-            m_autonThetaController.getP(),
-            m_autonThetaController.getI(),
-            m_autonThetaController.getD());
+                m_autonThetaController.getP(),
+                m_autonThetaController.getI(),
+                m_autonThetaController.getD());
     }
 
     /**

@@ -15,6 +15,12 @@ public class Trajectories {
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond());
     }
 
+    public static PathPlannerTrajectory NewTestPath(BeakDrivetrain drivetrain) {
+        return PathPlanner.loadPath("NewTestPath",
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25, // velocity
+                drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.25); // acceleration);
+    }
+
     public static PathPlannerTrajectory Ball1(BeakDrivetrain drivetrain) {
         return PathPlanner.loadPath("Ball1",
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond(),
@@ -73,6 +79,9 @@ public class Trajectories {
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.75,
                 drivetrain.getPhysics().maxVelocity.getAsMetersPerSecond() * 0.75);
     }
+
+    
+
     // public static Trajectory getTrajectory(String path) {
     // Trajectory traj = new Trajectory();
     // try {

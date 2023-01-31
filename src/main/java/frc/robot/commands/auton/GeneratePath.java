@@ -47,6 +47,8 @@ public class GeneratePath extends CommandBase {
                 0.1, // 4 inches
                 0.1,
                 Rotation2d.fromDegrees(2.0));
+        
+        m_timer = new Timer();
 
         // Use addRequirements() here to declare subsystem dependencies.
     }
@@ -63,15 +65,17 @@ public class GeneratePath extends CommandBase {
 
         m_thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
+        // The drive controller takes in three PID controllers (x, y, theta)
         m_driveController = new PPHolonomicDriveController(
                 m_xController,
                 m_yController,
                 m_thetaController);
 
+        // Note: we also have to enable the controller
         m_driveController.setTolerance(m_positionTolerance);
         m_driveController.setEnabled(true);
 
-        // trajectory and m_timer magic
+        // Generate a trajectory and start the timer
         m_traj = m_drivetrain.generateTrajectoryToPose(m_desiredPose);
 
         m_timer.reset();
@@ -82,13 +86,17 @@ public class GeneratePath extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        // Gets the setpoint--i.e. the next desired state.
+        // Gets the setpoint--i.e. the next target position. This is used
+        // by the drive controller to determine "where" it should be
+        // on the next cycle.
         m_setpoint = (PathPlannerState) m_traj.sample(m_timer.get() + 0.02);
 
         // Gets the current pose
         m_currentPose = m_drivetrain.getPoseMeters();
 
-        // Actual PID and driving magic
+        // The drive controller's calculation takes in the current position
+        // and the target position, and outputs a ChassisSpeeds object.
+        // This is then passed into the drivetrain's drive method.
         m_drivetrain.drive(
                 m_driveController.calculate(
                         m_currentPose,
@@ -106,7 +114,7 @@ public class GeneratePath extends CommandBase {
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        // Ends when it should while also not ending "too early"
+        // Ends when it's at the target while also not ending "too early"
         return (m_traj.getTotalTimeSeconds() < m_timer.get() && m_driveController.atReference());
     }
 }
