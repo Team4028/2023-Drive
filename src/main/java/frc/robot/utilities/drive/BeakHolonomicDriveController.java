@@ -75,9 +75,9 @@ public class BeakHolonomicDriveController {
         Translation2d translationTolerance = this.tolerance.getTranslation();
         Rotation2d rotationTolerance = this.tolerance.getRotation();
 
-        return Math.abs(this.translationError.getX()) < translationTolerance.getX()
-                && Math.abs(this.translationError.getY()) < translationTolerance.getY()
-                && Math.abs(this.rotationError.getRadians()) < rotationTolerance.getRadians();
+        return Math.abs(this.auxTranslationError.getX()) < translationTolerance.getX()
+                && Math.abs(this.auxTranslationError.getY()) < translationTolerance.getY()
+                && Math.abs(this.auxRotationError.getRadians()) < rotationTolerance.getRadians();
     }
 
     /**

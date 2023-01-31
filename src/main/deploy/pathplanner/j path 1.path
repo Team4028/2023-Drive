@@ -48,5 +48,12 @@
   "maxVelocity": 8.0,
   "maxAcceleration": 8.0,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.8272727272727273,
+      "names": [
+        "useVision"
+      ]
+    }
+  ]
 }

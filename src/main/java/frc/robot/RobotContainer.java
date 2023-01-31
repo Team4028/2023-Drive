@@ -27,6 +27,7 @@ import frc.robot.commands.auton.JPath2;
 import frc.robot.commands.auton.NickPath;
 import frc.robot.commands.auton.RotateDrivetrainToAngle;
 import frc.robot.commands.auton.RotateDrivetrainToTargetPosition;
+import frc.robot.commands.auton.RunPath;
 import frc.robot.commands.auton.SamPath;
 import frc.robot.commands.auton.TestPath;
 import frc.robot.commands.auton.TwoPieceAcquirePiece;
@@ -42,6 +43,7 @@ import frc.robot.subsystems.PracticeSwerveDrivetrain;
 import frc.robot.subsystems.SixNEODrivetrain;
 import frc.robot.utilities.BeakXBoxController;
 import frc.robot.utilities.Util;
+import frc.robot.utilities.drive.Trajectories;
 import frc.robot.utilities.units.Distance;
 
 /** Add your docs here. */
@@ -139,8 +141,9 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        m_drive.resetOdometry(_autonChooser.getSelected().getInitialPose());
-        return _autonChooser.getSelected();
+        // m_drive.resetOdometry(_autonChooser.getSelected().getInitialPose());
+        // return _autonChooser.getSelected();
+        return new RunPath(Trajectories.JPath1(m_drive), m_drive);
     }
 
     public static RobotContainer getInstance() {
