@@ -26,11 +26,11 @@ public class JPath1 extends BeakAutonCommand {
     public JPath1(Vision vision, BeakDrivetrain drivetrain) {
         super.addCommands(
                 drivetrain.getTrajectoryCommand(Trajectories.JPath1(drivetrain)),
-                new WaitCommand(0.1),
+                // new WaitCommand(0.1),
                 new InstantCommand(() -> m_desiredAprTagPose = vision.getTargetPose(drivetrain.getPoseMeters(),
                         new Transform3d(new Translation3d(Units.inchesToMeters(54.), Units.inchesToMeters(-0.), 0.),
                                 new Rotation3d()))), // This gets the position of a point square to the target, and 54 inches away.
-                new WaitCommand(0.1),
+                // new WaitCommand(0.1),
                 new InstantCommand(() -> {
                     Field2d field = new Field2d();
                     field.setRobotPose(m_desiredAprTagPose);
