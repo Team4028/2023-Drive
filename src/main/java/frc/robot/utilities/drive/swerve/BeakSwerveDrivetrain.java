@@ -96,8 +96,8 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
                 createDriveController(),
                 createAutonThetaController(),
                 this::setModuleStates,
-                this).andThen();
-                // .andThen(() -> drive(0, 0, 0));
+                this)
+                .andThen(() -> drive(0, 0, 0));
     }
 
     public SequentialCommandGroup getGeneratedTrajectoryCommand(PathPlannerTrajectory traj) {
