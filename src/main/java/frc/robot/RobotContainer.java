@@ -141,9 +141,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // m_drive.resetOdometry(_autonChooser.getSelected().getInitialPose());
-        // return _autonChooser.getSelected();
-        return new RunPath(Trajectories.JPath1(m_drive), m_drive);
+        m_drive.resetOdometry(_autonChooser.getSelected().getInitialPose());
+        return _autonChooser.getSelected();
     }
 
     public static RobotContainer getInstance() {

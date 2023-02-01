@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Custom version of a @HolonomicDriveController specifically for following
@@ -110,11 +111,41 @@ public class BeakHolonomicDriveController {
         if (auxRotationError.equals(rotationError) && auxTranslationError.equals(translationError)) {
             return 1.;
         }
+        SmartDashboard.putNumber("rot error percent", (auxRotationError.getDegrees() / initialAuxRotationError.getDegrees()));
+        SmartDashboard.putNumber("tran error percent", (auxTranslationError.getNorm() / initialAuxTranslationError.getNorm()));
         // The initial error is assumed to be the highest it will ever be.
         // In case it isn't, we clamp to 1.0 to ensure it never outputs "more" than it
         // should
         return MathUtil.clamp(((auxRotationError.getDegrees() / initialAuxRotationError.getDegrees())
                 + (auxTranslationError.getNorm() / initialAuxTranslationError.getNorm())) / 2, 0., 1.);
+    }
+
+    /**
+     * Calculates the next output of the holonomic drive controller
+     *
+     * @param currentPose    The current pose
+     * @param referenceState The desired trajectory state
+     * @return The next output of the holonomic drive controller
+     */
+    public ChassisSpeeds calculate(Pose2d currentPose, PathPlannerState referenceState) {
+        double xFF = referenceState.velocityMetersPerSecond * referenceState.poseMeters.getRotation().getCos();
+        double yFF = referenceState.velocityMetersPerSecond * referenceState.poseMeters.getRotation().getSin();
+        double rotationFF = referenceState.holonomicAngularVelocityRadPerSec;
+
+        this.translationError = referenceState.poseMeters.relativeTo(currentPose).getTranslation();
+        this.rotationError = referenceState.holonomicRotation.minus(currentPose.getRotation());
+
+        if (!this.isEnabled) {
+            return ChassisSpeeds.fromFieldRelativeSpeeds(xFF, yFF, rotationFF, currentPose.getRotation());
+        }
+
+        double xFeedback = this.xController.calculate(currentPose.getX(), referenceState.poseMeters.getX());
+        double yFeedback = this.yController.calculate(currentPose.getY(), referenceState.poseMeters.getY());
+        double rotationFeedback = this.rotationController.calculate(
+                currentPose.getRotation().getRadians(), referenceState.holonomicRotation.getRadians());
+
+        return ChassisSpeeds.fromFieldRelativeSpeeds(
+                xFF + xFeedback, yFF + yFeedback, rotationFF + rotationFeedback, currentPose.getRotation());
     }
 
     /**
@@ -128,6 +159,12 @@ public class BeakHolonomicDriveController {
      */
     public ChassisSpeeds calculate(Pose2d currentPose, PathPlannerState referenceState,
             PathPlannerState auxReferenceState) {
+        
+        // boolean noAux;
+
+        // if (auxReferenceState == null || auxReferenceState.equals(new PathPlannerState())) {
+        //     noAux = true;
+        //     return this.calculate(currentPose, auxReferenceState)
         double primaryWeight = getWeight();
         double auxWeight = 1 - primaryWeight;
 
@@ -147,18 +184,14 @@ public class BeakHolonomicDriveController {
         double primaryRotationFeedback = this.rotationController.calculate(
                 currentPose.getRotation().getRadians(), referenceState.holonomicRotation.getRadians());
 
-        if (auxReferenceState == null || auxReferenceState == new PathPlannerState()) {
-            auxReferenceState = referenceState;
+        SmartDashboard.putBoolean("Bruh?", auxReferenceState == null || auxReferenceState.equals(new PathPlannerState()));
+
+        if (auxReferenceState == null || auxReferenceState.equals(new PathPlannerState())) {
+            // auxReferenceState = referenceState;
             this.auxTranslationError = this.translationError;
             this.auxRotationError = this.rotationError;
 
-            xFF = primaryXFF;
-            yFF = primaryYFF;
-            rotationFF = primaryRotationFF;
-
-            xFeedback = primaryXFeedback;
-            yFeedback = primaryYFeedback;
-            rotationFeedback = primaryRotationFeedback;
+            return this.calculate(currentPose, referenceState);
         } else {
             this.auxTranslationError = auxReferenceState.poseMeters.relativeTo(currentPose).getTranslation();
             this.auxRotationError = auxReferenceState.holonomicRotation.minus(currentPose.getRotation());
@@ -180,11 +213,13 @@ public class BeakHolonomicDriveController {
             yFF = (primaryYFF * primaryWeight) + (auxYFF * auxWeight);
             rotationFF = (primaryRotationFF * primaryWeight) + (auxRotationFF * auxWeight);
 
-            double auxXFeedback = this.auxXController.calculate(currentPose.getX(), auxReferenceState.poseMeters.getX());
-            double auxYFeedback = this.auxYController.calculate(currentPose.getY(), auxReferenceState.poseMeters.getY());
+            double auxXFeedback = this.auxXController.calculate(currentPose.getX(),
+                    auxReferenceState.poseMeters.getX());
+            double auxYFeedback = this.auxYController.calculate(currentPose.getY(),
+                    auxReferenceState.poseMeters.getY());
             double auxRotationFeedback = this.auxRotationController.calculate(
                     currentPose.getRotation().getRadians(), auxReferenceState.holonomicRotation.getRadians());
-            
+
             xFeedback = (primaryXFeedback * primaryWeight) + (auxXFeedback * auxWeight);
             yFeedback = (primaryYFeedback * primaryWeight) + (auxYFeedback * auxWeight);
             rotationFeedback = (primaryRotationFeedback * primaryWeight) + (auxRotationFeedback * auxWeight);

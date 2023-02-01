@@ -7,6 +7,8 @@ package frc.robot.commands.auton;
 import java.util.List;
 import java.util.function.Supplier;
 
+import javax.swing.text.StyleContext.SmallAttributeSet;
+
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
@@ -30,11 +32,12 @@ public class NewGeneratePath extends CommandBase {
     private BeakHolonomicDriveController m_driveController;
 
     private final Timer m_timer;
+    private double m_timerOffset;
 
     private PathPlannerTrajectory m_traj;
     private final PathPlannerTrajectory m_plannedTraj;
 
-    private final List<EventMarker> m_markers;
+    private List<EventMarker> m_markers;
 
     private final Supplier<Pose2d> m_poseSupplier;
     private Pose2d m_desiredPose;
@@ -57,12 +60,11 @@ public class NewGeneratePath extends CommandBase {
                 0.1, // 4 inches
                 0.1,
                 Rotation2d.fromDegrees(2.0));
-        
+
         m_timer = new Timer();
 
-        m_markers = m_plannedTraj.getMarkers();
-
         // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(drivetrain);
     }
 
     // Called when the command is initially scheduled.
@@ -95,6 +97,10 @@ public class NewGeneratePath extends CommandBase {
         // start timer
         m_timer.reset();
         m_timer.start();
+
+        m_markers = m_plannedTraj.getMarkers();
+
+        SmartDashboard.putBoolean("useVsiion?", false);
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -109,11 +115,21 @@ public class NewGeneratePath extends CommandBase {
         // Gets the current pose
         m_currentPose = m_drivetrain.getPoseMeters();
 
-        if (m_markers.size() > 0 && m_timer.get() >= m_markers.get(0).timeSeconds) {
+        // System.err.println(m_markers.size() > 0);
+        // System.out.println(m_timer.get() >= m_markers.get(0).timeSeconds);
+        if (m_markers.size() > 0) {
+            SmartDashboard.putNumber("Current Pose", m_currentPose.getTranslation().getNorm());
+            SmartDashboard.putNumber("Marker pose", m_markers.get(0).positionMeters.getNorm());
+        }
+
+        if (m_markers.size() > 0
+                && m_currentPose.getTranslation().getNorm() > m_markers.get(0).positionMeters.getNorm()) {
             PathPlannerTrajectory.EventMarker marker = m_markers.remove(0);
-      
+
             for (String name : marker.names) {
-                if (name == "useVision") {
+                System.out.println(name);
+                SmartDashboard.putBoolean("useVsiion?", true);
+                if (name.equals("useVision")) {
                     m_desiredPose = m_poseSupplier.get();
 
                     m_traj = m_drivetrain.generateTrajectoryToPose(m_desiredPose);
@@ -121,8 +137,11 @@ public class NewGeneratePath extends CommandBase {
             }
         }
 
-        if (m_traj != null) {
-            plannedSetpoint = (PathPlannerState) m_traj.sample(m_timer.get() + 0.02);
+        SmartDashboard.putBoolean("Trajectory bruh", m_traj != null);
+
+        if (m_traj != null && m_traj.getStates().size() > 0) {
+            m_timerOffset = m_timer.get();
+            plannedSetpoint = (PathPlannerState) m_traj.sample(m_timer.get() - m_timerOffset + 0.02);
         }
 
         // The drive controller's calculation takes in the current position
@@ -133,6 +152,7 @@ public class NewGeneratePath extends CommandBase {
                         m_currentPose,
                         m_setpoint,
                         plannedSetpoint));
+        SmartDashboard.putNumber("Weight", m_driveController.getWeight());
     }
 
     // Called once the command ends or is interrupted.
@@ -158,6 +178,9 @@ public class NewGeneratePath extends CommandBase {
     @Override
     public boolean isFinished() {
         // Ends when it's at the target while also not ending "too early"
-        return (m_plannedTraj.getTotalTimeSeconds() < m_timer.get() && m_driveController.atReference());
+        if (m_traj != null)
+            return (m_traj.getTotalTimeSeconds() < m_timer.get() - m_timerOffset && m_driveController.atReference());
+        else
+            return (m_plannedTraj.getTotalTimeSeconds() < m_timer.get() && m_driveController.atReference());
     }
 }

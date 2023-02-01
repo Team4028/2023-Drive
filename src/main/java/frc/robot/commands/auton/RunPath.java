@@ -50,6 +50,7 @@ public class RunPath extends CommandBase {
         m_timer = new Timer();
 
         // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(drivetrain);
     }
 
     // Called when the command is initially scheduled.
@@ -69,7 +70,7 @@ public class RunPath extends CommandBase {
                 m_thetaController);
 
         // Note: we also have to enable the controller
-        // m_driveController.setTolerance(m_positionTolerance);
+        m_driveController.setTolerance(m_positionTolerance);
         m_driveController.setEnabled(true);
 
         m_timer.reset();
@@ -83,6 +84,10 @@ public class RunPath extends CommandBase {
         // by the drive controller to determine "where" it should be
         // on the next cycle.
         m_setpoint = (PathPlannerState) m_traj.sample(m_timer.get() + 0.02);
+
+        SmartDashboard.putNumber("Trajectory Pose X", m_setpoint.poseMeters.getX());
+        SmartDashboard.putNumber("Trajectory Pose Y", m_setpoint.poseMeters.getX());
+        SmartDashboard.putNumber("Trajectory Pose Rotation", m_setpoint.holonomicRotation.getDegrees());
 
         // Gets the current pose
         m_currentPose = m_drivetrain.getPoseMeters();
