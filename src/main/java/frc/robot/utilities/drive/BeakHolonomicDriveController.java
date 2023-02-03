@@ -37,10 +37,8 @@ public class BeakHolonomicDriveController {
     private Translation2d auxTranslationError = new Translation2d();
     private Rotation2d auxRotationError = new Rotation2d();
 
-    private Translation2d initialAuxTranslationError = new Translation2d();
-    private Rotation2d initialAuxRotationError = new Rotation2d();
-
-    private PathPlannerState prevAuxReferenceState;
+    private Translation2d largestAuxTranslationError = new Translation2d();
+    private Rotation2d largestAuxRotationError = new Rotation2d();
 
     /**
      * Constructs a BeakHolonomicDriveController
@@ -111,13 +109,16 @@ public class BeakHolonomicDriveController {
         if (auxRotationError.equals(rotationError) && auxTranslationError.equals(translationError)) {
             return 1.;
         }
-        SmartDashboard.putNumber("rot error percent", (auxRotationError.getDegrees() / initialAuxRotationError.getDegrees()));
-        SmartDashboard.putNumber("tran error percent", (auxTranslationError.getNorm() / initialAuxTranslationError.getNorm()));
-        // The initial error is assumed to be the highest it will ever be.
-        // In case it isn't, we clamp to 1.0 to ensure it never outputs "more" than it
-        // should
-        return MathUtil.clamp(((auxRotationError.getDegrees() / initialAuxRotationError.getDegrees())
-                + (auxTranslationError.getNorm() / initialAuxTranslationError.getNorm())) / 2, 0., 1.);
+        SmartDashboard.putNumber("rot error", (auxRotationError.getDegrees()));
+        SmartDashboard.putNumber("tran error", (auxTranslationError.getNorm()));
+        SmartDashboard.putNumber("rot error initial", (largestAuxRotationError.getDegrees()));
+        SmartDashboard.putNumber("tran error initial", (largestAuxTranslationError.getNorm()));
+        SmartDashboard.putNumber("rot error percent",
+                (auxRotationError.getDegrees() / largestAuxRotationError.getDegrees()));
+        SmartDashboard.putNumber("tran error percent",
+                (auxTranslationError.getNorm() / largestAuxTranslationError.getNorm()));
+        return MathUtil.clamp(((auxRotationError.getDegrees() / largestAuxRotationError.getDegrees())
+                + (auxTranslationError.getNorm() / largestAuxTranslationError.getNorm())) / 2, 0., 1.);
     }
 
     /**
@@ -159,12 +160,6 @@ public class BeakHolonomicDriveController {
      */
     public ChassisSpeeds calculate(Pose2d currentPose, PathPlannerState referenceState,
             PathPlannerState auxReferenceState) {
-        
-        // boolean noAux;
-
-        // if (auxReferenceState == null || auxReferenceState.equals(new PathPlannerState())) {
-        //     noAux = true;
-        //     return this.calculate(currentPose, auxReferenceState)
         double primaryWeight = getWeight();
         double auxWeight = 1 - primaryWeight;
 
@@ -184,7 +179,8 @@ public class BeakHolonomicDriveController {
         double primaryRotationFeedback = this.rotationController.calculate(
                 currentPose.getRotation().getRadians(), referenceState.holonomicRotation.getRadians());
 
-        SmartDashboard.putBoolean("Bruh?", auxReferenceState == null || auxReferenceState.equals(new PathPlannerState()));
+        SmartDashboard.putBoolean("Bruh?",
+                auxReferenceState == null || auxReferenceState.equals(new PathPlannerState()));
 
         if (auxReferenceState == null || auxReferenceState.equals(new PathPlannerState())) {
             // auxReferenceState = referenceState;
@@ -196,12 +192,13 @@ public class BeakHolonomicDriveController {
             this.auxTranslationError = auxReferenceState.poseMeters.relativeTo(currentPose).getTranslation();
             this.auxRotationError = auxReferenceState.holonomicRotation.minus(currentPose.getRotation());
 
-            if (prevAuxReferenceState == null) {
-                this.initialAuxTranslationError = this.auxTranslationError;
-                this.initialAuxRotationError = this.auxRotationError;
+            if (this.auxTranslationError.getNorm() > this.largestAuxTranslationError.getNorm()) {
+                this.largestAuxTranslationError = this.auxTranslationError;
             }
 
-            prevAuxReferenceState = auxReferenceState;
+            if (this.auxRotationError.getDegrees() > this.largestAuxRotationError.getDegrees()) {
+                this.largestAuxRotationError = this.auxRotationError;
+            }
 
             double auxXFF = auxReferenceState.velocityMetersPerSecond
                     * auxReferenceState.poseMeters.getRotation().getCos();
