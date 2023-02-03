@@ -34,7 +34,7 @@ public class JPath1 extends BeakAutonCommand {
                 // new Rotation3d()))), // This gets the position of a point square to the
                 // target, and 54 inches away.
                 // new WaitCommand(0.1),
-                new NewGeneratePath(Trajectories.JPath1(drivetrain),
+                new NewNewGeneratePath(Trajectories.JPath1(drivetrain),
                         () -> vision.getTargetPose(drivetrain.getPoseMeters(),
                                 new Transform3d(
                                         new Translation3d(Units.inchesToMeters(54.), Units.inchesToMeters(-0.), 0.),
