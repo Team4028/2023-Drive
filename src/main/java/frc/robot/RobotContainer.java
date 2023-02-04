@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PerpetualCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -39,6 +41,7 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.FalconDrivetrain;
 import frc.robot.subsystems.NEODrivetrain;
 import frc.robot.subsystems.OctavianSwerveDrivetrain;
+import frc.robot.subsystems.PoseEstimatorSwerveDrivetrain;
 import frc.robot.subsystems.PracticeSwerveDrivetrain;
 import frc.robot.subsystems.SixNEODrivetrain;
 import frc.robot.utilities.BeakXBoxController;
@@ -56,9 +59,10 @@ public class RobotContainer {
     // private FalconDrivetrain m_drive = FalconDrivetrain.getInstance();
     // private OctavianSwerveDrivetrain m_drive =
     // OctavianSwerveDrivetrain.getInstance();
-    private SwerveDrivetrain m_drive = SwerveDrivetrain.getInstance();
+    // private SwerveDrivetrain m_drive = SwerveDrivetrain.getInstance();
     // private PracticeSwerveDrivetrain m_drive =
     // PracticeSwerveDrivetrain.getInstance();
+    private PoseEstimatorSwerveDrivetrain m_drive = PoseEstimatorSwerveDrivetrain.getInstance();
 
     private Vision m_vision = Vision.getInstance();
 
@@ -94,11 +98,18 @@ public class RobotContainer {
                 new RotateDrivetrainToTargetPosition(Distance.fromInches(324.), Distance.fromInches(162.), m_drive)
                         .withTimeout(2.0));
 
-        m_driverController.x.onTrue(new GeneratePath(
-                () -> m_vision.getTargetPose(m_drive.getPoseMeters(),
-                        new Transform3d(new Translation3d(Units.inchesToMeters(54.), Units.inchesToMeters(-0.), 0.),
-                                new Rotation3d())),
-                m_drive));
+        // m_driverController.x.onTrue(new GeneratePath(
+        // () -> m_vision.getTargetPose(m_drive.getPoseMeters(),
+        // new Transform3d(new Translation3d(Units.inchesToMeters(54.),
+        // Units.inchesToMeters(-0.), 0.),
+        // new Rotation3d())),
+        // m_drive));
+
+        m_driverController.x
+                .onTrue(new InstantCommand(() -> m_drive.resetOdometry(m_vision.getLatestEstimatedRobotPose())));
+        m_driverController.y.whileTrue(new RepeatCommand(new InstantCommand(() -> m_drive.addVisionMeasurement(
+                m_vision.getLatestEstimatedRobotPose(),
+                m_vision.getLatestLatency()))));
     }
 
     public double speedScaledDriverLeftY() {

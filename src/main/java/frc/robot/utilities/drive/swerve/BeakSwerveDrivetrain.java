@@ -10,13 +10,14 @@ import java.util.List;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.utilities.drive.BeakDrivetrain;
@@ -35,7 +36,7 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     protected List<BeakSwerveModule> m_modules = new ArrayList<BeakSwerveModule>();
     int m_numModules;
 
-    protected SwerveDriveOdometry m_odom;
+    protected SwerveDrivePoseEstimator m_odom;
     protected SwerveDriveKinematics m_kinematics;
 
     protected RobotPhysics m_physics;
@@ -82,7 +83,7 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
 
         m_kinematics = new SwerveDriveKinematics(moduleLocations);
 
-        m_odom = new SwerveDriveOdometry(m_kinematics, getGyroRotation2d(), getModulePositions());
+        m_odom = new SwerveDrivePoseEstimator(m_kinematics, getGyroRotation2d(), getModulePositions(), new Pose2d());
 
         resetTurningMotors();
     }
@@ -114,15 +115,21 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
     }
 
     public Pose2d updateOdometry() {
-        m_pose = m_odom.update(
+        m_pose = m_odom.updateWithTime(
+                Timer.getFPGATimestamp(),
                 getGyroRotation2d(),
                 getModulePositions());
 
         return m_pose;
     }
 
+    public void addVisionMeasurement(Pose2d estimatedPose, double latency) {
+        if (!estimatedPose.equals(new Pose2d()))
+            m_odom.addVisionMeasurement(estimatedPose, Timer.getFPGATimestamp() - latency);
+    }
+
     public Pose2d getPoseMeters() {
-        return m_odom.getPoseMeters();
+        return m_odom.getEstimatedPosition();
     }
 
     public void resetOdometry(Pose2d pose) {
@@ -135,7 +142,7 @@ public class BeakSwerveDrivetrain extends BeakDrivetrain {
         rot *= m_physics.maxAngularVelocity.getAsRadiansPerSecond();
 
         ChassisSpeeds speeds = fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(x, y, rot, getRotation2d())
-        : new ChassisSpeeds(x, y, rot);
+                : new ChassisSpeeds(x, y, rot);
 
         drive(speeds);
     }

@@ -27,10 +27,12 @@ public class Vision extends SubsystemBase {
     private PhotonCamera m_camera;
     private AprilTagFieldLayout m_layout;
 
+    private double m_latestLatency;
+
     private static final String CAMERA_NAME = "Global_Shutter_Camera";
 
-    private static final Pose3d CAMERA_TO_ROBOT = new Pose3d(0., Units.inchesToMeters(5.), 0.,
-            new Rotation3d(0., 0., Units.degreesToRadians(0.)));
+    private static final Pose3d ROBOT_TO_CAMERA = new Pose3d(Units.inchesToMeters(12.), Units.inchesToMeters(2.), 0.,
+            new Rotation3d(0., Units.degreesToRadians(56.), Units.degreesToRadians(0.)));
 
     private static Vision m_instance;
 
@@ -53,6 +55,8 @@ public class Vision extends SubsystemBase {
     public PhotonTrackedTarget getBestTarget() {
         PhotonPipelineResult result = m_camera.getLatestResult();
 
+        m_latestLatency = result.getLatencyMillis() / 1000.;
+
         boolean hasTarget = result.hasTargets();
 
         PhotonTrackedTarget target = null;
@@ -64,7 +68,7 @@ public class Vision extends SubsystemBase {
         return target;
     }
 
-    public Pose3d getLatestEstimatedRobotPose() {
+    public Pose2d getLatestEstimatedRobotPose() {
         PhotonTrackedTarget target = getBestTarget();
 
         if (target != null) {
@@ -76,10 +80,10 @@ public class Vision extends SubsystemBase {
 
             if (tagPose.isPresent()) {
                 Pose3d robotPose = PhotonUtils.estimateFieldToRobotAprilTag(cameraToTarget, tagPose.get(), camToRobot);
-                return robotPose;
+                return robotPose.toPose2d();
             }
         }
-        return new Pose3d();
+        return new Pose2d();
     }
 
     /**
@@ -109,12 +113,16 @@ public class Vision extends SubsystemBase {
 
             Pose2d finalPose = new Pose2d(newPose.getTranslation(), newRotation).plus(
                     new Transform2d(
-                            CAMERA_TO_ROBOT.getTranslation().toTranslation2d(),
-                            CAMERA_TO_ROBOT.getRotation().toRotation2d()));
+                            ROBOT_TO_CAMERA.getTranslation().toTranslation2d(),
+                            ROBOT_TO_CAMERA.getRotation().toRotation2d()));
             return finalPose;
         }
 
         return robotPose;
+    }
+
+    public double getLatestLatency() {
+        return m_latestLatency;
     }
 
     public static Vision getInstance() {

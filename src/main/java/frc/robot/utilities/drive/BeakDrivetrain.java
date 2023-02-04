@@ -327,6 +327,16 @@ public class BeakDrivetrain extends BeakGyroSubsystem {
     }
 
     /**
+     * Add a vision measurement to the pose estimator's Kalman filter.
+     * 
+     * @param estimatedPose The latest estimated pose from a vision system.
+     * @param latency       The time since measurement of the estimated pose.
+     */
+    public void addVisionMeasurement(Pose2d estimatedPose, double latency) {
+
+    }
+
+    /**
      * Get the angle to a target position on the field.
      * </p>
      * 
